@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستم محاسبه دستمزد - شرکت صنعت بسته‌بندی نقش آرمانی</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #1a2980;
+            --secondary: #26d0ce;
+            --accent: #ff6b6b;
+            --dark: #2d3748;
+            --light: #f8f9fa;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #f87171;
+            --purple: #8e44ad;
+            --gold: #FFD700;
+            --dark-blue: #0f1b4f;
+            --industrial-blue: #1e3a8a;
+            --industrial-orange: #f97316;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f4f8, #e2e8f0);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.6;
+        }
+        
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 1200px;
+            border-radius: 15px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        
+        header {
+            background: linear-gradient(95deg, var(--industrial-blue), #2d4a8a);
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+            position: relative;
+            border-bottom: 4px solid var(--industrial-orange);
+        }
+        
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin: 10px 0;
+            font-weight: 800;
+            color: white;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 10px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .sponsor {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 15px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-top: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0;
+        }
+        
+        .input-section {
+            flex: 1;
+            min-width: 500px;
+            padding: 25px;
+            background: #f9fafb;
+            border-right: 1px solid #e2e8f0;
+        }
+        
+        .result-section {
+            flex: 1;
+            min-width: 500px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+        
+        .section-title {
+            color: var(--industrial-blue);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--industrial-orange);
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: var(--industrial-orange);
+        }
+        
+        .currency-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 10px;
+        }
+        
+        .currency-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .currency-btn.active {
+            background: var(--industrial-blue);
+            color: white;
+            border-color: var(--industrial-blue);
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 700;
+            color: var(--industrial-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        
+        label i {
+            color: var(--industrial-orange);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--industrial-orange);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+        }
+        
+        .overtime-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .calculate-btn {
+            background: var(--industrial-blue);
+            color: white;
+        }
+        
+        .reset-btn {
+            background: #f1f5f9;
+            color: var(--dark);
+            border: 2px solid #e2e8f0;
+        }
+        
+        .save-btn {
+            background: var(--success);
+            color: white;
+        }
+        
+        .print-btn {
+            background: var(--purple);
+            color: white;
+        }
+        
+        .load-btn {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .settings-btn {
+            background: var(--dark);
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--industrial-orange);
+        }
+        
+        .result-title {
+            color: var(--industrial-blue);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+        
+        .salary-result {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--industrial-blue);
+            margin: 12px 0;
+        }
+        
+        .salary-subtext {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+        
+        .detail-card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            text-align: right;
+            margin-bottom: 18px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .detail-title {
+            font-size: 1.1rem;
+            color: var(--industrial-blue);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #e2e8f0;
+            font-size: 0.95rem;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--industrial-blue);
+            padding-top: 12px;
+            margin-top: 5px;
+            border-top: 2px solid #e2e8f0;
+        }
+        
+        .detail-label {
+            color: #475569;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .positive {
+            color: var(--success);
+        }
+        
+        .negative {
+            color: var(--danger);
+        }
+        
+        .employee-section {
+            background: #f1f5f9;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+        
+        .print-only {
+            display: none;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            padding: 25px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+        
+        .modal-title {
+            color: var(--industrial-blue);
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
+        
+        .close-modal {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .saved-employees {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .employee-item {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .employee-item:hover {
+            background: #f1f5f9;
+        }
+        
+        .employee-item:last-child {
+            border-bottom: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 18px;
+            background: #f1f5f9;
+            color: #475569;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.85rem;
+        }
+        
+        .developer-signature {
+            margin-top: 8px;
+            font-weight: 600;
+            color: var(--industrial-blue);
+        }
+        
+        @media (max-width: 900px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .input-section {
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+        }
+        
+        @media print {
+            .no-print {
+                display: none;
+            }
+            .print-only {
+                display: block;
+                text-align: center;
+                margin-bottom: 20px;
+                font-weight: 700;
+                color: var(--industrial-blue);
+            }
+            body {
+                background: white;
+                padding: 10px;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-calculator"></i> سیستم محاسبه دستمزد</h1>
+                <p class="subtitle">شرکت صنعت بسته‌بندی نقش آرمانی</p>
+                <div class="sponsor">حامی برنامه: آقای ولی دانشور</div>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="input-section">
+                <h2 class="section-title"><i class="fas fa-user"></i> اطلاعات کارمند</h2>
+                
+                <div class="employee-section">
+                    <div class="input-group">
+                        <label for="personnelId"><i class="fas fa-id-card"></i> شماره پرسنلی</label>
+                        <input type="text" id="personnelId" placeholder="شماره پرسنلی را وارد کنید">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="firstName"><i class="fas fa-signature"></i> نام</label>
+                        <input type="text" id="firstName" placeholder="نام کارمند">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="lastName"><i class="fas fa-signature"></i> نام خانوادگی</label>
+                        <input type="text" id="lastName" placeholder="نام خانوادگی کارمند">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="baseSalary"><i class="fas fa-money-bill-wave"></i> حقوق پایه</label>
+                        <input type="number" id="baseSalary" value="25000000" min="0">
+                    </div>
+                </div>
+                
+                <h2 class="section-title"><i class="fas fa-cog"></i> تنظیمات محاسبات</h2>
+                
+                <div class="currency-selector">
+                    <div class="currency-btn active" data-currency="rial">ریال</div>
+                    <div class="currency-btn" data-currency="toman">تومان</div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="workHours"><i class="fas fa-clock"></i> ساعت کاری ماهانه</label>
+                    <input type="number" id="workHours" value="176" min="0">
+                </div>
+                
+                <h2 class="section-title"><i class="fas fa-business-time"></i> محاسبه اضافه کاری</h2>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-sun"></i> اضافه کاری عادی</label>
+                    <div class="overtime-grid">
+                        <div>
+                            <label for="normalOvertimeHours">ساعت</label>
+                            <input type="number" id="normalOvertimeHours" value="20" min="0">
+                        </div>
+                        <div>
+                            <label for="normalOvertimeRate">نرخ (درصد)</label>
+                            <input type="number" id="normalOvertimeRate" value="140" min="0">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-moon"></i> اضافه کاری شب‌کاری</label>
+                    <div class="overtime-grid">
+                        <div>
+                            <label for="nightOvertimeHours">ساعت</label>
+                            <input type="number" id="nightOvertimeHours" value="8" min="0">
+                        </div>
+                        <div>
+                            <label for="nightOvertimeRate">نرخ (درصد)</label>
+                            <input type="number" id="nightOvertimeRate" value="200" min="0">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-umbrella-beach"></i> اضافه کاری تعطیل</label>
+                    <div class="overtime-grid">
+                        <div>
+                            <label for="holidayOvertimeHours">ساعت</label>
+                            <input type="number" id="holidayOvertimeHours" value="4" min="0">
+                        </div>
+                        <div>
+                            <label for="holidayOvertimeRate">نرخ (درصد)</label>
+                            <input type="number" id="holidayOvertimeRate" value="170" min="0">
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title"><i class="fas fa-file-invoice-dollar"></i> کسورات و مزایا</h2>
+                
+                <div class="input-group">
+                    <label for="bonus"><i class="fas fa-gift"></i> پاداش و مزایا</label>
+                    <input type="number" id="bonus" value="3500000" min="0">
+                </div>
+                
+                <div class="input-group">
+                    <label for="taxRate"><i class="fas fa-landmark"></i> نرخ مالیات (درصد)</label>
+                    <input type="number" id="taxRate" value="10" min="0" max="100">
+                </div>
+                
+                <div class="input-group">
+                    <label for="insurance"><i class="fas fa-shield-alt"></i> بیمه (درصد)</label>
+                    <input type="number" id="insurance" value="7" min="0" max="100">
+                </div>
+                
+                <div class="input-group">
+                    <label for="supplementaryInsurance"><i class="fas fa-heartbeat"></i> بیمه تکمیلی</label>
+                    <input type="number" id="supplementaryInsurance" value="450000" min="0">
+                </div>
+                
+                <div class="button-group">
+                    <button class="calculate-btn" id="calculateBtn">
+                        <i class="fas fa-calculator"></i> محاسبه حقوق
+                    </button>
+                    <button class="reset-btn" id="resetBtn">
+                        <i class="fas fa-redo"></i> تنظیم مجدد
+                    </button>
+                    <button class="save-btn" id="saveBtn">
+                        <i class="fas fa-save"></i> ذخیره اطلاعات
+                    </button>
+                    <button class="print-btn" id="printBtn">
+                        <i class="fas fa-print"></i> پرینت فیش
+                    </button>
+                    <button class="load-btn" id="loadBtn">
+                        <i class="fas fa-folder-open"></i> فراخوانی اطلاعات
+                    </button>
+                    <button class="settings-btn" id="settingsBtn">
+                        <i class="fas fa-cogs"></i> تنظیمات پیشرفته
+                    </button>
+                </div>
+            </div>
+            
+            <div class="result-section">
+                <div class="print-only">
+                    <h2>فیش حقوقی شرکت صنعت بسته‌بندی نقش آرمانی</h2>
+                    <p>حامی برنامه: آقای ولی دانشور</p>
+                </div>
+                
+                <h2 class="section-title"><i class="fas fa-chart-line"></i> نتایج محاسبات</h2>
+                
+                <div class="result-card">
+                    <div class="result-title">حقوق خالص دریافتی</div>
+                    <div class="salary-result" id="netSalaryResult">۳۱,۶۴۰,۰۰۰ ریال</div>
+                    <p class="salary-subtext">پس از کسر مالیات، بیمه و بیمه تکمیلی</p>
+                </div>
+                
+                <div class="detail-card">
+                    <div class="detail-title">جزئیات محاسبات</div>
+                    <div class="detail-row">
+                        <span class="detail-label">حقوق پایه:</span>
+                        <span class="detail-value" id="baseSalaryResult">۲۵,۰۰۰,۰۰۰ ریال</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">اضافه کاری عادی:</span>
+                        <span class="detail-value positive" id="normalOvertimeResult">۲,۸۶۳,۶۳۶ ریال</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">اضافه کاری شب‌کاری:</span>
+                        <span class="detail-value positive" id="nightOvertimeResult">۱,۸۱۸,۱۸۱ ریال</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">اضافه کاری تعطیل:</span>
+                        <span class="detail-value positive" id="holidayOvertimeResult">۴۰۹,۰۹۰ ریال</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">پاداش و مزایا:</span>
+                        <span class="detail-value positive" id="bonusResult">۳,۵۰۰,۰۰۰ ریال</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">حقوق ناخالص:</span>
+                        <span class="detail-value" id="grossSalaryResult">۳۳,۵۹۰,۹۰۹ ریال</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">مالیات (۱۰٪):</span>
+                        <span class="detail-value negative" id="taxResult">۳,۳۵۹,۰۹۰ ریال</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">بیمه (۷٪):</span>
+                        <span class="detail-value negative" id="insuranceResult">۲,۳۵۱,۳۶۴ ریال</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">بیمه تکمیلی:</span>
+                        <span class="detail-value negative" id="supplementaryResult">۴۵۰,۰۰۰ ریال</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">حقوق خالص:</span>
+                        <span class="detail-value" id="finalSalaryResult">۳۱,۶۴۰,۰۰۰ ریال</span>
+                    </div>
+                </div>
+                
+                <div class="detail-card">
+                    <div class="detail-title">خلاصه اطلاعات کارمند</div>
+                    <div class="detail-row">
+                        <span class="detail-label">شماره پرسنلی:</span>
+                        <span class="detail-value" id="printPersonnelId">PR-2023-001</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">نام و نام خانوادگی:</span>
+                        <span class="detail-value" id="printEmployeeName">محمد حسینی</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">تاریخ محاسبه:</span>
+                        <span class="detail-value" id="printDate">۱۴۰۲/۰۷/۱۵</span>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="save-btn no-print" id="saveDataBtn">
+                        <i class="fas fa-save"></i> ذخیره داده‌ها
+                    </button>
+                    <button class="print-btn no-print" id="printResultBtn">
+                        <i class="fas fa-print"></i> پرینت نتیجه
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal for Settings -->
+        <div id="settingsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">تنظیمات پیشرفته</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                
+                <div class="input-group">
+                    <label for="defaultTax">نرخ پیش‌فرض مالیات (%)</label>
+                    <input type="number" id="defaultTax" value="10">
+                </div>
+                
+                <div class="input-group">
+                    <label for="defaultInsurance">نرخ پیش‌فرض بیمه (%)</label>
+                    <input type="number" id="defaultInsurance" value="7">
+                </div>
+                
+                <div class="input-group">
+                    <label for="defaultSupplementary">بیمه تکمیلی پیش‌فرض</label>
+                    <input type="number" id="defaultSupplementary" value="450000">
+                </div>
+                
+                <div class="input-group">
+                    <label for="defaultWorkHours">ساعات کاری پیش‌فرض</label>
+                    <input type="number" id="defaultWorkHours" value="176">
+                </div>
+                
+                <div class="button-group" style="margin-top: 20px;">
+                    <button class="save-btn" id="saveSettings">
+                        <i class="fas fa-save"></i> ذخیره تنظیمات
+                    </button>
+                    <button class="reset-btn" id="resetSettings">
+                        <i class="fas fa-undo"></i> تنظیمات پیش‌فرض
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal for Loading Data -->
+        <div id="loadModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">فراخوانی اطلاعات ذخیره شده</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                
+                <div class="input-group">
+                    <label for="searchEmployee">جستجوی کارمند (شماره پرسنلی یا نام)</label>
+                    <input type="text" id="searchEmployee" placeholder="جستجو...">
+                </div>
+                
+                <div class="saved-employees" id="savedEmployeesList">
+                    <!-- Saved employees will be listed here -->
+                </div>
+                
+                <div class="button-group" style="margin-top: 20px;">
+                    <button class="load-btn" id="loadEmployeeData">
+                        <i class="fas fa-download"></i> بارگذاری اطلاعات انتخاب شده
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>سیستم محاسبه دستمزد - شرکت صنعت بسته‌بندی نقش آرمانی</p>
+            <div class="developer-signature">توسعه و پیاده‌سازی: حسین رحمانی</div>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // عناصر DOM
+            const calculateBtn = document.getElementById('calculateBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const printBtn = document.getElementById('printBtn');
+            const loadBtn = document.getElementById('loadBtn');
+            const settingsBtn = document.getElementById('settingsBtn');
+            const saveDataBtn = document.getElementById('saveDataBtn');
+            const printResultBtn = document.getElementById('printResultBtn');
+            const currencyBtns = document.querySelectorAll('.currency-btn');
+            const settingsModal = document.getElementById('settingsModal');
+            const loadModal = document.getElementById('loadModal');
+            const closeModalBtns = document.querySelectorAll('.close-modal');
+            const saveSettingsBtn = document.getElementById('saveSettings');
+            const resetSettingsBtn = document.getElementById('resetSettings');
+            const loadEmployeeBtn = document.getElementById('loadEmployeeData');
+            const searchEmployeeInput = document.getElementById('searchEmployee');
+            const savedEmployeesList = document.getElementById('savedEmployeesList');
+            
+            let currentCurrency = 'rial';
+            
+            // رویدادهای انتخاب واحد پول
+            currencyBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    currencyBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCurrency = this.dataset.currency;
+                    calculateBtn.click(); // محاسبه مجدد با واحد پول جدید
+                });
+            });
+            
+            // تابع تبدیل واحد پول
+            function convertCurrency(amount) {
+                if (currentCurrency === 'toman') {
+                    return amount / 10; // تبدیل ریال به تومان
+                }
+                return amount;
+            }
+            
+            // تابع قالب‌بندی عدد با واحد پول
+            function formatCurrency(amount) {
+                const convertedAmount = convertCurrency(amount);
+                const formatted = convertedAmount.toLocaleString('fa-IR');
+                
+                if (currentCurrency === 'toman') {
+                    return formatted + ' تومان';
+                }
+                return formatted + ' ریال';
+            }
+            
+            // رویداد محاسبه حقوق
+            calculateBtn.addEventListener('click', function() {
+                // دریافت مقادیر ورودی
+                const baseSalary = parseInt(document.getElementById('baseSalary').value) || 0;
+                const workHours = parseInt(document.getElementById('workHours').value) || 176;
+                const bonus = parseInt(document.getElementById('bonus').value) || 0;
+                const taxRate = parseInt(document.getElementById('taxRate').value) || 10;
+                const insurance = parseInt(document.getElementById('insurance').value) || 7;
+                const supplementaryInsurance = parseInt(document.getElementById('supplementaryInsurance').value) || 0;
+                
+                // دریافت اطلاعات اضافه کاری
+                const normalOvertimeHours = parseInt(document.getElementById('normalOvertimeHours').value) || 0;
+                const normalOvertimeRate = parseInt(document.getElementById('normalOvertimeRate').value) || 140;
+                const nightOvertimeHours = parseInt(document.getElementById('nightOvertimeHours').value) || 0;
+                const nightOvertimeRate = parseInt(document.getElementById('nightOvertimeRate').value) || 200;
+                const holidayOvertimeHours = parseInt(document.getElementById('holidayOvertimeHours').value) || 0;
+                const holidayOvertimeRate = parseInt(document.getElementById('holidayOvertimeRate').value) || 170;
+                
+                // محاسبه نرخ ساعتی
+                const hourlyRate = baseSalary / workHours;
+                
+                // محاسبه اضافه کاری‌ها
+                const normalOvertimePay = (hourlyRate * normalOvertimeHours * normalOvertimeRate) / 100;
+                const nightOvertimePay = (hourlyRate * nightOvertimeHours * nightOvertimeRate) / 100;
+                const holidayOvertimePay = (hourlyRate * holidayOvertimeHours * holidayOvertimeRate) / 100;
+                const totalOvertimePay = normalOvertimePay + nightOvertimePay + holidayOvertimePay;
+                
+                // محاسبه حقوق ناخالص
+                const grossSalary = baseSalary + totalOvertimePay + bonus;
+                
+                // محاسبه کسورات
+                const tax = (grossSalary * taxRate) / 100;
+                const insuranceDeduction = (grossSalary * insurance) / 100;
+                const totalDeductions = tax + insuranceDeduction + supplementaryInsurance;
+                
+                // محاسبه حقوق خالص
+                const netSalary = grossSalary - totalDeductions;
+                
+                // به‌روزرسانی نتایج در رابط کاربری
+                document.getElementById('netSalaryResult').textContent = formatCurrency(netSalary);
+                document.getElementById('baseSalaryResult').textContent = formatCurrency(baseSalary);
+                document.getElementById('normalOvertimeResult').textContent = formatCurrency(normalOvertimePay);
+                document.getElementById('nightOvertimeResult').textContent = formatCurrency(nightOvertimePay);
+                document.getElementById('holidayOvertimeResult').textContent = formatCurrency(holidayOvertimePay);
+                document.getElementById('bonusResult').textContent = formatCurrency(bonus);
+                document.getElementById('grossSalaryResult').textContent = formatCurrency(grossSalary);
+                document.getElementById('taxResult').textContent = formatCurrency(tax);
+                document.getElementById('insuranceResult').textContent = formatCurrency(insuranceDeduction);
+                document.getElementById('supplementaryResult').textContent = formatCurrency(supplementaryInsurance);
+                document.getElementById('finalSalaryResult').textContent = formatCurrency(netSalary);
+                
+                // به‌روزرسانی اطلاعات کارمند برای پرینت
+                const personnelId = document.getElementById('personnelId').value || 'PR-2023-001';
+                const firstName = document.getElementById('firstName').value || 'نام';
+                const lastName = document.getElementById('lastName').value || 'خانوادگی';
+                const currentDate = new Date().toLocaleDateString('fa-IR');
+                
+                document.getElementById('printPersonnelId').textContent = personnelId;
+                document.getElementById('printEmployeeName').textContent = `${firstName} ${lastName}`;
+                document.getElementById('printDate').textContent = currentDate;
+            });
+            
+            // رویداد تنظیم مجدد
+            resetBtn.addEventListener('click', function() {
+                document.getElementById('personnelId').value = '';
+                document.getElementById('firstName').value = '';
+                document.getElementById('lastName').value = '';
+                document.getElementById('baseSalary').value = '25000000';
+                document.getElementById('workHours').value = '176';
+                document.getElementById('normalOvertimeHours').value = '20';
+                document.getElementById('normalOvertimeRate').value = '140';
+                document.getElementById('nightOvertimeHours').value = '8';
+                document.getElementById('nightOvertimeRate').value = '200';
+                document.getElementById('holidayOvertimeHours').value = '4';
+                document.getElementById('holidayOvertimeRate').value = '170';
+                document.getElementById('bonus').value = '3500000';
+                document.getElementById('taxRate').value = '10';
+                document.getElementById('insurance').value = '7';
+                document.getElementById('supplementaryInsurance').value = '450000';
+                
+                // محاسبه مجدد
+                calculateBtn.click();
+            });
+            
+            // رویداد ذخیره اطلاعات کارمند
+            saveBtn.addEventListener('click', function() {
+                const personnelId = document.getElementById('personnelId').value;
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const baseSalary = document.getElementById('baseSalary').value;
+                
+                if (!personnelId || !firstName || !lastName) {
+                    alert('لطفاً شماره پرسنلی، نام و نام خانوادگی را وارد کنید.');
+                    return;
+                }
+                
+                const employeeData = {
+                    id: personnelId,
+                    firstName: firstName,
+                    lastName: lastName,
+                    baseSalary: baseSalary,
+                    workHours: document.getElementById('workHours').value,
+                    normalOvertimeRate: document.getElementById('normalOvertimeRate').value,
+                    nightOvertimeRate: document.getElementById('nightOvertimeRate').value,
+                    holidayOvertimeRate: document.getElementById('holidayOvertimeRate').value,
+                    taxRate: document.getElementById('taxRate').value,
+                    insurance: document.getElementById('insurance').value,
+                    supplementaryInsurance: document.getElementById('supplementaryInsurance').value
+                };
+                
+                // ذخیره در localStorage
+                localStorage.setItem(`employee_${personnelId}`, JSON.stringify(employeeData));
+                alert(`اطلاعات کارمند ${firstName} ${lastName} با موفقیت ذخیره شد.`);
+            });
+            
+            // رویداد ذخیره داده‌های محاسباتی
+            saveDataBtn.addEventListener('click', function() {
+                const personnelId = document.getElementById('personnelId').value || 'PR-2023-001';
+                const firstName = document.getElementById('firstName').value || 'نام';
+                const lastName = document.getElementById('lastName').value || 'خانوادگی';
+                
+                const payrollData = {
+                    personnelId: personnelId,
+                    name: `${firstName} ${lastName}`,
+                    date: new Date().toLocaleDateString('fa-IR'),
+                    netSalary: document.getElementById('finalSalaryResult').textContent,
+                    details: {
+                        baseSalary: document.getElementById('baseSalaryResult').textContent,
+                        normalOvertime: document.getElementById('normalOvertimeResult').textContent,
+                        nightOvertime: document.getElementById('nightOvertimeResult').textContent,
+                        holidayOvertime: document.getElementById('holidayOvertimeResult').textContent,
+                        bonus: document.getElementById('bonusResult').textContent,
+                        grossSalary: document.getElementById('grossSalaryResult').textContent,
+                        tax: document.getElementById('taxResult').textContent,
+                        insurance: document.getElementById('insuranceResult').textContent,
+                        supplementary: document.getElementById('supplementaryResult').textContent
+                    }
+                };
+                
+                // ذخیره در localStorage
+                const timestamp = new Date().getTime();
+                localStorage.setItem(`payroll_${personnelId}_${timestamp}`, JSON.stringify(payrollData));
+                alert('اطلاعات حقوقی با موفقیت ذخیره شد.');
+            });
+            
+            // رویداد پرینت
+            printBtn.addEventListener('click', function() {
+                window.print();
+            });
+            
+            printResultBtn.addEventListener('click', function() {
+                window.print();
+            });
+            
+            // مدیریت مودال‌ها
+            settingsBtn.addEventListener('click', function() {
+                settingsModal.style.display = 'flex';
+                loadSettings();
+            });
+            
+            loadBtn.addEventListener('click', function() {
+                loadModal.style.display = 'flex';
+                loadSavedEmployees();
+            });
+            
+            closeModalBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    settingsModal.style.display = 'none';
+                    loadModal.style.display = 'none';
+                });
+            });
+            
+            // کلیک خارج از مودال برای بستن
+            window.addEventListener('click', function(event) {
+                if (event.target === settingsModal) {
+                    settingsModal.style.display = 'none';
+                }
+                if (event.target === loadModal) {
+                    loadModal.style.display = 'none';
+                }
+            });
+            
+            // بارگذاری تنظیمات
+            function loadSettings() {
+                const settings = JSON.parse(localStorage.getItem('payroll_settings')) || {};
+                document.getElementById('defaultTax').value = settings.taxRate || 10;
+                document.getElementById('defaultInsurance').value = settings.insurance || 7;
+                document.getElementById('defaultSupplementary').value = settings.supplementary || 450000;
+                document.getElementById('defaultWorkHours').value = settings.workHours || 176;
+            }
+            
+            // ذخیره تنظیمات
+            saveSettingsBtn.addEventListener('click', function() {
+                const settings = {
+                    taxRate: document.getElementById('defaultTax').value,
+                    insurance: document.getElementById('defaultInsurance').value,
+                    supplementary: document.getElementById('defaultSupplementary').value,
+                    workHours: document.getElementById('defaultWorkHours').value
+                };
+                
+                localStorage.setItem('payroll_settings', JSON.stringify(settings));
+                alert('تنظیمات با موفقیت ذخیره شدند.');
+                applySettings();
+                settingsModal.style.display = 'none';
+            });
+            
+            // اعمال تنظیمات به فرم
+            function applySettings() {
+                const settings = JSON.parse(localStorage.getItem('payroll_settings')) || {};
+                if (settings.taxRate) document.getElementById('taxRate').value = settings.taxRate;
+                if (settings.insurance) document.getElementById('insurance').value = settings.insurance;
+                if (settings.supplementary) document.getElementById('supplementaryInsurance').value = settings.supplementary;
+                if (settings.workHours) document.getElementById('workHours').value = settings.workHours;
+                
+                calculateBtn.click();
+            }
+            
+            // بازنشانی تنظیمات
+            resetSettingsBtn.addEventListener('click', function() {
+                document.getElementById('defaultTax').value = 10;
+                document.getElementById('defaultInsurance').value = 7;
+                document.getElementById('defaultSupplementary').value = 450000;
+                document.getElementById('defaultWorkHours').value = 176;
+            });
+            
+            // بارگذاری کارمندان ذخیره شده
+            function loadSavedEmployees() {
+                savedEmployeesList.innerHTML = '';
+                const keys = Object.keys(localStorage);
+                const employeeKeys = keys.filter(key => key.startsWith('employee_'));
+                
+                if (employeeKeys.length === 0) {
+                    savedEmployeesList.innerHTML = '<p>هیچ کارمند ذخیره شده‌ای یافت نشد</p>';
+                    return;
+                }
+                
+                employeeKeys.forEach(key => {
+                    const employeeData = JSON.parse(localStorage.getItem(key));
+                    const employeeItem = document.createElement('div');
+                    employeeItem.className = 'employee-item';
+                    employeeItem.innerHTML = `
+                        <div><strong>${employeeData.firstName} ${employeeData.lastName}</strong></div>
+                        <div>شماره پرسنلی: ${employeeData.id}</div>
+                        <div>حقوق پایه: ${parseInt(employeeData.baseSalary).toLocaleString('fa-IR')} ریال</div>
+                    `;
+                    employeeItem.dataset.id = employeeData.id;
+                    employeeItem.addEventListener('click', function() {
+                        document.querySelectorAll('.employee-item').forEach(item => {
+                            item.style.backgroundColor = '';
+                        });
+                        this.style.backgroundColor = '#e6f7ff';
+                        selectedEmployeeId = employeeData.id;
+                    });
+                    savedEmployeesList.appendChild(employeeItem);
+                });
+            }
+            
+            // بارگذاری اطلاعات کارمند
+            let selectedEmployeeId = null;
+            
+            loadEmployeeBtn.addEventListener('click', function() {
+                if (!selectedEmployeeId) {
+                    alert('لطفاً یک کارمند را انتخاب کنید');
+                    return;
+                }
+                
+                const employeeData = JSON.parse(localStorage.getItem(`employee_${selectedEmployeeId}`));
+                if (!employeeData) return;
+                
+                document.getElementById('personnelId').value = employeeData.id;
+                document.getElementById('firstName').value = employeeData.firstName;
+                document.getElementById('lastName').value = employeeData.lastName;
+                document.getElementById('baseSalary').value = employeeData.baseSalary;
+                document.getElementById('workHours').value = employeeData.workHours || 176;
+                document.getElementById('normalOvertimeRate').value = employeeData.normalOvertimeRate || 140;
+                document.getElementById('nightOvertimeRate').value = employeeData.nightOvertimeRate || 200;
+                document.getElementById('holidayOvertimeRate').value = employeeData.holidayOvertimeRate || 170;
+                document.getElementById('taxRate').value = employeeData.taxRate || 10;
+                document.getElementById('insurance').value = employeeData.insurance || 7;
+                document.getElementById('supplementaryInsurance').value = employeeData.supplementaryInsurance || 450000;
+                
+                loadModal.style.display = 'none';
+                calculateBtn.click();
+            });
+            
+            // جستجوی کارمند
+            searchEmployeeInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const items = document.querySelectorAll('.employee-item');
+                
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+            
+            // بارگذاری کارمند هنگام تغییر شماره پرسنلی
+            document.getElementById('personnelId').addEventListener('change', function() {
+                const personnelId = this.value;
+                if (!personnelId) return;
+                
+                const employeeData = JSON.parse(localStorage.getItem(`employee_${personnelId}`));
+                if (employeeData) {
+                    document.getElementById('firstName').value = employeeData.firstName;
+                    document.getElementById('lastName').value = employeeData.lastName;
+                    document.getElementById('baseSalary').value = employeeData.baseSalary;
+                    
+                    if (employeeData.workHours) document.getElementById('workHours').value = employeeData.workHours;
+                    if (employeeData.taxRate) document.getElementById('taxRate').value = employeeData.taxRate;
+                    if (employeeData.insurance) document.getElementById('insurance').value = employeeData.insurance;
+                    if (employeeData.supplementaryInsurance) document.getElementById('supplementaryInsurance').value = employeeData.supplementaryInsurance;
+                    
+                    calculateBtn.click();
+                }
+            });
+            
+            // اعمال تنظیمات هنگام بارگذاری صفحه
+            applySettings();
+            
+            // محاسبه اولیه
+            calculateBtn.click();
+        });
+    </script>
+</body>
+</html>
