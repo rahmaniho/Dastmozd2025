@@ -58,11 +58,23 @@ import { Building2, DatabaseZap, HardDriveDownload, Plus, ShieldCheck, Trash2, U
 import { useEffect, useMemo, useState } from 'react';
 import { JALALI_MONTH_LABELS, useDatabaseCounts } from '@/lib/hooks';
 import { useAppStore } from '@/lib/store';
+import { DesktopPanel } from '@/components/desktop-panel';
+import { isDesktop } from '@/lib/native';
 
 const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? '1.0.0';
 
+const SETTINGS_TABS = [
+  { value: 'company', label: 'شرکت و کارگاه' },
+  { value: 'legal', label: 'پارامترهای سال' },
+  { value: 'backup', label: 'پشتیبان‌گیری' },
+  { value: 'users', label: 'کاربران و دسترسی' },
+  { value: 'appearance', label: 'ظاهر و زبان' },
+  { value: 'desktop', label: 'نسخه دسکتاپ' },
+];
+
 export default function SettingsPage() {
   const [tab, setTab] = useState('company');
+  const [desktop, setDesktop] = useState(false);
   const companyId = useAppStore((state) => state.companyId);
 
   const companies = useLiveQuery(() => listCompanies(true), [], undefined);
@@ -73,6 +85,17 @@ export default function SettingsPage() {
   const [draft, setDraft] = useState<CompanyProfile | null>(null);
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
+
+  // تشخیص پوسته دسکتاپ پس از سوارشدن تا رندر سرور و مرورگر یکسان بماند.
+  useEffect(() => {
+    setDesktop(isDesktop());
+  }, []);
+
+  // پیوند مستقیم به هر بخش تنظیمات با پارامتر `tab` در نشانی صفحه.
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get('tab');
+    if (requested && SETTINGS_TABS.some((item) => item.value === requested)) setTab(requested);
+  }, []);
 
   useEffect(() => {
     if (!companies) return;
@@ -118,13 +141,7 @@ export default function SettingsPage() {
         value={tab}
         onValueChange={setTab}
         ariaLabel="بخش‌های تنظیمات"
-        tabs={[
-          { value: 'company', label: 'شرکت و کارگاه' },
-          { value: 'legal', label: 'پارامترهای سال' },
-          { value: 'backup', label: 'پشتیبان‌گیری' },
-          { value: 'users', label: 'کاربران و دسترسی' },
-          { value: 'appearance', label: 'ظاهر و زبان' },
-        ]}
+        tabs={desktop ? SETTINGS_TABS : SETTINGS_TABS.filter((item) => item.value !== 'desktop')}
       />
 
       {tab === 'company' ? (
@@ -465,6 +482,13 @@ export default function SettingsPage() {
       {tab === 'users' ? <UsersPanel companyId={companyId ?? ''} /> : null}
 
       {tab === 'appearance' ? <AppearancePanel /> : null}
+
+      {tab === 'desktop' && desktop ? (
+        <DesktopPanel
+          companyId={draft?.id ?? companyId ?? ''}
+          companyName={draft?.name ?? 'شرکت صنعت بسته‌بندی نقش آرمانی'}
+        />
+      ) : null}
     </div>
   );
 }

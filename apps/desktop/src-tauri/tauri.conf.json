@@ -1,0 +1,90 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Dastmozd",
+  "mainBinaryName": "Dastmozd",
+  "version": "1.0.0",
+  "identifier": "ir.armani.dastmozd",
+  "build": {
+    "beforeDevCommand": "pnpm --filter web dev",
+    "devUrl": "http://localhost:3000",
+    "beforeBuildCommand": "pnpm --filter web build",
+    "frontendDist": "../../web/out"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "دستمزد آرمانی ۱۴۰۵",
+        "width": 1360,
+        "height": 880,
+        "minWidth": 1024,
+        "minHeight": 700,
+        "resizable": true,
+        "maximizable": true,
+        "closable": true,
+        "center": true,
+        "dragDropEnabled": true,
+        "focus": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost https://*.supabase.co; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+      "assetProtocol": {
+        "enable": false,
+        "scope": []
+      }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis", "app", "dmg"],
+    "createUpdaterArtifacts": false,
+    "publisher": "Armani Packaging Industry",
+    "copyright": "© ۱۴۰۵ شرکت صنعت بسته‌بندی نقش آرمانی",
+    "category": "Business",
+    "shortDescription": "سامانه جامع حقوق و دستمزد بر پایه قانون کار ایران",
+    "longDescription": "دستمزد آرمانی ۱۴۰۵: ثبت کارکرد، محاسبه مزایا و کسورات، بیمه تأمین اجتماعی، مالیات بر درآمد حقوق، فیش حقوقی، دیسکت بیمه و گزارش‌های مدیریتی — کاملاً آفلاین روی رایانه شما.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "fileAssociations": [
+      {
+        "ext": ["dastmozd"],
+        "name": "DastmozdBackup",
+        "description": "پرونده پشتیبان دستمزد آرمانی",
+        "mimeType": "application/x-dastmozd-backup",
+        "role": "Editor"
+      }
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper",
+        "silent": true
+      },
+      "allowDowngrades": false,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "http://timestamp.digicert.com",
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": ["Persian", "English"],
+        "displayLanguageSelector": false,
+        "installerIcon": "icons/icon.ico",
+        "compression": "lzma",
+        "startMenuFolder": "دستمزد آرمانی"
+      }
+    },
+    "macOS": {
+      "minimumSystemVersion": "11.0",
+      "dmg": {
+        "appPosition": { "x": 180, "y": 240 },
+        "applicationFolderPosition": { "x": 480, "y": 240 },
+        "windowSize": { "width": 660, "height": 420 }
+      }
+    }
+  },
+  "plugins": {}
+}

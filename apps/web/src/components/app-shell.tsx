@@ -16,6 +16,7 @@ import {
 } from '@dastmozd/ui';
 import {
   BarChart3,
+  BookOpen,
   CalendarDays,
   Download,
   LayoutDashboard,
@@ -34,6 +35,7 @@ import { seedDemoData, db, saveDepartment, ensureActiveCompany, makeId } from '@
 import { useAppStore } from '@/lib/store';
 import { useBootstrap, usePeriodNavigator, useDatabaseCounts } from '@/lib/hooks';
 import { JALALI_MONTH_LABELS } from '@/lib/hooks';
+import { DesktopBridge } from '@/components/desktop-bridge';
 
 interface NavItem {
   href: string;
@@ -50,6 +52,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: '/payroll', label: 'محاسبه حقوق', icon: <Wallet className="size-4" />, hint: 'اجرای دوره حقوقی' },
   { href: '/reports', label: 'گزارش‌ها', icon: <BarChart3 className="size-4" />, hint: 'فیش، بیمه، مالیات و خروجی‌ها' },
   { href: '/settings', label: 'تنظیمات', icon: <Settings className="size-4" />, hint: 'شرکت، مقررات، پشتیبان و کاربران' },
+  { href: '/help', label: 'راهنما', icon: <BookOpen className="size-4" />, hint: 'راهنمای گام‌به‌گام و پرسش‌های متداول' },
 ];
 
 /** راهنمای نصب PWA — پس از دو بازدید نمایش داده می‌شود و کاربر می‌تواند آن را ببندد. */
@@ -478,6 +481,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           ))}
         </ul>
       </nav>
+
+      {/* پل رویدادهای نسخه دسکتاپ: منوی بومی، پشتیبان پیش از بستن و پرونده بازشده */}
+      <DesktopBridge />
     </div>
   );
 }

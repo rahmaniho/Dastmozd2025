@@ -13,7 +13,8 @@
   "scripts": {
     "build": "echo \"brand assets are static\"",
     "icons": "node scripts/generate-icons.mjs",
-    "clean": "rm -rf logo/png logo/ico logo/icns .turbo"
+    "clean": "rm -rf logo/png logo/ico logo/icns .turbo",
+    "tauri:icons": "node scripts/generate-tauri-icons.mjs"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
