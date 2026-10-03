@@ -47,7 +47,8 @@ jobs:
         run: pnpm test:coverage
 
       - name: ساخت بسته‌ها و خروجی ایستای وب
-        run: pnpm build
+        # بسته دسکتاپ به زنجیره ابزار Rust نیاز دارد و در جریان انتشار جداگانه ساخته می‌شود.
+        run: pnpm exec turbo run build --filter='!@dastmozd/desktop'
         env:
           GITHUB_PAGES: 'false'
 

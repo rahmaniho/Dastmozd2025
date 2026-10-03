@@ -15,7 +15,7 @@
     "icons": "node scripts/generate-icons.mjs",
     "clean": "rm -rf logo/png logo/ico logo/icns .turbo",
     "tauri:icons": "node scripts/generate-tauri-icons.mjs",
-    "lint": "eslint src scripts"
+    "lint": "eslint src"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",

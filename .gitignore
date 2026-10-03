@@ -9,6 +9,7 @@ build/
 .next/
 .turbo/
 *.tsbuildinfo
+.tscheck/
 
 # Tauri / Rust
 src-tauri/target/
