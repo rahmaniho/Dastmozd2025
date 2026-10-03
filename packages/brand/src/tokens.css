@@ -1,0 +1,95 @@
+/**
+ * توکن‌های طراحی به‌صورت CSS Variables.
+ * مقادیر RGB بدون کاما ذخیره می‌شوند تا در `rgb(var(--dm-x) / 0.4)` قابل استفاده باشند.
+ */
+:root {
+  --dm-primary: 13 148 136;
+  --dm-primary-hover: 15 118 110;
+  --dm-primary-active: 17 94 89;
+  --dm-primary-subtle: 230 247 245;
+  --dm-secondary: 15 63 92;
+  --dm-secondary-soft: 18 59 82;
+  --dm-accent: 232 117 50;
+  --dm-accent-soft: 255 240 231;
+  --dm-success: 15 123 82;
+  --dm-success-soft: 232 247 240;
+  --dm-warning: 154 91 0;
+  --dm-warning-soft: 255 247 231;
+  --dm-danger: 180 35 24;
+  --dm-danger-soft: 253 238 237;
+  --dm-info: 21 94 158;
+  --dm-info-soft: 234 243 253;
+  --dm-background: 244 248 249;
+  --dm-surface: 255 255 255;
+  --dm-surface-elevated: 255 255 255;
+  --dm-surface-sunken: 238 244 245;
+  --dm-border: 216 227 230;
+  --dm-border-strong: 185 203 208;
+  --dm-text: 16 33 43;
+  --dm-text-muted: 76 100 112;
+  --dm-text-subtle: 109 133 146;
+  --dm-ring: 13 148 136;
+
+  --dm-radius-sm: 6px;
+  --dm-radius-md: 10px;
+  --dm-radius-lg: 14px;
+  --dm-radius-xl: 18px;
+  --dm-radius-2xl: 24px;
+  --dm-radius-full: 9999px;
+
+  --dm-shadow-xs: 0 1px 2px rgb(9 30 38 / 0.06);
+  --dm-shadow-sm: 0 2px 6px rgb(9 30 38 / 0.07);
+  --dm-shadow-md: 0 8px 24px rgb(9 30 38 / 0.09);
+  --dm-shadow-lg: 0 18px 45px rgb(9 30 38 / 0.12);
+  --dm-shadow-xl: 0 30px 70px rgb(9 30 38 / 0.16);
+
+  --dm-font-sans: 'Vazirmatn', 'IRANSansX', 'Tahoma', system-ui, sans-serif;
+  --dm-font-size-xs: 0.6875rem;
+  --dm-font-size-sm: 0.8125rem;
+  --dm-font-size-base: 0.9375rem;
+  --dm-font-size-lg: 1.0625rem;
+  --dm-font-size-xl: 1.25rem;
+  --dm-font-size-2xl: 1.5rem;
+  --dm-font-size-3xl: 1.875rem;
+  --dm-font-size-4xl: 2.25rem;
+
+  --dm-duration-fast: 140ms;
+  --dm-duration-base: 220ms;
+  --dm-duration-slow: 340ms;
+  --dm-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+[data-theme='dark'] {
+  --dm-primary: 45 212 191;
+  --dm-primary-hover: 94 234 212;
+  --dm-primary-active: 153 246 228;
+  --dm-primary-subtle: 18 58 61;
+  --dm-secondary: 124 198 232;
+  --dm-secondary-soft: 21 57 79;
+  --dm-accent: 246 169 122;
+  --dm-accent-soft: 66 41 26;
+  --dm-success: 74 222 159;
+  --dm-success-soft: 15 49 37;
+  --dm-warning: 243 199 107;
+  --dm-warning-soft: 61 47 16;
+  --dm-danger: 255 156 150;
+  --dm-danger-soft: 67 31 30;
+  --dm-info: 124 184 242;
+  --dm-info-soft: 19 44 68;
+  --dm-background: 11 20 24;
+  --dm-surface: 18 31 37;
+  --dm-surface-elevated: 22 39 46;
+  --dm-surface-sunken: 14 26 31;
+  --dm-border: 38 65 74;
+  --dm-border-strong: 58 91 102;
+  --dm-text: 232 241 244;
+  --dm-text-muted: 173 194 201;
+  --dm-text-subtle: 139 164 173;
+  --dm-ring: 45 212 191;
+
+  --dm-shadow-xs: 0 1px 2px rgb(0 0 0 / 0.3);
+  --dm-shadow-sm: 0 2px 6px rgb(0 0 0 / 0.34);
+  --dm-shadow-md: 0 8px 24px rgb(0 0 0 / 0.38);
+  --dm-shadow-lg: 0 18px 45px rgb(0 0 0 / 0.42);
+  --dm-shadow-xl: 0 30px 70px rgb(0 0 0 / 0.5);
+}

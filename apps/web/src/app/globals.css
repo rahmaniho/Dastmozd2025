@@ -1,0 +1,74 @@
+@import 'tailwindcss';
+@import '../../../../packages/brand/src/tokens.css';
+@import '../../../../packages/ui/src/styles.css';
+
+/*
+ * قلم وزیرمتن به‌صورت میزبانی‌شده محلی بارگذاری می‌شود؛ هیچ CDN بیرونی در زمان
+ * اجرا فراخوانی نمی‌شود تا برنامه کامل آفلاین کار کند.
+ */
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('/fonts/Vazirmatn-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* پس‌زمینه ملایم برنامه با هاله‌های رنگی برند */
+body {
+  background-image:
+    radial-gradient(circle at 92% -6%, rgb(var(--dm-primary) / 0.1), transparent 26rem),
+    radial-gradient(circle at -8% 62%, rgb(var(--dm-accent) / 0.07), transparent 24rem);
+  background-attachment: fixed;
+}
+
+/* چاپ فیش حقوقی و گزارش‌ها روی A4 */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  body {
+    background-image: none;
+  }
+  .dm-print-hide {
+    display: none !important;
+  }
+  .dm-print-page {
+    box-shadow: none !important;
+    border: none !important;
+    page-break-after: always;
+  }
+}

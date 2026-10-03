@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="دستمزد آرمانی ۱۴۰۵">
+  <title>تصویر پیش‌نمایش دستمزد آرمانی ۱۴۰۵</title>
+  <defs>
+    <linearGradient id="ogBg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b3a4a"/>
+      <stop offset="0.55" stop-color="#0d6d68"/>
+      <stop offset="1" stop-color="#12a89a"/>
+    </linearGradient>
+    <linearGradient id="ogBadge" x1="4" y1="2" x2="60" y2="62" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.08"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#ogBg)"/>
+  <circle cx="1050" cy="80" r="240" fill="#ffffff" fill-opacity="0.06"/>
+  <circle cx="150" cy="580" r="190" fill="#e87532" fill-opacity="0.14"/>
+  <g transform="translate(950 118) scale(2.5)">
+    <rect width="64" height="64" rx="15" fill="url(#ogBadge)" stroke="#ffffff" stroke-opacity="0.35"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(45 32 32)"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(90 32 32)"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(135 32 32)"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(180 32 32)"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(225 32 32)"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(270 32 32)"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(315 32 32)"/>
+    <circle cx="32" cy="32" r="16.6" fill="#ffffff"/>
+    <circle cx="32" cy="32" r="19.2" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="1.2"/>
+    <path d="M40.6 23.4c-8.6 1.2-13.8 5.9-14.9 13.3 8-1 13-5.8 14.9-13.3z" fill="#0d9488"/>
+    <path d="M27.2 35.2c2.2-3.9 5.2-7 9.5-9.5" fill="none" stroke="#ffffff" stroke-opacity="0.85" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M24.4 37.8c-.8 1.2-1.4 2.5-1.8 3.9" fill="none" stroke="#0b6f77" stroke-width="1.7" stroke-linecap="round"/>
+  </g>
+  <text x="1030" y="430" text-anchor="end" font-family="Vazirmatn, Tahoma, sans-serif" font-size="82" font-weight="700" fill="#ffffff">دستمزد آرمانی ۱۴۰۵</text>
+  <text x="1030" y="500" text-anchor="end" font-family="Vazirmatn, Tahoma, sans-serif" font-size="34" font-weight="500" fill="#cdeee9">سامانه جامع حقوق و دستمزد ایران</text>
+  <text x="1030" y="556" text-anchor="end" font-family="Vazirmatn, Tahoma, sans-serif" font-size="26" font-weight="400" fill="#9fd8d2">موتور محاسباتی شفاف • گزارش‌های رسمی بیمه و مالیات • وب، ویندوز و موبایل</text>
+</svg>

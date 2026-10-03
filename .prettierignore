@@ -1,0 +1,19 @@
+# خروجی‌های ساخت
+node_modules
+.next
+out
+dist
+coverage
+.turbo
+playwright-report
+test-results
+
+# دارایی‌های دودویی و تولیدشده
+packages/brand/logo
+apps/web/public
+*.ico
+*.icns
+*.png
+
+# فایل‌های قفل
+pnpm-lock.yaml

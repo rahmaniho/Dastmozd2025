@@ -1,0 +1,75 @@
+{
+  "id": "dastmozd-armani-1405",
+  "name": "دستمزد آرمانی ۱۴۰۵ — سامانه جامع حقوق و دستمزد",
+  "short_name": "دستمزد آرمانی",
+  "description": "محاسبه شفاف حقوق و دستمزد بر پایه قانون کار ایران: کارکرد، اضافه‌کار، شب‌کاری، بیمه تأمین اجتماعی، مالیات پلکانی، فیش حقوقی، دیسکت بیمه و لیست مالیات — کاملاً آفلاین و روی دستگاه شما.",
+  "lang": "fa-IR",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#f4f8f9",
+  "theme_color": "#0d9488",
+  "categories": ["business", "finance", "productivity"],
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "icons/dastmozd-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/dastmozd-icon-384.png", "sizes": "384x384", "type": "image/png", "purpose": "any" },
+    { "src": "icons/dastmozd-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/dastmozd-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/dastmozd-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    {
+      "name": "کارمند جدید",
+      "short_name": "کارمند جدید",
+      "description": "ثبت سریع پرونده یک کارمند تازه",
+      "url": "./employees/?new=1",
+      "icons": [{ "src": "icons/dastmozd-icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "محاسبه حقوق",
+      "short_name": "محاسبه حقوق",
+      "description": "اجرای دوره حقوقی ماه جاری در چهار گام",
+      "url": "./payroll/",
+      "icons": [{ "src": "icons/dastmozd-icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "گزارش ماهانه",
+      "short_name": "گزارش ماهانه",
+      "description": "فیش حقوقی، دیسکت بیمه و لیست مالیات",
+      "url": "./reports/",
+      "icons": [{ "src": "icons/dastmozd-icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "share_target": {
+    "action": "./share-target/",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "files": [
+        {
+          "name": "workbook",
+          "accept": [
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.ms-excel",
+            "text/csv"
+          ]
+        }
+      ]
+    }
+  },
+  "file_handlers": [
+    {
+      "action": "./settings/",
+      "accept": {
+        "application/x-dastmozd-backup": [".dastmozd"]
+      }
+    }
+  ],
+  "launch_handler": { "client_mode": "focus-existing" }
+}

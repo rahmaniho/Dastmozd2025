@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 76" width="420" height="76" role="img" aria-label="دستمزد آرمانی ۱۴۰۵">
+  <title>نشان کامل دستمزد آرمانی ۱۴۰۵</title>
+  <!-- نشان کامل: آیکون در سمت راست و مونوگرام در سمت چپ آن (چیدمان راست‌چین) -->
+  <defs>
+    <linearGradient id="dmBadgeL" x1="4" y1="2" x2="60" y2="62" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#14b3a4"/>
+      <stop offset="0.5" stop-color="#0d9488"/>
+      <stop offset="1" stop-color="#0f3f5c"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(340 6)">
+    <rect width="64" height="64" rx="15" fill="url(#dmBadgeL)"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(45 32 32)"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(90 32 32)"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(135 32 32)"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(180 32 32)"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(225 32 32)"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(270 32 32)"/>
+  <rect x="30.3" y="7.6" width="3.4" height="7.6" rx="1.7" fill="#ffffff" transform="rotate(315 32 32)"/>
+    <circle cx="32" cy="32" r="16.6" fill="#ffffff"/>
+    <circle cx="32" cy="32" r="19.2" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="1.2"/>
+    <path d="M40.6 23.4c-8.6 1.2-13.8 5.9-14.9 13.3 8-1 13-5.8 14.9-13.3z" fill="#0d9488"/>
+    <path d="M27.2 35.2c2.2-3.9 5.2-7 9.5-9.5" fill="none" stroke="#ffffff" stroke-opacity="0.85" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M24.4 37.8c-.8 1.2-1.4 2.5-1.8 3.9" fill="none" stroke="#0b6f77" stroke-width="1.7" stroke-linecap="round"/>
+  </g>
+  <text x="324" y="34" text-anchor="end" font-family="Vazirmatn, IRANSansX, Tahoma, sans-serif" font-size="27" font-weight="700" fill="#10212b">دستمزد آرمانی</text>
+  <text x="324" y="59" text-anchor="end" font-family="Vazirmatn, IRANSansX, Tahoma, sans-serif" font-size="15" font-weight="500" fill="#0d766e">۱۴۰۵ — حقوق و دستمزد حرفه‌ای ایران</text>
+</svg>

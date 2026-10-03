@@ -1,0 +1,2 @@
+# بررسی سریع پیش از ارسال: نوع‌ها و آزمون‌های واحد
+pnpm turbo run typecheck test --filter="!@dastmozd/desktop"

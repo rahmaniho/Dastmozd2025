@@ -1,0 +1,36 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "مجوزهای پنجره اصلی دستمزد آرمانی ۱۴۰۵: پشتیبان‌گیری بومی، بازکردن پرونده، چاپ و اجرای خودکار در ویندوز",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-show",
+    "core:window:allow-hide",
+    "core:window:allow-set-focus",
+    "core:window:allow-start-dragging",
+    "dialog:default",
+    "dialog:allow-save",
+    "dialog:allow-open",
+    "dialog:allow-message",
+    "dialog:allow-confirm",
+    "fs:default",
+    "fs:allow-read-text-file",
+    "fs:allow-write-text-file",
+    "opener:default",
+    "opener:allow-open-path",
+    "opener:allow-reveal-item-in-dir",
+    "process:default",
+    "log:default",
+    "autostart:allow-enable",
+    "autostart:allow-disable",
+    "autostart:allow-is-enabled",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        { "path": "$APPDATA/Dastmozd/**" },
+        { "path": "$HOME/Library/Application Support/Dastmozd/**" }
+      ]
+    }
+  ]
+}

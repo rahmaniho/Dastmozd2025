@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+out/
+build/
+.next/
+.turbo/
+*.tsbuildinfo
+.tscheck/
+
+# Tauri / Rust
+src-tauri/target/
+src-tauri/gen/
+
+# Test & coverage
+coverage/
+playwright-report/
+test-results/
+.vitest/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Husky runtime
+.husky/_/
+
+# Tauri build & signed updater config (generated in CI from secrets)
+apps/desktop/src-tauri/target/
+apps/desktop/src-tauri/gen/
+apps/desktop/src-tauri/tauri.updater.conf.json
+apps/desktop/src-tauri/capabilities/updater.json
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Local data dumps & generated binaries
+/tmp/
+*.local
+packages/brand/logo/png/*.tmp

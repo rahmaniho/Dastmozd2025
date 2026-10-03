@@ -1,0 +1,208 @@
+name: Release desktop app
+
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'شماره نسخه بدون پیشوند v (نمونه: 1.0.0)'
+        required: true
+
+permissions:
+  contents: write
+
+env:
+  NODE_VERSION: '22'
+  PNPM_VERSION: '10.18.0'
+
+jobs:
+  build:
+    name: ساخت بسته ${{ matrix.label }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            label: ویندوز ۶۴ بیتی
+            artifact: dastmozd-windows
+          - os: macos-14
+            target: aarch64-apple-darwin
+            label: مک (Apple Silicon)
+            artifact: dastmozd-macos-arm64
+          - os: macos-13
+            target: x86_64-apple-darwin
+            label: مک (Intel)
+            artifact: dastmozd-macos-x64
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: apps/desktop/src-tauri
+
+      - name: نصب وابستگی‌های Node
+        run: pnpm install --frozen-lockfile
+
+      - name: تعیین نسخه
+        id: version
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            echo "value=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: نوشتن پیکربندی امضاشده به‌روزرسانی از اسرار
+        shell: bash
+        env:
+          TAURI_SIGNING_PUBLIC_KEY: ${{ secrets.TAURI_SIGNING_PUBLIC_KEY }}
+        run: |
+          if [ -z "$TAURI_SIGNING_PUBLIC_KEY" ]; then
+            echo "::error::کلید عمومی امضای به‌روزرسانی (TAURI_SIGNING_PUBLIC_KEY) تنظیم نشده است."
+            exit 1
+          fi
+          cat > apps/desktop/src-tauri/tauri.updater.conf.json <<JSON
+          {
+            "bundle": { "createUpdaterArtifacts": true },
+            "plugins": {
+              "updater": {
+                "endpoints": ["https://github.com/${{ github.repository }}/releases/latest/download/latest.json"],
+                "pubkey": "${TAURI_SIGNING_PUBLIC_KEY}",
+                "windows": { "installMode": "passive" }
+              }
+            }
+          }
+          JSON
+          cat > apps/desktop/src-tauri/capabilities/updater.json <<JSON
+          {
+            "\$schema": "../gen/schemas/desktop-schema.json",
+            "identifier": "updater",
+            "description": "مجوزهای به‌روزرسانی خودکار برای ساخت رسمی",
+            "windows": ["main"],
+            "permissions": ["updater:default", "process:allow-restart"]
+          }
+          JSON
+
+      - name: ساخت بسته دسکتاپ
+        working-directory: apps/desktop
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          GITHUB_PAGES: 'false'
+        run: pnpm exec tauri build --target ${{ matrix.target }} --features updater --config src-tauri/tauri.updater.conf.json
+
+      - name: آماده‌سازی نام بسته‌ها (ویندوز)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.value }}"
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+          $nsis = Get-ChildItem "apps/desktop/src-tauri/target/${{ matrix.target }}/release/bundle/nsis/*-setup.exe" | Select-Object -First 1
+          Copy-Item $nsis.FullName "artifacts/Dastmozd-Setup-$version.exe"
+          if (Test-Path "$($nsis.FullName).sig") {
+            Copy-Item "$($nsis.FullName).sig" "artifacts/Dastmozd-Setup-$version.exe.sig"
+          }
+          Copy-Item "apps/desktop/src-tauri/target/${{ matrix.target }}/release/Dastmozd.exe" "artifacts/Dastmozd-Portable-$version-x64.exe"
+          Get-ChildItem artifacts | Select-Object Name, Length
+
+      - name: آماده‌سازی نام بسته‌ها (مک)
+        if: startsWith(matrix.os, 'macos')
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${{ steps.version.outputs.value }}"
+          arch="${{ contains(matrix.target, 'aarch64') && 'arm64' || 'x64' }}"
+          mkdir -p artifacts
+          dmg=$(ls apps/desktop/src-tauri/target/${{ matrix.target }}/release/bundle/dmg/*.dmg | head -1)
+          cp "$dmg" "artifacts/Dastmozd-$version-$arch.dmg"
+          tar=$(ls apps/desktop/src-tauri/target/${{ matrix.target }}/release/bundle/macos/*.app.tar.gz | head -1)
+          cp "$tar" "artifacts/$(basename "$tar")"
+          cp "$tar.sig" "artifacts/$(basename "$tar").sig"
+          ls -la artifacts
+
+      - name: بارگذاری بسته‌ها
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: artifacts
+          if-no-files-found: error
+
+  release:
+    name: انتشار نسخه و مانیفست به‌روزرسانی
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: تعیین نسخه و برچسب
+        id: version
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            echo "value=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+            echo "tag=v${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: ساخت مانیفست به‌روزرسانی
+        run: |
+          node apps/desktop/scripts/build-updater-manifest.mjs \
+            --input artifacts \
+            --out artifacts/latest.json \
+            --version "${{ steps.version.outputs.value }}" \
+            --tag "${{ steps.version.outputs.tag }}" \
+            --repo "${{ github.repository }}" \
+            --notes "دستمزد آرمانی نسخه ${{ steps.version.outputs.value }} — فیش حقوقی، بیمه تأمین اجتماعی و مالیات حقوق"
+
+      - name: ایجاد یا به‌روزرسانی انتشار
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          tag="${{ steps.version.outputs.tag }}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" artifacts/* --clobber
+          else
+            gh release create "$tag" artifacts/* \
+              --title "دستمزد آرمانی ${{ steps.version.outputs.value }}" \
+              --notes-file - <<'NOTES'
+          ### دستمزد آرمانی ۱۴۰۵ — نسخه دسکتاپ
+
+          - نصب‌کننده ویندوز: `Dastmozd-Setup-<version>.exe`
+          - نسخه همراه (Portable): `Dastmozd-Portable-<version>-x64.exe`
+          - مک (Apple Silicon و Intel): `Dastmozd-<version>-arm64.dmg` و `Dastmozd-<version>-x64.dmg`
+          - به‌روزرسانی خودکار از طریق `latest.json` و امضای دیجیتال Tauri
+
+          پیش از به‌روزرسانی، از داده‌ها پشتیبان بگیرید (تنظیمات ← پشتیبان‌گیری).
+          NOTES
+          fi

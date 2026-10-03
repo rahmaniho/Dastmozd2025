@@ -1,0 +1,38 @@
+{
+  "name": "@dastmozd/db",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "لایه داده محلی (Dexie/IndexedDB) با مهاجرت‌ها، پشتیبان‌گیری رمزنگاری‌شده و گزارش حسابرسی",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist coverage .turbo",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@dastmozd/core": "workspace:*",
+    "@dastmozd/legal": "workspace:*",
+    "@dastmozd/types": "workspace:*",
+    "dexie": "^4.0.11"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.8",
+    "fake-indexeddb": "^6.0.0",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@dastmozd/brand",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "هویت بصری دستمزد آرمانی — نشان، رنگ‌ها، تایپوگرافی و توکن‌های طراحی",
+  "main": "./src/tokens.ts",
+  "types": "./src/tokens.ts",
+  "exports": {
+    ".": "./src/tokens.ts",
+    "./tokens": "./src/tokens.ts"
+  },
+  "scripts": {
+    "build": "echo \"brand assets are static\"",
+    "icons": "node scripts/generate-icons.mjs",
+    "clean": "rm -rf logo/png logo/ico logo/icns .turbo",
+    "tauri:icons": "node scripts/generate-tauri-icons.mjs",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "png2icons": "^2.0.1"
+  }
+}

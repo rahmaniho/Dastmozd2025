@@ -1,0 +1,20 @@
+{
+  "name": "@dastmozd/desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "برنامه دسکتاپ دستمزد آرمانی ۱۴۰۵ بر پایه Tauri 2 برای ویندوز و مک",
+  "type": "module",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "build:debug": "tauri build --debug",
+    "build:windows": "tauri build --target x86_64-pc-windows-msvc",
+    "build:macos": "tauri build --target aarch64-apple-darwin",
+    "build:updater": "tauri build --features updater --config src-tauri/tauri.updater.conf.json",
+    "tauri": "tauri",
+    "clean": "rm -rf src-tauri/target .turbo"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.1.0"
+  }
+}
