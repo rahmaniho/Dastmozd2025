@@ -104,7 +104,10 @@ export function applyTheme(theme: ThemeMode): void {
 }
 
 /** اشتراک تغییرات تنظیم سیستم‌عامل در حالت «سیستم». */
-export function watchSystemTheme(theme: ThemeMode, onChange: (resolved: 'light' | 'dark') => void): () => void {
+export function watchSystemTheme(
+  theme: ThemeMode,
+  onChange: (resolved: 'light' | 'dark') => void,
+): () => void {
   if (typeof window === 'undefined') return () => undefined;
   const query = window.matchMedia('(prefers-color-scheme: dark)');
   const listener = (event: MediaQueryListEvent): void => {

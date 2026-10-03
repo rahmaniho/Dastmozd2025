@@ -111,7 +111,10 @@ export function EmployeeImportDialog({
       toast({
         tone: 'success',
         title: `${saved} پرونده ثبت شد`,
-        description: failures.length > 0 ? `${failures.length} سطر ثبت نشد؛ گزارش خطاها را ببینید.` : 'همه سطرهای معتبر ثبت شدند.',
+        description:
+          failures.length > 0
+            ? `${failures.length} سطر ثبت نشد؛ گزارش خطاها را ببینید.`
+            : 'همه سطرهای معتبر ثبت شدند.',
       });
       onImported();
       onOpenChange(false);
@@ -149,20 +152,20 @@ export function EmployeeImportDialog({
                 گزارش خطاها
               </Button>
             ) : null}
-            <Button
-              onClick={importRows}
-              disabled={busy || !preview || preview.valid.length === 0}
-            >
+            <Button onClick={importRows} disabled={busy || !preview || preview.valid.length === 0}>
               {busy ? 'در حال ثبت…' : `ثبت ${preview ? preview.valid.length : 0} سطر معتبر`}
             </Button>
           </>
         }
       >
         <div className="rounded-[var(--dm-radius-lg)] border border-dashed border-[rgb(var(--dm-border-strong))] p-5 text-center">
-          <FileSpreadsheet className="mx-auto mb-2 size-8 text-[rgb(var(--dm-primary))]" aria-hidden />
+          <FileSpreadsheet
+            className="mx-auto mb-2 size-8 text-[rgb(var(--dm-primary))]"
+            aria-hidden
+          />
           <p className="mb-3 text-sm text-[rgb(var(--dm-text-muted))]">
-            سطر اول فایل باید سرواژه داشته باشد؛ ستون‌های الزامی: شماره پرسنلی، نام، نام خانوادگی، نام پدر، کد ملی،
-            شماره شناسنامه، سمت، دپارتمان، تاریخ استخدام.
+            سطر اول فایل باید سرواژه داشته باشد؛ ستون‌های الزامی: شماره پرسنلی، نام، نام خانوادگی،
+            نام پدر، کد ملی، شماره شناسنامه، سمت، دپارتمان، تاریخ استخدام.
           </p>
           <input
             ref={inputRef}
@@ -196,8 +199,8 @@ export function EmployeeImportDialog({
 
             {preview.issues.length > 0 ? (
               <Alert tone="warning" title="گزارش اعتبارسنجی">
-                سطرهای دارای خطا ثبت نمی‌شوند. برای اصلاح، گزارش خطاها را بارگیری کنید یا مقدار ستون‌ها را
-                مطابق قالب نمونه تنظیم کنید.
+                سطرهای دارای خطا ثبت نمی‌شوند. برای اصلاح، گزارش خطاها را بارگیری کنید یا مقدار
+                ستون‌ها را مطابق قالب نمونه تنظیم کنید.
               </Alert>
             ) : null}
 

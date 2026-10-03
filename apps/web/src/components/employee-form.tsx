@@ -91,7 +91,9 @@ export function EmployeeForm({
   const role = useAppStore((state) => state.role);
   const { toast } = useToast();
   const [form, setForm] = useState<EmployeeInput>(() =>
-    editing ? ({ ...editing } as EmployeeInput) : emptyEmployee(companyId, departments[0]?.id ?? ''),
+    editing
+      ? ({ ...editing } as EmployeeInput)
+      : emptyEmployee(companyId, departments[0]?.id ?? ''),
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
@@ -99,10 +101,15 @@ export function EmployeeForm({
   useEffect(() => {
     if (!open) return;
     setErrors({});
-    setForm(editing ? ({ ...editing } as EmployeeInput) : emptyEmployee(companyId, departments[0]?.id ?? ''));
+    setForm(
+      editing
+        ? ({ ...editing } as EmployeeInput)
+        : emptyEmployee(companyId, departments[0]?.id ?? ''),
+    );
   }, [open, editing, companyId, departments]);
 
-  const patch = (changes: Partial<EmployeeInput>): void => setForm((current) => ({ ...current, ...changes }));
+  const patch = (changes: Partial<EmployeeInput>): void =>
+    setForm((current) => ({ ...current, ...changes }));
 
   const departmentOptions = useMemo(
     () => departments.map((department) => ({ value: department.id, label: department.title })),
@@ -153,7 +160,9 @@ export function EmployeeForm({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         size="wide"
-        title={editing ? `ویرایش پرونده ${editing.firstName} ${editing.lastName}` : 'ثبت کارمند جدید'}
+        title={
+          editing ? `ویرایش پرونده ${editing.firstName} ${editing.lastName}` : 'ثبت کارمند جدید'
+        }
         description="فیلدهای ستاره‌دار الزامی‌اند. شماره پرسنلی و کد ملی باید یکتا باشند."
         footer={
           <>
@@ -169,7 +178,12 @@ export function EmployeeForm({
         <section className="space-y-3" aria-label="اطلاعات هویتی">
           <h3 className="text-sm font-bold text-[rgb(var(--dm-text))]">اطلاعات هویتی</h3>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <FormField label="شماره پرسنلی" htmlFor="emp-personnel" required error={errors.personnelCode}>
+            <FormField
+              label="شماره پرسنلی"
+              htmlFor="emp-personnel"
+              required
+              error={errors.personnelCode}
+            >
               <Input
                 id="emp-personnel"
                 numeric
@@ -218,7 +232,12 @@ export function EmployeeForm({
                 onChange={(event) => patch({ nationalId: event.target.value })}
               />
             </FormField>
-            <FormField label="شماره شناسنامه" htmlFor="emp-idcard" required error={errors.idCardNumber}>
+            <FormField
+              label="شماره شناسنامه"
+              htmlFor="emp-idcard"
+              required
+              error={errors.idCardNumber}
+            >
               <Input
                 id="emp-idcard"
                 numeric
@@ -254,7 +273,9 @@ export function EmployeeForm({
                   { value: 'male', label: 'مرد' },
                   { value: 'female', label: 'زن' },
                 ]}
-                onChange={(event) => patch({ gender: event.target.value as EmployeeInput['gender'] })}
+                onChange={(event) =>
+                  patch({ gender: event.target.value as EmployeeInput['gender'] })
+                }
               />
             </FormField>
             <FormField label="وضعیت تأهل" htmlFor="emp-marital">
@@ -275,7 +296,9 @@ export function EmployeeForm({
                 id="emp-education"
                 value={form.education}
                 options={EDUCATIONS.map((item) => ({ value: item.value, label: item.label }))}
-                onChange={(event) => patch({ education: event.target.value as EmployeeInput['education'] })}
+                onChange={(event) =>
+                  patch({ education: event.target.value as EmployeeInput['education'] })
+                }
               />
             </FormField>
           </div>
@@ -286,7 +309,12 @@ export function EmployeeForm({
         <section className="space-y-3" aria-label="اطلاعات شغلی">
           <h3 className="text-sm font-bold text-[rgb(var(--dm-text))]">اطلاعات شغلی و بیمه</h3>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <FormField label="دپارتمان" htmlFor="emp-department" required error={errors.departmentId}>
+            <FormField
+              label="دپارتمان"
+              htmlFor="emp-department"
+              required
+              error={errors.departmentId}
+            >
               <Select
                 id="emp-department"
                 value={form.departmentId}
@@ -309,7 +337,9 @@ export function EmployeeForm({
                 id="emp-contract"
                 value={form.contractType}
                 options={CONTRACT_TYPES.map((item) => ({ value: item.value, label: item.label }))}
-                onChange={(event) => patch({ contractType: event.target.value as EmployeeInput['contractType'] })}
+                onChange={(event) =>
+                  patch({ contractType: event.target.value as EmployeeInput['contractType'] })
+                }
               />
             </FormField>
             <FormField label="وضعیت اشتغال" htmlFor="emp-status">
@@ -317,7 +347,9 @@ export function EmployeeForm({
                 id="emp-status"
                 value={form.status}
                 options={STATUSES.map((item) => ({ value: item.value, label: item.label }))}
-                onChange={(event) => patch({ status: event.target.value as EmployeeInput['status'] })}
+                onChange={(event) =>
+                  patch({ status: event.target.value as EmployeeInput['status'] })
+                }
               />
             </FormField>
             <FormField label="تاریخ استخدام" required error={errors.hireDate}>
@@ -331,7 +363,11 @@ export function EmployeeForm({
                 onChange={(value) => patch({ hireDate: value })}
               />
             </FormField>
-            <FormField label="شماره بیمه تأمین اجتماعی" htmlFor="emp-insurance" error={errors.insuranceNumber}>
+            <FormField
+              label="شماره بیمه تأمین اجتماعی"
+              htmlFor="emp-insurance"
+              error={errors.insuranceNumber}
+            >
               <Input
                 id="emp-insurance"
                 numeric
@@ -369,7 +405,10 @@ export function EmployeeForm({
           <h3 className="text-sm font-bold text-[rgb(var(--dm-text))]">حقوق و مزایای ماهانه</h3>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <FormField label="پایه حقوق ماهانه" required hint="حداقل حقوق ۱۴۰۵: ۱۶۶٬۲۵۵٬۵۰۰ ریال">
-              <MoneyInput value={form.salary.baseMonthly} onChange={(value) => patch({ salary: { ...form.salary, baseMonthly: value } })} />
+              <MoneyInput
+                value={form.salary.baseMonthly}
+                onChange={(value) => patch({ salary: { ...form.salary, baseMonthly: value } })}
+              />
             </FormField>
             <FormField label="پایه سنوات ماهانه">
               <MoneyInput
@@ -377,29 +416,40 @@ export function EmployeeForm({
                 onChange={(value) => patch({ salary: { ...form.salary, seniorityMonthly: value } })}
               />
             </FormField>
-            <FormField label="حق مسکن (بازنویسی اختیاری)" hint="در صورت خالی بودن، مبلغ قانونی اعمال می‌شود.">
+            <FormField
+              label="حق مسکن (بازنویسی اختیاری)"
+              hint="در صورت خالی بودن، مبلغ قانونی اعمال می‌شود."
+            >
               <MoneyInput
                 value={form.salary.housingMonthly ?? 0}
-                onChange={(value) => patch({ salary: { ...form.salary, housingMonthly: value || undefined } })}
+                onChange={(value) =>
+                  patch({ salary: { ...form.salary, housingMonthly: value || undefined } })
+                }
               />
             </FormField>
             <FormField label="بن کارگری (بازنویسی اختیاری)">
               <MoneyInput
                 value={form.salary.groceryMonthly ?? 0}
-                onChange={(value) => patch({ salary: { ...form.salary, groceryMonthly: value || undefined } })}
+                onChange={(value) =>
+                  patch({ salary: { ...form.salary, groceryMonthly: value || undefined } })
+                }
               />
             </FormField>
             <FormField label="حق تأهل (بازنویسی اختیاری)">
               <MoneyInput
                 value={form.salary.marriageMonthly ?? 0}
-                onChange={(value) => patch({ salary: { ...form.salary, marriageMonthly: value || undefined } })}
+                onChange={(value) =>
+                  patch({ salary: { ...form.salary, marriageMonthly: value || undefined } })
+                }
               />
             </FormField>
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <h4 className="text-xs font-bold text-[rgb(var(--dm-text-muted))]">مزایای ثابت اختصاصی</h4>
+              <h4 className="text-xs font-bold text-[rgb(var(--dm-text-muted))]">
+                مزایای ثابت اختصاصی
+              </h4>
               <Button
                 type="button"
                 size="sm"
@@ -552,7 +602,9 @@ export function EmployeeForm({
                   variant="ghost"
                   size="icon"
                   aria-label={`حذف فرزند ${index + 1}`}
-                  onClick={() => patch({ children: form.children.filter((item) => item.id !== child.id) })}
+                  onClick={() =>
+                    patch({ children: form.children.filter((item) => item.id !== child.id) })
+                  }
                 >
                   <Trash2 className="size-4 text-[rgb(var(--dm-danger))]" />
                 </Button>
@@ -566,7 +618,12 @@ export function EmployeeForm({
         <section className="space-y-3" aria-label="اطلاعات بانکی">
           <h3 className="text-sm font-bold text-[rgb(var(--dm-text))]">اطلاعات بانکی</h3>
           <div className="grid gap-3 sm:grid-cols-2">
-            <FormField label="شماره شبا" htmlFor="emp-iban" error={errors.bankAccount} hint="با یا بدون IR — ۲۴ رقم">
+            <FormField
+              label="شماره شبا"
+              htmlFor="emp-iban"
+              error={errors.bankAccount}
+              hint="با یا بدون IR — ۲۴ رقم"
+            >
               <Input
                 id="emp-iban"
                 dir="ltr"
@@ -579,7 +636,9 @@ export function EmployeeForm({
                     bankAccount: {
                       iban: event.target.value,
                       bankName: form.bankAccount?.bankName ?? DEFAULT_BANK,
-                      ...(form.bankAccount?.accountHolder ? { accountHolder: form.bankAccount.accountHolder } : {}),
+                      ...(form.bankAccount?.accountHolder
+                        ? { accountHolder: form.bankAccount.accountHolder }
+                        : {}),
                     },
                   })
                 }
@@ -595,7 +654,9 @@ export function EmployeeForm({
                     bankAccount: {
                       iban: form.bankAccount?.iban ?? '',
                       bankName: event.target.value,
-                      ...(form.bankAccount?.accountHolder ? { accountHolder: form.bankAccount.accountHolder } : {}),
+                      ...(form.bankAccount?.accountHolder
+                        ? { accountHolder: form.bankAccount.accountHolder }
+                        : {}),
                     },
                   })
                 }

@@ -147,12 +147,14 @@ export default function HelpPage() {
         title="راهنمای کاربر"
         description="گام‌های راه‌اندازی سامانه، پاسخ پرسش‌های پرتکرار و مسیر رسیدن به هر بخش."
         breadcrumb="دستمزد آرمانی ۱۴۰۵"
-        actions={<Badge tone="primary">{toPersianDigits(GETTING_STARTED.length)} گام راه‌اندازی</Badge>}
+        actions={
+          <Badge tone="primary">{toPersianDigits(GETTING_STARTED.length)} گام راه‌اندازی</Badge>
+        }
       />
 
       <Alert tone="info" title="اولین بار است از سامانه استفاده می‌کنید؟">
-        ترتیب پیشنهادی کار همان شش گام زیر است؛ با داده نمونه نیز می‌توانید همه بخش‌ها را بی‌خطر تمرین کنید
-        (تنظیمات ← پشتیبان‌گیری ← بارگذاری داده نمونه).
+        ترتیب پیشنهادی کار همان شش گام زیر است؛ با داده نمونه نیز می‌توانید همه بخش‌ها را بی‌خطر
+        تمرین کنید (تنظیمات ← پشتیبان‌گیری ← بارگذاری داده نمونه).
       </Alert>
 
       <div className="max-w-md">
@@ -215,7 +217,9 @@ export default function HelpPage() {
                   <summary className="cursor-pointer text-sm font-semibold text-[rgb(var(--dm-text))]">
                     {item.question}
                   </summary>
-                  <p className="mt-2 text-xs leading-6 text-[rgb(var(--dm-text-muted))]">{item.answer}</p>
+                  <p className="mt-2 text-xs leading-6 text-[rgb(var(--dm-text-muted))]">
+                    {item.answer}
+                  </p>
                 </details>
               ))}
             </CardContent>

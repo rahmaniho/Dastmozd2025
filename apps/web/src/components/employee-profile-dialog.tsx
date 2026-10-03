@@ -96,7 +96,10 @@ export function EmployeeProfileDialog({
     undefined,
   );
   const summary = useLiveQuery(
-    () => (employeeId ? summarizeEmployeeMonth(employeeId, fiscalYear, currentMonth) : Promise.resolve(null)),
+    () =>
+      employeeId
+        ? summarizeEmployeeMonth(employeeId, fiscalYear, currentMonth)
+        : Promise.resolve(null),
     [employeeId, fiscalYear, currentMonth],
     undefined,
   );
@@ -128,7 +131,11 @@ export function EmployeeProfileDialog({
       await navigator.clipboard.writeText(text);
       toast({ tone: 'success', title: 'اطلاعات پرونده در حافظه موقت کپی شد' });
     } catch {
-      toast({ tone: 'error', title: 'کپی اطلاعات ممکن نشد', description: 'دسترسی به حافظه موقت رد شده است.' });
+      toast({
+        tone: 'error',
+        title: 'کپی اطلاعات ممکن نشد',
+        description: 'دسترسی به حافظه موقت رد شده است.',
+      });
     }
   };
 
@@ -156,9 +163,12 @@ export function EmployeeProfileDialog({
           </Badge>
           <Badge tone="neutral">{CONTRACT_LABELS[employee.contractType]}</Badge>
           <Badge tone="info">
-            {employee.gender === 'male' ? 'مرد' : 'زن'} · {employee.maritalStatus === 'married' ? 'متأهل' : 'مجرد'}
+            {employee.gender === 'male' ? 'مرد' : 'زن'} ·{' '}
+            {employee.maritalStatus === 'married' ? 'متأهل' : 'مجرد'}
           </Badge>
-          {children.length > 0 ? <Badge tone="accent">{toPersianDigits(children.length)} فرزند</Badge> : null}
+          {children.length > 0 ? (
+            <Badge tone="accent">{toPersianDigits(children.length)} فرزند</Badge>
+          ) : null}
         </div>
 
         <Tabs
@@ -194,7 +204,9 @@ export function EmployeeProfileDialog({
             {children.length > 0 ? (
               <div className="sm:col-span-2">
                 <Separator className="my-2" />
-                <p className="mb-2 text-xs font-bold text-[rgb(var(--dm-text-muted))]">فرزندان (حق اولاد)</p>
+                <p className="mb-2 text-xs font-bold text-[rgb(var(--dm-text-muted))]">
+                  فرزندان (حق اولاد)
+                </p>
                 <div className="space-y-2">
                   {children.map((child) => (
                     <ListRow
@@ -231,7 +243,11 @@ export function EmployeeProfileDialog({
               )}/${toPersianDigits(String(employee.hireDate.jd).padStart(2, '0'))}`}
             />
             <Field label="شماره بیمه" value={employee.insuranceNumber ?? '—'} numeric />
-            <Field label="پایه حقوق ماهانه" value={`${formatPersianNumber(employee.salary.baseMonthly)} ریال`} numeric />
+            <Field
+              label="پایه حقوق ماهانه"
+              value={`${formatPersianNumber(employee.salary.baseMonthly)} ریال`}
+              numeric
+            />
             <Field
               label="پایه سنوات ماهانه"
               value={`${formatPersianNumber(employee.salary.seniorityMonthly)} ریال`}
@@ -239,18 +255,28 @@ export function EmployeeProfileDialog({
             />
             <Field
               label="حق مسکن (بازنویسی)"
-              value={employee.salary.housingMonthly ? `${formatPersianNumber(employee.salary.housingMonthly)} ریال` : 'مبلغ قانونی'}
+              value={
+                employee.salary.housingMonthly
+                  ? `${formatPersianNumber(employee.salary.housingMonthly)} ریال`
+                  : 'مبلغ قانونی'
+              }
               numeric
             />
             <Field
               label="بن کارگری (بازنویسی)"
-              value={employee.salary.groceryMonthly ? `${formatPersianNumber(employee.salary.groceryMonthly)} ریال` : 'مبلغ قانونی'}
+              value={
+                employee.salary.groceryMonthly
+                  ? `${formatPersianNumber(employee.salary.groceryMonthly)} ریال`
+                  : 'مبلغ قانونی'
+              }
               numeric
             />
             {(employee.salary.extraFixedAllowances ?? []).length > 0 ? (
               <div className="sm:col-span-2 space-y-2">
                 <Separator className="my-1" />
-                <p className="text-xs font-bold text-[rgb(var(--dm-text-muted))]">مزایای ثابت اختصاصی</p>
+                <p className="text-xs font-bold text-[rgb(var(--dm-text-muted))]">
+                  مزایای ثابت اختصاصی
+                </p>
                 {(employee.salary.extraFixedAllowances ?? []).map((item) => (
                   <ListRow
                     key={item.title}
@@ -283,7 +309,11 @@ export function EmployeeProfileDialog({
                 <Metric label="ساعات اضافه‌کار" value={summary.overtimeHours} />
                 <Metric label="ساعات شب‌کاری" value={summary.nightHours} />
                 <Metric label="ساعات تعطیل‌کاری" value={summary.holidayHours} />
-                <Metric label="تأخیر (دقیقه)" value={summary.lateMinutes} tone={summary.lateMinutes > 0 ? 'warning' : 'default'} />
+                <Metric
+                  label="تأخیر (دقیقه)"
+                  value={summary.lateMinutes}
+                  tone={summary.lateMinutes > 0 ? 'warning' : 'default'}
+                />
                 <Metric
                   label="تعجیل در خروج (دقیقه)"
                   value={summary.earlyLeaveMinutes}
@@ -292,8 +322,8 @@ export function EmployeeProfileDialog({
               </div>
             )}
             <Alert tone="info" title="ویرایش کارکرد">
-              برای ثبت یا اصلاح کارکرد روزانه، به صفحه «حضور و غیاب» بروید؛ در آنجا شبکه ماهانه و ورود از فایل
-              دستگاه‌های حضور در دسترس است.
+              برای ثبت یا اصلاح کارکرد روزانه، به صفحه «حضور و غیاب» بروید؛ در آنجا شبکه ماهانه و
+              ورود از فایل دستگاه‌های حضور در دسترس است.
             </Alert>
           </div>
         ) : null}
@@ -319,14 +349,12 @@ export function EmployeeProfileDialog({
                 <TableBody>
                   {(payslips ?? [])
                     .slice()
-                    .sort(
-                      (a, b) =>
-                        b.period.jy - a.period.jy || b.period.jm - a.period.jm,
-                    )
+                    .sort((a, b) => b.period.jy - a.period.jy || b.period.jm - a.period.jm)
                     .map((slip) => (
                       <TableRow key={slip.id}>
                         <TableCell className="font-semibold">
-                          {JALALI_MONTH_LABELS[slip.period.jm - 1]} {toPersianDigits(slip.period.jy)}
+                          {JALALI_MONTH_LABELS[slip.period.jm - 1]}{' '}
+                          {toPersianDigits(slip.period.jy)}
                         </TableCell>
                         <TableCell>
                           <Money value={slip.totals.grossEarnings} />
@@ -340,7 +368,9 @@ export function EmployeeProfileDialog({
                         <TableCell>
                           <Money value={slip.totals.netPay} tone="positive" />
                         </TableCell>
-                        <TableCell className="dm-numeric text-xs">{slip.verificationCode}</TableCell>
+                        <TableCell className="dm-numeric text-xs">
+                          {slip.verificationCode}
+                        </TableCell>
                       </TableRow>
                     ))}
                 </TableBody>
@@ -361,7 +391,9 @@ export function EmployeeProfileDialog({
         {tab === 'loans' ? (
           <div className="space-y-3">
             {(loans ?? []).length === 0 ? (
-              <p className="text-sm text-[rgb(var(--dm-text-subtle))]">قرارداد وامی برای این کارمند ثبت نشده است.</p>
+              <p className="text-sm text-[rgb(var(--dm-text-subtle))]">
+                قرارداد وامی برای این کارمند ثبت نشده است.
+              </p>
             ) : (
               (loans ?? []).map((loan) => {
                 const paid = loan.paidInstallments;
@@ -382,7 +414,11 @@ export function EmployeeProfileDialog({
                           مانده: <Money value={loan.remainingBalance} size="sm" />
                         </span>
                         <Badge tone={loan.status === 'active' ? 'primary' : 'neutral'}>
-                          {loan.status === 'active' ? 'جاری' : loan.status === 'settled' ? 'تسویه‌شده' : 'لغوشده'}
+                          {loan.status === 'active'
+                            ? 'جاری'
+                            : loan.status === 'settled'
+                              ? 'تسویه‌شده'
+                              : 'لغوشده'}
                         </Badge>
                       </span>
                     }
@@ -396,7 +432,9 @@ export function EmployeeProfileDialog({
         {tab === 'audit' ? (
           <div className="space-y-2">
             {(audit ?? []).length === 0 ? (
-              <p className="text-sm text-[rgb(var(--dm-text-subtle))]">رکوردی در گزارش رهگیری ثبت نشده است.</p>
+              <p className="text-sm text-[rgb(var(--dm-text-subtle))]">
+                رکوردی در گزارش رهگیری ثبت نشده است.
+              </p>
             ) : (
               (audit ?? []).map((entry) => (
                 <ListRow
@@ -404,9 +442,15 @@ export function EmployeeProfileDialog({
                   title={entry.summary}
                   meta={
                     <span className="flex flex-wrap items-center gap-2">
-                      <Badge tone="neutral">{AUDIT_ACTION_LABELS[entry.action] ?? entry.action}</Badge>
-                      <span className="dm-numeric">{toPersianDigits(entry.createdAt.slice(0, 10))}</span>
-                      <span className="dm-numeric text-[0.65rem] opacity-70">هش: {entry.hash.slice(0, 10)}</span>
+                      <Badge tone="neutral">
+                        {AUDIT_ACTION_LABELS[entry.action] ?? entry.action}
+                      </Badge>
+                      <span className="dm-numeric">
+                        {toPersianDigits(entry.createdAt.slice(0, 10))}
+                      </span>
+                      <span className="dm-numeric text-[0.65rem] opacity-70">
+                        هش: {entry.hash.slice(0, 10)}
+                      </span>
                     </span>
                   }
                 />
@@ -433,7 +477,10 @@ function Field({
   return (
     <div className={className}>
       <p className="text-xs text-[rgb(var(--dm-text-subtle))]">{label}</p>
-      <p className={`mt-0.5 text-sm font-semibold ${numeric ? 'dm-numeric' : ''}`} dir={numeric ? 'rtl' : undefined}>
+      <p
+        className={`mt-0.5 text-sm font-semibold ${numeric ? 'dm-numeric' : ''}`}
+        dir={numeric ? 'rtl' : undefined}
+      >
         {value}
       </p>
     </div>
@@ -458,7 +505,9 @@ function Metric({
   return (
     <div className="rounded-[var(--dm-radius-lg)] border border-[rgb(var(--dm-border))] bg-[rgb(var(--dm-surface-sunken))] p-3">
       <p className="text-xs text-[rgb(var(--dm-text-muted))]">{label}</p>
-      <p className={`dm-numeric mt-1 text-lg font-bold ${color}`}>{toPersianDigits(Math.round(value * 100) / 100)}</p>
+      <p className={`dm-numeric mt-1 text-lg font-bold ${color}`}>
+        {toPersianDigits(Math.round(value * 100) / 100)}
+      </p>
     </div>
   );
 }

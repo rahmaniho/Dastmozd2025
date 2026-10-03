@@ -64,11 +64,17 @@ async function main() {
     await writeFile(join(logoDir, 'png', `dastmozd-icon-${size}.png`), render(icon, size));
   }
   await writeFile(join(logoDir, 'png', 'dastmozd-icon-mono-512.png'), render(iconMono, 512));
-  await writeFile(join(logoDir, 'png', 'dastmozd-icon-maskable-512.png'), render(iconMaskable, 512));
+  await writeFile(
+    join(logoDir, 'png', 'dastmozd-icon-maskable-512.png'),
+    render(iconMaskable, 512),
+  );
   await writeFile(join(logoDir, 'png', 'android-foreground-432.png'), render(iconForeground, 432));
   await writeFile(
     join(logoDir, 'png', 'android-background-432.png'),
-    render('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="#0d9488"/></svg>', 432),
+    render(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="#0d9488"/></svg>',
+      432,
+    ),
   );
 
   // ۲) آیکون ویندوز (ICO) و مک (ICNS)
@@ -90,10 +96,16 @@ async function main() {
   await writeFile(join(logoDir, 'favicon', 'favicon.svg'), icon);
 
   // ۴) آیکون تطبیقی اندروید (پیش‌زمینه شفاف + پس‌زمینه تک‌رنگ)
-  await writeFile(join(logoDir, 'android', 'ic_launcher_foreground.png'), render(iconForeground, 432));
+  await writeFile(
+    join(logoDir, 'android', 'ic_launcher_foreground.png'),
+    render(iconForeground, 432),
+  );
   await writeFile(
     join(logoDir, 'android', 'ic_launcher_background.png'),
-    render('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="#0d9488"/></svg>', 432),
+    render(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="#0d9488"/></svg>',
+      432,
+    ),
   );
   await writeFile(join(logoDir, 'android', 'ic_launcher_round.png'), render(icon, 192));
   await writeFile(join(logoDir, 'android', 'play-store-512.png'), render(icon, 512));

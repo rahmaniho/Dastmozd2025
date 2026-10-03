@@ -71,7 +71,8 @@ export const ATTENDANCE_ADAPTERS: AttendanceAdapter[] = [
   {
     id: 'sepidar',
     label: 'سپیدار سیستم',
-    description: 'فایل کارکرد سپیدار با ستون‌های «کد کارمند»، «تاریخ»، «مرخصی/غیبت» و ساعات ورود و خروج.',
+    description:
+      'فایل کارکرد سپیدار با ستون‌های «کد کارمند»، «تاریخ»، «مرخصی/غیبت» و ساعات ورود و خروج.',
     columns: {
       personnel: ['کد کارمند', 'کد پرسنلی', 'کد'],
       date: ['تاریخ', 'تاریخ روز'],
@@ -165,7 +166,8 @@ export function readAttendanceWorkbook(
   file: ArrayBuffer,
   options: { employees: Employee[]; adapterId: string },
 ): AttendanceImportResult {
-  const adapter = ATTENDANCE_ADAPTERS.find((item) => item.id === options.adapterId) ?? ATTENDANCE_ADAPTERS[0];
+  const adapter =
+    ATTENDANCE_ADAPTERS.find((item) => item.id === options.adapterId) ?? ATTENDANCE_ADAPTERS[0];
   if (!adapter) throw new Error('آداپتور ورود یافت نشد.');
 
   const workbook = XLSX.read(file, { type: 'array' });
@@ -193,7 +195,10 @@ export function readAttendanceWorkbook(
     }
     const employee = byPersonnel.get(toLatinDigits(personnelRaw).trim().toLowerCase());
     if (!employee) {
-      issues.push({ row: rowNumber, message: `کارمندی با شماره پرسنلی «${personnelRaw}» یافت نشد.` });
+      issues.push({
+        row: rowNumber,
+        message: `کارمندی با شماره پرسنلی «${personnelRaw}» یافت نشد.`,
+      });
       return;
     }
 
@@ -206,7 +211,10 @@ export function readAttendanceWorkbook(
     const date = jalaliToGregorianIso(jalali);
     const key = `${employee.id}|${date}`;
     if (seen.has(key)) {
-      issues.push({ row: rowNumber, message: 'کارکرد این روز برای این کارمند در فایل تکراری است.' });
+      issues.push({
+        row: rowNumber,
+        message: 'کارکرد این روز برای این کارمند در فایل تکراری است.',
+      });
       return;
     }
     seen.add(key);

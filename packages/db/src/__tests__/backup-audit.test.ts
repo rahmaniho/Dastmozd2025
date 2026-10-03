@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { buildBackupFile, decryptText, encryptText, parseBackupFile, sha256Hex, toBase64 } from '../crypto';
+import {
+  buildBackupFile,
+  decryptText,
+  encryptText,
+  parseBackupFile,
+  sha256Hex,
+  toBase64,
+} from '../crypto';
 import { db } from '../schema';
 import { recordAudit, verifyAuditChain } from '../audit';
 import { collectBackupData, createBackup, restoreBackup } from '../backup';
@@ -68,9 +75,9 @@ describe('رمزنگاری داده و فایل پشتیبان', () => {
 
   it('فایل نامعتبر با پیام فارسی رد می‌شود', async () => {
     await expect(parseBackupFile('{ not json')).rejects.toThrow(/معتبر/);
-    await expect(parseBackupFile(JSON.stringify({ manifest: { format: 'x' }, payload: '' }))).rejects.toThrow(
-      /شناسایی نشد/,
-    );
+    await expect(
+      parseBackupFile(JSON.stringify({ manifest: { format: 'x' }, payload: '' })),
+    ).rejects.toThrow(/شناسایی نشد/);
   });
 
   it('اثر انگشت SHA-256 پایدار است', async () => {
@@ -97,7 +104,11 @@ describe('پشتیبان‌گیری و بازیابی کامل داده', () => 
     await db.employees.clear();
     expect(await db.employees.count()).toBe(0);
 
-    const result = await restoreBackup({ content, passphrase: 'backup-passphrase', mode: 'replace' });
+    const result = await restoreBackup({
+      content,
+      passphrase: 'backup-passphrase',
+      mode: 'replace',
+    });
     expect(result.integrity.valid).toBe(true);
     expect(result.restored.employees).toBe(5);
     expect(await db.employees.count()).toBe(5);
@@ -128,8 +139,18 @@ describe('گزارش حسابرسی تغییرناپذیر', () => {
 
   it('دست‌کاری در سابقه، زنجیره را می‌شکند', async () => {
     await db.auditLog.clear();
-    await recordAudit({ action: 'create', entityType: 'employee', entityId: 'emp-1', summary: 'الف' });
-    await recordAudit({ action: 'update', entityType: 'employee', entityId: 'emp-1', summary: 'ب' });
+    await recordAudit({
+      action: 'create',
+      entityType: 'employee',
+      entityId: 'emp-1',
+      summary: 'الف',
+    });
+    await recordAudit({
+      action: 'update',
+      entityType: 'employee',
+      entityId: 'emp-1',
+      summary: 'ب',
+    });
     const entries = await db.auditLog.orderBy('createdAt').toArray();
     const first = entries[0];
     if (first) await db.auditLog.update(first.id, { summary: 'تغییر یافته' });

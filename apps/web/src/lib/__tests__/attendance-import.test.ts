@@ -101,7 +101,9 @@ describe('readAttendanceWorkbook', () => {
     expect(result.rows).toHaveLength(1);
     expect(result.issues).toHaveLength(4);
     expect(result.issues.map((issue) => issue.message).join(' ')).toContain('یافت نشد');
-    expect(result.issues.map((issue) => issue.message).join(' ')).toContain('تاریخ شمسی معتبر نیست');
+    expect(result.issues.map((issue) => issue.message).join(' ')).toContain(
+      'تاریخ شمسی معتبر نیست',
+    );
     expect(result.issues.map((issue) => issue.message).join(' ')).toContain('تکراری');
     expect(result.issues.map((issue) => issue.message).join(' ')).toContain('خالی است');
   });
@@ -119,7 +121,12 @@ describe('readAttendanceWorkbook', () => {
 
   it('آداپتور راهکاران زمان‌های ورود و خروج را ترجمه می‌کند', () => {
     const file = workbook([
-      { 'شماره پرسنلی': 'AR-1001', 'تاریخ شمسی': '1405/07/06', 'زمان ورود': '۰۷:۳۰', 'زمان خروج': '۱۶:۰۰' },
+      {
+        'شماره پرسنلی': 'AR-1001',
+        'تاریخ شمسی': '1405/07/06',
+        'زمان ورود': '۰۷:۳۰',
+        'زمان خروج': '۱۶:۰۰',
+      },
     ]);
 
     const result = readAttendanceWorkbook(file, { employees: EMPLOYEES, adapterId: 'rahkaran' });

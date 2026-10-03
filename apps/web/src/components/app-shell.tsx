@@ -46,13 +46,48 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { href: '/', label: 'داشبورد', icon: <LayoutDashboard className="size-4" />, hint: 'تصویر کلی حقوق و دستمزد' },
-  { href: '/employees', label: 'کارکنان', icon: <Users className="size-4" />, hint: 'مدیریت پرونده کارکنان' },
-  { href: '/attendance', label: 'حضور و غیاب', icon: <CalendarDays className="size-4" />, hint: 'کارکرد ماهانه' },
-  { href: '/payroll', label: 'محاسبه حقوق', icon: <Wallet className="size-4" />, hint: 'اجرای دوره حقوقی' },
-  { href: '/reports', label: 'گزارش‌ها', icon: <BarChart3 className="size-4" />, hint: 'فیش، بیمه، مالیات و خروجی‌ها' },
-  { href: '/settings', label: 'تنظیمات', icon: <Settings className="size-4" />, hint: 'شرکت، مقررات، پشتیبان و کاربران' },
-  { href: '/help', label: 'راهنما', icon: <BookOpen className="size-4" />, hint: 'راهنمای گام‌به‌گام و پرسش‌های متداول' },
+  {
+    href: '/',
+    label: 'داشبورد',
+    icon: <LayoutDashboard className="size-4" />,
+    hint: 'تصویر کلی حقوق و دستمزد',
+  },
+  {
+    href: '/employees',
+    label: 'کارکنان',
+    icon: <Users className="size-4" />,
+    hint: 'مدیریت پرونده کارکنان',
+  },
+  {
+    href: '/attendance',
+    label: 'حضور و غیاب',
+    icon: <CalendarDays className="size-4" />,
+    hint: 'کارکرد ماهانه',
+  },
+  {
+    href: '/payroll',
+    label: 'محاسبه حقوق',
+    icon: <Wallet className="size-4" />,
+    hint: 'اجرای دوره حقوقی',
+  },
+  {
+    href: '/reports',
+    label: 'گزارش‌ها',
+    icon: <BarChart3 className="size-4" />,
+    hint: 'فیش، بیمه، مالیات و خروجی‌ها',
+  },
+  {
+    href: '/settings',
+    label: 'تنظیمات',
+    icon: <Settings className="size-4" />,
+    hint: 'شرکت، مقررات، پشتیبان و کاربران',
+  },
+  {
+    href: '/help',
+    label: 'راهنما',
+    icon: <BookOpen className="size-4" />,
+    hint: 'راهنمای گام‌به‌گام و پرسش‌های متداول',
+  },
 ];
 
 /** راهنمای نصب PWA — پس از دو بازدید نمایش داده می‌شود و کاربر می‌تواند آن را ببندد. */
@@ -71,8 +106,14 @@ function InstallPrompt() {
   }, []);
 
   const install = useCallback(async () => {
-    const promptEvent = (window as unknown as { __dastmozdInstallPrompt?: Event & { prompt?: () => Promise<void>; userChoice?: Promise<{ outcome: string }> } })
-      .__dastmozdInstallPrompt;
+    const promptEvent = (
+      window as unknown as {
+        __dastmozdInstallPrompt?: Event & {
+          prompt?: () => Promise<void>;
+          userChoice?: Promise<{ outcome: string }>;
+        };
+      }
+    ).__dastmozdInstallPrompt;
     if (!promptEvent?.prompt) {
       toast({
         tone: 'info',
@@ -86,7 +127,11 @@ function InstallPrompt() {
     await promptEvent.prompt();
     const choice = await promptEvent.userChoice;
     if (choice?.outcome === 'accepted') {
-      toast({ tone: 'success', title: 'برنامه نصب شد', description: 'دستمزد آرمانی اکنون روی دستگاه شما نصب است.' });
+      toast({
+        tone: 'success',
+        title: 'برنامه نصب شد',
+        description: 'دستمزد آرمانی اکنون روی دستگاه شما نصب است.',
+      });
     }
     setVisible(false);
   }, [toast]);
@@ -170,7 +215,8 @@ function PeriodSelector() {
               toast({
                 tone: 'warning',
                 title: 'پروفایل حقوقی سال انتخابی موجود نیست',
-                description: 'ارقام پروفایل ۱۴۰۵ به کار گرفته می‌شود؛ پیش از تأیید نهایی، مقررات سال را بررسی کنید.',
+                description:
+                  'ارقام پروفایل ۱۴۰۵ به کار گرفته می‌شود؛ پیش از تأیید نهایی، مقررات سال را بررسی کنید.',
               });
             }
           }}
@@ -262,7 +308,11 @@ function OnboardingGate({ onDone }: { onDone: () => void }) {
           createdAt: new Date().toISOString(),
         });
       }
-      toast({ tone: 'success', title: 'سامانه آماده است', description: 'از صفحه کارکنان، نخستین پرونده را ثبت کنید.' });
+      toast({
+        tone: 'success',
+        title: 'سامانه آماده است',
+        description: 'از صفحه کارکنان، نخستین پرونده را ثبت کنید.',
+      });
       onDone();
     } finally {
       setBusy(null);
@@ -278,15 +328,16 @@ function OnboardingGate({ onDone }: { onDone: () => void }) {
           </div>
           <CardTitle className="text-2xl">به دستمزد آرمانی ۱۴۰۵ خوش آمدید</CardTitle>
           <CardDescription className="max-w-xl text-center leading-relaxed">
-            این سامانه کاملاً روی دستگاه شما اجرا می‌شود؛ هیچ اطلاعاتی به اینترنت ارسال نمی‌شود. برای آغاز، می‌توانید
-            داده نمونه را بارگذاری کنید یا با پرونده‌های واقعی شرکت شروع کنید.
+            این سامانه کاملاً روی دستگاه شما اجرا می‌شود؛ هیچ اطلاعاتی به اینترنت ارسال نمی‌شود.
+            برای آغاز، می‌توانید داده نمونه را بارگذاری کنید یا با پرونده‌های واقعی شرکت شروع کنید.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-3 sm:grid-cols-2">
           <div className="rounded-[var(--dm-radius-lg)] border border-[rgb(var(--dm-border))] p-4">
             <p className="mb-1 font-bold">بارگذاری داده نمونه</p>
             <p className="mb-3 text-sm text-[var(--dm-text-muted)] text-[rgb(var(--dm-text-muted))]">
-              ۵ کارمند نمونه با کد ملی معتبر، ۵ دپارتمان و کارکرد ماه مهر ۱۴۰۵؛ مناسب آشنایی سریع و آزمون سامانه.
+              ۵ کارمند نمونه با کد ملی معتبر، ۵ دپارتمان و کارکرد ماه مهر ۱۴۰۵؛ مناسب آشنایی سریع و
+              آزمون سامانه.
             </p>
             <Button onClick={loadDemo} disabled={busy !== null} className="w-full">
               {busy === 'seed' ? 'در حال بارگذاری…' : 'بارگذاری داده نمونه'}
@@ -297,7 +348,12 @@ function OnboardingGate({ onDone }: { onDone: () => void }) {
             <p className="mb-3 text-sm text-[rgb(var(--dm-text-muted))]">
               شرکت و دپارتمان‌های پیش‌فرض ساخته می‌شود و پرونده کارکنان را خودتان ثبت می‌کنید.
             </p>
-            <Button variant="outline" onClick={startEmpty} disabled={busy !== null} className="w-full">
+            <Button
+              variant="outline"
+              onClick={startEmpty}
+              disabled={busy !== null}
+              className="w-full"
+            >
               {busy === 'empty' ? 'در حال آماده‌سازی…' : 'شروع خالی'}
             </Button>
           </div>
@@ -365,7 +421,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     />
                   ))}
                   <circle cx="32" cy="32" r="16.6" fill="#ffffff" />
-                  <path d="M40.6 23.4c-8.6 1.2-13.8 5.9-14.9 13.3 8-1 13-5.8 14.9-13.3z" fill="#0d9488" />
+                  <path
+                    d="M40.6 23.4c-8.6 1.2-13.8 5.9-14.9 13.3 8-1 13-5.8 14.9-13.3z"
+                    fill="#0d9488"
+                  />
                   <path
                     d="M24.4 37.8c-.8 1.2-1.4 2.5-1.8 3.9"
                     fill="none"
@@ -398,10 +457,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <div className="mx-auto flex w-full max-w-[1600px] flex-1 gap-4 px-4 py-4">
         <aside
-          className={cn(
-            'dm-print-hide hidden w-64 shrink-0 lg:block',
-            collapsed && 'lg:w-16',
-          )}
+          className={cn('dm-print-hide hidden w-64 shrink-0 lg:block', collapsed && 'lg:w-16')}
           aria-label="منوی اصلی"
         >
           <nav className="sticky top-20 space-y-1">
@@ -421,7 +477,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <span className={cn(collapsed && 'lg:hidden')}>{item.label}</span>
               </Link>
             ))}
-            <div className={cn('pt-4 text-xs text-[rgb(var(--dm-text-subtle))]', collapsed && 'lg:hidden')}>
+            <div
+              className={cn(
+                'pt-4 text-xs text-[rgb(var(--dm-text-subtle))]',
+                collapsed && 'lg:hidden',
+              )}
+            >
               <p className="flex items-center gap-1.5 pb-1">
                 <Lock className="size-3.5" aria-hidden /> داده‌ها فقط روی این دستگاه ذخیره می‌شود
               </p>
@@ -442,7 +503,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {error ? (
             <Card>
               <CardContent className="pt-5">
-                <p className="font-bold text-[rgb(var(--dm-danger))]">خطا در آماده‌سازی پایگاه داده</p>
+                <p className="font-bold text-[rgb(var(--dm-danger))]">
+                  خطا در آماده‌سازی پایگاه داده
+                </p>
                 <p className="mt-1 text-sm text-[rgb(var(--dm-text-muted))]">{error}</p>
               </CardContent>
             </Card>
@@ -471,7 +534,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 href={item.href}
                 className={cn(
                   'flex flex-col items-center gap-1 rounded-[var(--dm-radius-md)] px-2 py-1.5 text-[0.68rem] font-semibold transition-colors',
-                  item.active ? 'text-[rgb(var(--dm-primary))]' : 'text-[rgb(var(--dm-text-subtle))]',
+                  item.active
+                    ? 'text-[rgb(var(--dm-primary))]'
+                    : 'text-[rgb(var(--dm-text-subtle))]',
                 )}
               >
                 {item.icon}

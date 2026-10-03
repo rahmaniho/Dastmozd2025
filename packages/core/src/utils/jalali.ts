@@ -68,7 +68,10 @@ function jalCal(jy: number): JalCal {
 /** Gregorian date → Julian Day Number. */
 function g2d(gy: number, gm: number, gd: number): number {
   let d =
-    div((gy + div(gm - 8, 6) + 100100) * 1461, 4) + div(153 * mod(gm + 9, 12) + 2, 5) + gd - 34840408;
+    div((gy + div(gm - 8, 6) + 100100) * 1461, 4) +
+    div(153 * mod(gm + 9, 12) + 2, 5) +
+    gd -
+    34840408;
   d = d - div(div(gy + 100100 + div(gm - 8, 6), 100) * 3, 4) + 752;
   return d;
 }
@@ -121,7 +124,11 @@ export function toJalali(gy: number, gm: number, gd: number): JalaliDate {
 }
 
 /** Converts a Jalali date to a Gregorian date. */
-export function toGregorian(jy: number, jm: number, jd: number): { gy: number; gm: number; gd: number } {
+export function toGregorian(
+  jy: number,
+  jm: number,
+  jd: number,
+): { gy: number; gm: number; gd: number } {
   return d2g(j2d(jy, jm, jd));
 }
 
@@ -181,7 +188,7 @@ export function addJalaliDays(date: JalaliDate, days: number): JalaliDate {
 
 /** Adds months to a Jalali date, clamping the day to the month length. */
 export function addJalaliMonths(date: JalaliDate, months: number): JalaliDate {
-  const total = (date.jy * 12 + (date.jm - 1)) + months;
+  const total = date.jy * 12 + (date.jm - 1) + months;
   const jy = Math.floor(total / 12);
   const jm = (total % 12) + 1;
   const jd = Math.min(date.jd, jalaliMonthLength(jy, jm));

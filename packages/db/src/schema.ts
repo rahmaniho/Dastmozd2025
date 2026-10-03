@@ -81,9 +81,12 @@ export class DastmozdDatabase extends Dexie {
       departments: 'id, companyId, title, parentId',
       employees:
         'id, companyId, personnelCode, nationalId, lastName, departmentId, status, contractType, [companyId+status], [companyId+departmentId]',
-      attendance: 'id, employeeId, date, kind, payrollRunId, [employeeId+date], [employeeId+payrollRunId]',
-      payrollRuns: 'id, companyId, period.jy, period.jm, status, version, [companyId+period.jy+period.jm]',
-      payslips: 'id, payrollRunId, employeeId, period.jy, period.jm, [employeeId+period.jy+period.jm]',
+      attendance:
+        'id, employeeId, date, kind, payrollRunId, [employeeId+date], [employeeId+payrollRunId]',
+      payrollRuns:
+        'id, companyId, period.jy, period.jm, status, version, [companyId+period.jy+period.jm]',
+      payslips:
+        'id, payrollRunId, employeeId, period.jy, period.jm, [employeeId+period.jy+period.jm]',
       loans: 'id, employeeId, companyId, status',
       users: 'id, username, role',
       settings: 'id',
@@ -98,7 +101,8 @@ export class DastmozdDatabase extends Dexie {
     this.version(2).stores({
       employees:
         'id, companyId, personnelCode, nationalId, lastName, firstName, departmentId, status, contractType, [companyId+status], [companyId+departmentId]',
-      attendance: 'id, employeeId, date, kind, payrollRunId, [employeeId+date], [employeeId+payrollRunId], [date+kind]',
+      attendance:
+        'id, employeeId, date, kind, payrollRunId, [employeeId+date], [employeeId+payrollRunId], [date+kind]',
       payslips:
         'id, payrollRunId, employeeId, period.jy, period.jm, verificationCode, [employeeId+period.jy+period.jm]',
       auditLog: 'id, entityType, entityId, action, createdAt, actorId, [entityType+entityId]',

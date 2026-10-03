@@ -71,11 +71,17 @@ export function summarizeAttendance(
   let presentDays = 0;
 
   for (const record of records) {
-    const shift = options.shiftByDate?.[record.date] ?? (record.shiftKind === 'none' ? undefined : record.shiftKind);
+    const shift =
+      options.shiftByDate?.[record.date] ??
+      (record.shiftKind === 'none' ? undefined : record.shiftKind);
     const isHoliday = holidays.has(record.date);
     const hours = workedHoursOf(record);
     const overtime = record.overtimeHours ?? 0;
-    const night = record.nightHours ?? (record.checkIn && record.checkOut ? nightHoursOf(record.checkIn, record.checkOut, record.breakMinutes ?? 0) : 0);
+    const night =
+      record.nightHours ??
+      (record.checkIn && record.checkOut
+        ? nightHoursOf(record.checkIn, record.checkOut, record.breakMinutes ?? 0)
+        : 0);
     const holidayHours = record.holidayHours ?? (isHoliday ? hours : 0);
 
     switch (record.kind) {
@@ -149,12 +155,7 @@ export function summarizeAttendance(
  * missions. Unpaid leave and absences are excluded and deducted separately.
  */
 export function creditedDays(summary: AttendanceSummary): number {
-  return (
-    summary.presentDays +
-    summary.paidLeaveDays +
-    summary.sickLeaveDays +
-    summary.missionDays
-  );
+  return summary.presentDays + summary.paidLeaveDays + summary.sickLeaveDays + summary.missionDays;
 }
 
 /** Days that reduce the payable wage (غیبت + مرخصی بدون حقوق + استعلاجی بدون مزد). */

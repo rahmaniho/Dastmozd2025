@@ -1,7 +1,13 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from '../schema';
 import { makeId } from '../helpers';
-import { createDefaultCompany, ensureActiveCompany, listCompanies, saveCompany, archiveCompany } from '../repositories/companies';
+import {
+  createDefaultCompany,
+  ensureActiveCompany,
+  listCompanies,
+  saveCompany,
+  archiveCompany,
+} from '../repositories/companies';
 import {
   allActiveEmployees,
   deleteEmployee,
@@ -20,9 +26,30 @@ import {
   summarizeEmployeeMonth,
   upsertAttendance,
 } from '../repositories/attendance';
-import { createLoan, installmentForPeriod, installmentSchedule, listLoans, registerInstallment, upcomingInstallments } from '../repositories/loans';
-import { addManualEvent, listCalendarEvents, markEventDone, syncCalendarEvents } from '../repositories/events';
-import { can, createUser, defaultSettings, deleteUser, getSettings, roleLabel, saveSettings, verifyUserPassword } from '../repositories/settings';
+import {
+  createLoan,
+  installmentForPeriod,
+  installmentSchedule,
+  listLoans,
+  registerInstallment,
+  upcomingInstallments,
+} from '../repositories/loans';
+import {
+  addManualEvent,
+  listCalendarEvents,
+  markEventDone,
+  syncCalendarEvents,
+} from '../repositories/events';
+import {
+  can,
+  createUser,
+  defaultSettings,
+  deleteUser,
+  getSettings,
+  roleLabel,
+  saveSettings,
+  verifyUserPassword,
+} from '../repositories/settings';
 import { createBackup, listBackups } from '../backup';
 import { jalaliToGregorianIso } from '@dastmozd/core';
 
@@ -47,7 +74,9 @@ async function makeEmployee(companyId: string, departmentId: string, index = 1) 
     firstName: 'کارمند',
     lastName: `آزمون${index}`,
     fatherName: 'پدر',
-    nationalId: ['1234567891', '0084575948', '0930123451', '1111222231', '0079900119'][index - 1] ?? '1234567891',
+    nationalId:
+      ['1234567891', '0084575948', '0930123451', '1111222231', '0079900119'][index - 1] ??
+      '1234567891',
     idCardNumber: '1000',
     birthDate: { jy: 1370, jm: 1, jd: 1 },
     hireDate: { jy: 1398, jm: 1, jd: 1 },
@@ -115,7 +144,10 @@ describe('پرونده کارکنان', () => {
     expect(byName.total).toBe(1);
     const byNationalId = await listEmployees({ companyId: company.id, search: '1234567891' });
     expect(byNationalId.total).toBe(1);
-    const byDepartment = await listEmployees({ companyId: company.id, departmentId: department.id });
+    const byDepartment = await listEmployees({
+      companyId: company.id,
+      departmentId: department.id,
+    });
     expect(byDepartment.total).toBe(1);
     const none = await listEmployees({ companyId: company.id, status: 'terminated' });
     expect(none.total).toBe(0);
@@ -341,9 +373,29 @@ describe('وام‌ها و رویدادهای تقویم', () => {
       startPeriod: { jy: 1405, jm: 8 },
     });
     await registerInstallment(settled.id, 5_000_000);
-    expect((await listLoans(company.id)).find((item) => item.id === settled.id)?.status).toBe('settled');
-    await expect(createLoan({ employeeId: 'e', companyId: company.id, title: 'x', principal: 0, installmentCount: 1, startPeriod: { jy: 1405, jm: 1 } })).rejects.toThrow(/بزرگ‌تر از صفر/);
-    await expect(createLoan({ employeeId: 'e', companyId: company.id, title: 'x', principal: 100, installmentCount: 0, startPeriod: { jy: 1405, jm: 1 } })).rejects.toThrow(/حداقل یک/);
+    expect((await listLoans(company.id)).find((item) => item.id === settled.id)?.status).toBe(
+      'settled',
+    );
+    await expect(
+      createLoan({
+        employeeId: 'e',
+        companyId: company.id,
+        title: 'x',
+        principal: 0,
+        installmentCount: 1,
+        startPeriod: { jy: 1405, jm: 1 },
+      }),
+    ).rejects.toThrow(/بزرگ‌تر از صفر/);
+    await expect(
+      createLoan({
+        employeeId: 'e',
+        companyId: company.id,
+        title: 'x',
+        principal: 100,
+        installmentCount: 0,
+        startPeriod: { jy: 1405, jm: 1 },
+      }),
+    ).rejects.toThrow(/حداقل یک/);
     await expect(registerInstallment('missing', 1000)).rejects.toThrow(/یافت نشد/);
   });
 
@@ -419,7 +471,13 @@ describe('تنظیمات و کاربران', () => {
     expect(user.passwordHash).not.toBe('Passw0rd!1405');
     expect(user.passwordSalt).toBeTruthy();
     await expect(
-      createUser({ fullName: 'x', username: 's.rahimi', role: 'viewer', companyIds: [], password: 'Passw0rd!1405' }),
+      createUser({
+        fullName: 'x',
+        username: 's.rahimi',
+        role: 'viewer',
+        companyIds: [],
+        password: 'Passw0rd!1405',
+      }),
     ).rejects.toThrow(/نام کاربری/);
     expect(await verifyUserPassword('s.rahimi', 'wrong')).toBeNull();
     const logged = await verifyUserPassword('s.rahimi', 'Passw0rd!1405');

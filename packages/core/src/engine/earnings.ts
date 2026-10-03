@@ -135,7 +135,10 @@ export function buildEarnings({
   const daysInMonth = attendance.periodDays;
   const unpaidSickDays = Math.max(0, attendance.sickLeaveDays - employerPaidSickDays);
   const deductedDays =
-    attendance.unpaidLeaveDays + attendance.absenceDays + unpaidSickDays + attendance.nonPayableDays;
+    attendance.unpaidLeaveDays +
+    attendance.absenceDays +
+    unpaidSickDays +
+    attendance.nonPayableDays;
   const payableDays = Math.max(0, creditDays - deductedDays);
   const prorationRatio = creditDays > 0 ? payableDays / creditDays : 0;
 
@@ -166,12 +169,17 @@ export function buildEarnings({
   const seniorityAmount = employee.wage.seniorityMonthly ?? profile.seniorityMonthly;
   if (seniorityIncluded && seniorityAmount > 0) {
     earnings.push(
-      earningLine(profile, 'seniority', seniorityAmount * (options?.prorateBenefits ? prorationRatio : 1), {
-        quantity: 1,
-        unitRate: seniorityAmount,
-        coefficient: options?.prorateBenefits ? prorationRatio : 1,
-        note: 'پایه سنوات ماهانه برای کارکنان با حداقل یک سال سابقه',
-      }),
+      earningLine(
+        profile,
+        'seniority',
+        seniorityAmount * (options?.prorateBenefits ? prorationRatio : 1),
+        {
+          quantity: 1,
+          unitRate: seniorityAmount,
+          coefficient: options?.prorateBenefits ? prorationRatio : 1,
+          note: 'پایه سنوات ماهانه برای کارکنان با حداقل یک سال سابقه',
+        },
+      ),
     );
   } else if (!seniorityIncluded && employee.hireDate) {
     warnings.push({
@@ -275,7 +283,8 @@ export function buildEarnings({
   const nightOvertimeHours = attendance.nightOvertimeHours;
   if (nightHours > 0) {
     const mode = options?.nightWorkMode ?? 'full-rate';
-    const coefficient = mode === 'premium' ? rates.nightAllowanceRate : 1 + rates.nightAllowanceRate;
+    const coefficient =
+      mode === 'premium' ? rates.nightAllowanceRate : 1 + rates.nightAllowanceRate;
     const amount = amountOf(rates.hourlyWage, nightHours, coefficient);
     earnings.push(
       earningLine(profile, 'night-work', amount, {
@@ -343,7 +352,9 @@ export function buildEarnings({
   }
 
   // 7) Shift work allowance (نوبت‌کاری).
-  for (const [kind, hours] of Object.entries(attendance.shiftHours) as Array<[ShiftKind, number | undefined]>) {
+  for (const [kind, hours] of Object.entries(attendance.shiftHours) as Array<
+    [ShiftKind, number | undefined]
+  >) {
     if (!hours || hours <= 0) continue;
     const rule = profile.shiftWorkRules.find((item) => item.kind === kind);
     if (!rule) continue;
@@ -408,13 +419,18 @@ export function buildEarnings({
   // 11) Wage reductions (غیبت، مرخصی بدون حقوق، عدم کارکرد).
   if (attendance.unpaidLeaveDays > 0) {
     reductions.push(
-      deductionLine(profile, 'unpaid-leave-deduction', rates.dailyWage * attendance.unpaidLeaveDays, {
-        title: 'کسر مرخصی بدون حقوق',
-        quantity: attendance.unpaidLeaveDays,
-        unitRate: rates.dailyWage,
-        reducesBase: true,
-        note: `${attendance.unpaidLeaveDays} روز مرخصی بدون حقوق`,
-      }),
+      deductionLine(
+        profile,
+        'unpaid-leave-deduction',
+        rates.dailyWage * attendance.unpaidLeaveDays,
+        {
+          title: 'کسر مرخصی بدون حقوق',
+          quantity: attendance.unpaidLeaveDays,
+          unitRate: rates.dailyWage,
+          reducesBase: true,
+          note: `${attendance.unpaidLeaveDays} روز مرخصی بدون حقوق`,
+        },
+      ),
     );
   }
   if (attendance.absenceDays > 0) {
@@ -441,13 +457,18 @@ export function buildEarnings({
   }
   if (attendance.nonPayableDays > 0) {
     reductions.push(
-      deductionLine(profile, 'unpaid-leave-deduction', rates.dailyWage * attendance.nonPayableDays, {
-        title: 'کسر عدم کارکرد (ورود یا خروج در ماه)',
-        quantity: attendance.nonPayableDays,
-        unitRate: rates.dailyWage,
-        reducesBase: true,
-        note: `${attendance.nonPayableDays} روز بدون کارکرد و بدون حقوق`,
-      }),
+      deductionLine(
+        profile,
+        'unpaid-leave-deduction',
+        rates.dailyWage * attendance.nonPayableDays,
+        {
+          title: 'کسر عدم کارکرد (ورود یا خروج در ماه)',
+          quantity: attendance.nonPayableDays,
+          unitRate: rates.dailyWage,
+          reducesBase: true,
+          note: `${attendance.nonPayableDays} روز بدون کارکرد و بدون حقوق`,
+        },
+      ),
     );
   }
 
@@ -456,7 +477,11 @@ export function buildEarnings({
   // 12) Sanity warnings.
   const payableBase = baseWageAmount - reductionTotal;
   const minMonthly = profile.minMonthlyWage;
-  if (options?.minimumWageCheck !== false && payableBase < minMonthly && attendance.nonPayableDays === 0) {
+  if (
+    options?.minimumWageCheck !== false &&
+    payableBase < minMonthly &&
+    attendance.nonPayableDays === 0
+  ) {
     warnings.push({
       code: 'BELOW_MINIMUM_WAGE',
       severity: 'warning',

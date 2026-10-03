@@ -54,7 +54,15 @@ import {
   Textarea,
   useToast,
 } from '@dastmozd/ui';
-import { Building2, DatabaseZap, HardDriveDownload, Plus, ShieldCheck, Trash2, Upload, UserPlus } from 'lucide-react';
+import {
+  Building2,
+  HardDriveDownload,
+  Plus,
+  ShieldCheck,
+  Trash2,
+  Upload,
+  UserPlus,
+} from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { JALALI_MONTH_LABELS, useDatabaseCounts } from '@/lib/hooks';
 import { useAppStore } from '@/lib/store';
@@ -100,7 +108,9 @@ export default function SettingsPage() {
   useEffect(() => {
     if (!companies) return;
     const target =
-      companies.find((company) => company.id === (selectedCompanyId ?? companyId)) ?? companies[0] ?? null;
+      companies.find((company) => company.id === (selectedCompanyId ?? companyId)) ??
+      companies[0] ??
+      null;
     if (target) {
       setDraft(target);
       if (!selectedCompanyId) setSelectedCompanyId(target.id);
@@ -197,11 +207,17 @@ export default function SettingsPage() {
               <Card>
                 <CardHeader>
                   <CardTitle>مشخصات شرکت</CardTitle>
-                  <CardDescription>این اطلاعات در سرصفحه فیش حقوقی و فایل‌های رسمی درج می‌شود.</CardDescription>
+                  <CardDescription>
+                    این اطلاعات در سرصفحه فیش حقوقی و فایل‌های رسمی درج می‌شود.
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-3 sm:grid-cols-2">
                   <FormField label="نام شرکت" htmlFor="company-name" required>
-                    <Input id="company-name" value={draft.name} onChange={(event) => patchDraft({ name: event.target.value })} />
+                    <Input
+                      id="company-name"
+                      value={draft.name}
+                      onChange={(event) => patchDraft({ name: event.target.value })}
+                    />
                   </FormField>
                   <FormField label="شماره ثبت" htmlFor="company-registration">
                     <Input
@@ -219,7 +235,11 @@ export default function SettingsPage() {
                       onChange={(event) => patchDraft({ economicCode: event.target.value })}
                     />
                   </FormField>
-                  <FormField label="کد کارگاه تأمین اجتماعی" htmlFor="company-workshop" hint="در فایل دیسکت بیمه استفاده می‌شود.">
+                  <FormField
+                    label="کد کارگاه تأمین اجتماعی"
+                    htmlFor="company-workshop"
+                    hint="در فایل دیسکت بیمه استفاده می‌شود."
+                  >
                     <Input
                       id="company-workshop"
                       numeric
@@ -340,17 +360,26 @@ export default function SettingsPage() {
               <Card>
                 <CardHeader>
                   <CardTitle>ساعات کار و رویه‌های حقوقی</CardTitle>
-                  <CardDescription>مبنای محاسبه کارکرد، کسر تأخیر و گِرد کردن مبلغ پرداختی.</CardDescription>
+                  <CardDescription>
+                    مبنای محاسبه کارکرد، کسر تأخیر و گِرد کردن مبلغ پرداختی.
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <FormField label="ساعات کار هفتگی" htmlFor="company-weekly-hours" hint="قانون کار: ۴۴ ساعت">
+                  <FormField
+                    label="ساعات کار هفتگی"
+                    htmlFor="company-weekly-hours"
+                    hint="قانون کار: ۴۴ ساعت"
+                  >
                     <Input
                       id="company-weekly-hours"
                       numeric
                       value={String(draft.workSchedule.weeklyHours)}
                       onChange={(event) =>
                         patchDraft({
-                          workSchedule: { ...draft.workSchedule, weeklyHours: Number(event.target.value) || 44 },
+                          workSchedule: {
+                            ...draft.workSchedule,
+                            weeklyHours: Number(event.target.value) || 44,
+                          },
                         })
                       }
                     />
@@ -363,7 +392,9 @@ export default function SettingsPage() {
                       className="text-center"
                       value={draft.workSchedule.shiftStart}
                       onChange={(event) =>
-                        patchDraft({ workSchedule: { ...draft.workSchedule, shiftStart: event.target.value } })
+                        patchDraft({
+                          workSchedule: { ...draft.workSchedule, shiftStart: event.target.value },
+                        })
                       }
                     />
                   </FormField>
@@ -375,7 +406,9 @@ export default function SettingsPage() {
                       className="text-center"
                       value={draft.workSchedule.shiftEnd}
                       onChange={(event) =>
-                        patchDraft({ workSchedule: { ...draft.workSchedule, shiftEnd: event.target.value } })
+                        patchDraft({
+                          workSchedule: { ...draft.workSchedule, shiftEnd: event.target.value },
+                        })
                       }
                     />
                   </FormField>
@@ -386,7 +419,10 @@ export default function SettingsPage() {
                       value={String(draft.workSchedule.breakMinutes)}
                       onChange={(event) =>
                         patchDraft({
-                          workSchedule: { ...draft.workSchedule, breakMinutes: Number(event.target.value) || 0 },
+                          workSchedule: {
+                            ...draft.workSchedule,
+                            breakMinutes: Number(event.target.value) || 0,
+                          },
                         })
                       }
                     />
@@ -403,7 +439,10 @@ export default function SettingsPage() {
                       ]}
                       onChange={(event) =>
                         patchDraft({
-                          workSchedule: { ...draft.workSchedule, roundingStep: Number(event.target.value) },
+                          workSchedule: {
+                            ...draft.workSchedule,
+                            roundingStep: Number(event.target.value),
+                          },
                         })
                       }
                     />
@@ -415,7 +454,10 @@ export default function SettingsPage() {
                       value={String(draft.payroll.annualLeaveDays)}
                       onChange={(event) =>
                         patchDraft({
-                          payroll: { ...draft.payroll, annualLeaveDays: Number(event.target.value) || 26 },
+                          payroll: {
+                            ...draft.payroll,
+                            annualLeaveDays: Number(event.target.value) || 26,
+                          },
                         })
                       }
                     />
@@ -431,7 +473,9 @@ export default function SettingsPage() {
                     <Switch
                       label="تقسیم مزایای ثابت بر روزهای کارکرد"
                       checked={draft.payroll.prorateBenefits}
-                      onCheckedChange={(checked) => patchDraft({ payroll: { ...draft.payroll, prorateBenefits: checked } })}
+                      onCheckedChange={(checked) =>
+                        patchDraft({ payroll: { ...draft.payroll, prorateBenefits: checked } })
+                      }
                     />
                     <Switch
                       label="فعال‌سازی کسر تأخیر و تعجیل"
@@ -448,7 +492,10 @@ export default function SettingsPage() {
                           value={String(draft.payroll.latePenaltyPerMinute ?? 0)}
                           onChange={(event) =>
                             patchDraft({
-                              payroll: { ...draft.payroll, latePenaltyPerMinute: Number(event.target.value) || 0 },
+                              payroll: {
+                                ...draft.payroll,
+                                latePenaltyPerMinute: Number(event.target.value) || 0,
+                              },
                             })
                           }
                         />
@@ -500,21 +547,40 @@ function LegalPanel() {
   const { profile } = resolveLegalProfile(fiscalYear);
   const years = Object.values(LEGAL_PROFILES).sort((a, b) => a.year - b.year);
 
-  const rows: Array<{ label: string; value: (item: (typeof years)[number]) => string; hint?: string }> = [
+  const rows: Array<{
+    label: string;
+    value: (item: (typeof years)[number]) => string;
+    hint?: string;
+  }> = [
     { label: 'حداقل مزد روزانه', value: (item) => formatNumber(item.minDailyWage) },
     { label: 'حداقل مزد ماهانه', value: (item) => formatNumber(item.minMonthlyWage) },
     { label: 'حق مسکن', value: (item) => formatNumber(item.housingAllowanceMonthly) },
     { label: 'بن کارگری', value: (item) => formatNumber(item.groceryAllowanceMonthly) },
     { label: 'حق تأهل', value: (item) => formatNumber(item.marriageAllowanceMonthly) },
-    { label: 'حق اولاد (ماهانه هر فرزند)', value: (item) => formatNumber(item.childAllowanceDaily * 30) },
+    {
+      label: 'حق اولاد (ماهانه هر فرزند)',
+      value: (item) => formatNumber(item.childAllowanceDaily * 30),
+    },
     { label: 'پایه سنوات ماهانه', value: (item) => formatNumber(item.seniorityMonthly) },
     { label: 'سقف بیمه', value: (item) => formatNumber(item.insurance.ceiling) },
-    { label: 'نرخ بیمه کارکنان', value: (item) => `${toPersianDigits(Math.round(item.insurance.employeeRate * 100))}٪` },
-    { label: 'نرخ بیمه کارفرما (با بیکاری)', value: (item) => `${toPersianDigits(Math.round(item.insurance.employerRate * 100))}٪` },
+    {
+      label: 'نرخ بیمه کارکنان',
+      value: (item) => `${toPersianDigits(Math.round(item.insurance.employeeRate * 100))}٪`,
+    },
+    {
+      label: 'نرخ بیمه کارفرما (با بیکاری)',
+      value: (item) => `${toPersianDigits(Math.round(item.insurance.employerRate * 100))}٪`,
+    },
     { label: 'معافیت مالیاتی ماهانه', value: (item) => formatNumber(item.tax.monthlyExemption) },
     { label: 'ضریب اضافه‌کاری', value: (item) => toPersianDigits(item.overtimeCoefficient) },
-    { label: 'ضریب شب‌کاری', value: (item) => `+${toPersianDigits(Math.round(item.nightWorkAllowanceRate * 100))}٪` },
-    { label: 'حداکثر اضافه‌کار ماهانه', value: (item) => `${toPersianDigits(item.maxOvertimeHoursPerMonth)} ساعت` },
+    {
+      label: 'ضریب شب‌کاری',
+      value: (item) => `+${toPersianDigits(Math.round(item.nightWorkAllowanceRate * 100))}٪`,
+    },
+    {
+      label: 'حداکثر اضافه‌کار ماهانه',
+      value: (item) => `${toPersianDigits(item.maxOvertimeHoursPerMonth)} ساعت`,
+    },
   ];
 
   return (
@@ -523,8 +589,8 @@ function LegalPanel() {
         <CardHeader>
           <CardTitle>دوره مالی فعال</CardTitle>
           <CardDescription>
-            پروفایل حقوقی بر پایه سال دوره انتخاب می‌شود؛ برای سال‌های بدون بخشنامه، ارقام نزدیک‌ترین سال اعمال و
-            هشدار نمایش داده می‌شود.
+            پروفایل حقوقی بر پایه سال دوره انتخاب می‌شود؛ برای سال‌های بدون بخشنامه، ارقام
+            نزدیک‌ترین سال اعمال و هشدار نمایش داده می‌شود.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-3 sm:grid-cols-3">
@@ -532,7 +598,10 @@ function LegalPanel() {
             <Select
               id="settings-year"
               value={String(fiscalYear)}
-              options={[1403, 1404, 1405].map((year) => ({ value: String(year), label: toPersianDigits(year) }))}
+              options={[1403, 1404, 1405].map((year) => ({
+                value: String(year),
+                label: toPersianDigits(year),
+              }))}
               onChange={(event) => setPeriod(Number(event.target.value), currentMonth)}
             />
           </FormField>
@@ -540,7 +609,10 @@ function LegalPanel() {
             <Select
               id="settings-month"
               value={String(currentMonth)}
-              options={JALALI_MONTH_LABELS.map((label, index) => ({ value: String(index + 1), label }))}
+              options={JALALI_MONTH_LABELS.map((label, index) => ({
+                value: String(index + 1),
+                label,
+              }))}
               onChange={(event) => setPeriod(fiscalYear, Number(event.target.value))}
             />
           </FormField>
@@ -555,7 +627,9 @@ function LegalPanel() {
       <Card>
         <CardHeader>
           <CardTitle>مقایسه پارامترهای حقوقی سال‌های ۱۴۰۳ تا ۱۴۰۵</CardTitle>
-          <CardDescription>همه ارقام به ریال؛ ارقام ۱۴۰۳ و ۱۴۰۴ برای محاسبه مجدد دوره‌های گذشته نگه داشته شده‌اند.</CardDescription>
+          <CardDescription>
+            همه ارقام به ریال؛ ارقام ۱۴۰۳ و ۱۴۰۴ برای محاسبه مجدد دوره‌های گذشته نگه داشته شده‌اند.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="dm-scroll overflow-x-auto">
@@ -564,7 +638,10 @@ function LegalPanel() {
                 <TableRow>
                   <TableHead>پارامتر</TableHead>
                   {years.map((item) => (
-                    <TableHead key={item.year} className={item.year === fiscalYear ? 'text-[rgb(var(--dm-primary))]' : ''}>
+                    <TableHead
+                      key={item.year}
+                      className={item.year === fiscalYear ? 'text-[rgb(var(--dm-primary))]' : ''}
+                    >
                       {item.label}
                       {item.verified ? '' : ' *'}
                     </TableHead>
@@ -586,9 +663,9 @@ function LegalPanel() {
             </Table>
           </div>
           <p className="mt-3 text-xs text-[rgb(var(--dm-text-subtle))]">
-            * پروفایل‌های بدون علامت تأیید، بر پایه منابع عمومی تنظیم شده‌اند و باید با بخشنامه رسمی همان سال تطبیق
-            داده شوند (جدول منابع در docs/LEGAL.md). بازنویسی پارامترها برای هر سال در جدول legalOverrides ثبت
-            می‌شود و در پشتیبان‌گیری لحاظ می‌گردد.
+            * پروفایل‌های بدون علامت تأیید، بر پایه منابع عمومی تنظیم شده‌اند و باید با بخشنامه رسمی
+            همان سال تطبیق داده شوند (جدول منابع در docs/LEGAL.md). بازنویسی پارامترها برای هر سال
+            در جدول legalOverrides ثبت می‌شود و در پشتیبان‌گیری لحاظ می‌گردد.
           </p>
         </CardContent>
       </Card>
@@ -597,8 +674,8 @@ function LegalPanel() {
         <CardHeader>
           <CardTitle>گام‌های تعیین مالیات سال {profile.label}</CardTitle>
           <CardDescription>
-            پس از کسر معافیت ماهانه {formatNumber(profile.tax.monthlyExemption)} ریال، درآمد مشمول به‌صورت پلکانی
-            مشمول مالیات می‌شود.
+            پس از کسر معافیت ماهانه {formatNumber(profile.tax.monthlyExemption)} ریال، درآمد مشمول
+            به‌صورت پلکانی مشمول مالیات می‌شود.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -641,7 +718,13 @@ function BackupPanel({
   companyId: string;
   companyName: string;
   backups: BackupRecord[];
-  counts: { employees: number; attendance: number; runs: number; slips: number; audit: number } | null;
+  counts: {
+    employees: number;
+    attendance: number;
+    runs: number;
+    slips: number;
+    audit: number;
+  } | null;
 }) {
   const [passphrase, setPassphrase] = useState('');
   const [busy, setBusy] = useState(false);
@@ -709,7 +792,8 @@ function BackupPanel({
           <CardHeader>
             <CardTitle>ساخت پشتیبان</CardTitle>
             <CardDescription>
-              فایل `.dastmozd` شامل همه داده‌های شرکت است؛ با گذرواژه، رمزنگاری AES-GCM انجام می‌شود.
+              فایل `.dastmozd` شامل همه داده‌های شرکت است؛ با گذرواژه، رمزنگاری AES-GCM انجام
+              می‌شود.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -735,7 +819,11 @@ function BackupPanel({
                 variant="outline"
                 onClick={async () => {
                   await enforceRetention();
-                  toast({ tone: 'info', title: 'سیاست نگهداری اعمال شد', description: '۳۰ روزانه، ۱۲ ماهانه و ۵ سالانه.' });
+                  toast({
+                    tone: 'info',
+                    title: 'سیاست نگهداری اعمال شد',
+                    description: '۳۰ روزانه، ۱۲ ماهانه و ۵ سالانه.',
+                  });
                 }}
               >
                 اعمال سیاست نگهداری
@@ -748,7 +836,11 @@ function BackupPanel({
               <Fact label="دوره حقوقی" value={counts?.runs ?? 0} />
               <Fact label="فیش حقوقی" value={counts?.slips ?? 0} />
               <Fact label="رکورد رهگیری" value={counts?.audit ?? 0} />
-              <Fact label="فضای مصرفی" value={storage ? Math.round(storage.usage / 1024) : 0} unit="کیلوبایت" />
+              <Fact
+                label="فضای مصرفی"
+                value={storage ? Math.round(storage.usage / 1024) : 0}
+                unit="کیلوبایت"
+              />
             </div>
           </CardContent>
         </Card>
@@ -757,7 +849,8 @@ function BackupPanel({
           <CardHeader>
             <CardTitle>بازیابی از فایل پشتیبان</CardTitle>
             <CardDescription>
-              پیش از بازیابی، یکپارچگی فایل با SHA-256 بررسی می‌شود؛ در حالت جایگزینی، داده‌های فعلی پاک می‌شوند.
+              پیش از بازیابی، یکپارچگی فایل با SHA-256 بررسی می‌شود؛ در حالت جایگزینی، داده‌های فعلی
+              پاک می‌شوند.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -811,7 +904,9 @@ function BackupPanel({
       <Card>
         <CardHeader>
           <CardTitle>پشتیبان‌های ذخیره‌شده در مرورگر</CardTitle>
-          <CardDescription>کپی‌های سبک برای بازیابی سریع؛ بر پایه سیاست نگهداری پاک‌سازی می‌شوند.</CardDescription>
+          <CardDescription>
+            کپی‌های سبک برای بازیابی سریع؛ بر پایه سیاست نگهداری پاک‌سازی می‌شوند.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {backups.length === 0 ? (
@@ -854,14 +949,20 @@ function BackupPanel({
       <Card>
         <CardHeader>
           <CardTitle>عملیات پرخطر</CardTitle>
-          <CardDescription>این عملیات بازگشت‌ناپذیر است؛ پیش از اجرا پشتیبان بگیرید.</CardDescription>
+          <CardDescription>
+            این عملیات بازگشت‌ناپذیر است؛ پیش از اجرا پشتیبان بگیرید.
+          </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
           <Button
             variant="outline"
             onClick={async () => {
               await seedDemoData({ reset: true });
-              toast({ tone: 'success', title: 'داده نمونه بارگذاری شد', description: 'برای آزمون و آموزش مناسب است.' });
+              toast({
+                tone: 'success',
+                title: 'داده نمونه بارگذاری شد',
+                description: 'برای آزمون و آموزش مناسب است.',
+              });
             }}
           >
             بارگذاری داده نمونه
@@ -890,7 +991,11 @@ function BackupPanel({
               ...(restorePassphrase ? { passphrase: restorePassphrase } : {}),
             });
             if (!outcome.integrity.valid) {
-              toast({ tone: 'error', title: 'یکپارچگی فایل تأیید نشد', description: outcome.integrity.message });
+              toast({
+                tone: 'error',
+                title: 'یکپارچگی فایل تأیید نشد',
+                description: outcome.integrity.message,
+              });
               return;
             }
             toast({
@@ -923,7 +1028,11 @@ function BackupPanel({
         onConfirm={async () => {
           try {
             await wipeDatabase();
-            toast({ tone: 'warning', title: 'داده‌ها پاک شد', description: 'سامانه به وضعیت آغازین بازگشت.' });
+            toast({
+              tone: 'warning',
+              title: 'داده‌ها پاک شد',
+              description: 'سامانه به وضعیت آغازین بازگشت.',
+            });
           } catch (error) {
             toast({
               tone: 'error',
@@ -944,7 +1053,8 @@ function Fact({ label, value, unit }: { label: string; value: number; unit?: str
     <div className="rounded-[var(--dm-radius-md)] border border-[rgb(var(--dm-border))] bg-[rgb(var(--dm-surface-sunken))] p-2">
       <p className="text-[0.65rem] text-[rgb(var(--dm-text-muted))]">{label}</p>
       <p className="dm-numeric text-sm font-bold">
-        {toPersianDigits(formatNumber(value))} {unit ? <span className="text-xs font-normal opacity-70">{unit}</span> : null}
+        {toPersianDigits(formatNumber(value))}{' '}
+        {unit ? <span className="text-xs font-normal opacity-70">{unit}</span> : null}
       </p>
     </div>
   );
@@ -957,7 +1067,12 @@ function UsersPanel({ companyId }: { companyId: string }) {
   const displayName = useAppStore((state) => state.displayName);
   const setDisplayName = useAppStore((state) => state.setDisplayName);
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ fullName: '', username: '', password: '', role: 'accountant' as UserRole });
+  const [form, setForm] = useState({
+    fullName: '',
+    username: '',
+    password: '',
+    role: 'accountant' as UserRole,
+  });
   const [pendingDelete, setPendingDelete] = useState<AppUser | null>(null);
   const { toast } = useToast();
 
@@ -987,7 +1102,8 @@ function UsersPanel({ companyId }: { companyId: string }) {
           <div>
             <CardTitle>کاربران سامانه</CardTitle>
             <CardDescription>
-              نقش‌ها: مدیر سامانه، حسابدار و بازدیدکننده. گذرواژه‌ها با PBKDF2 (۳۱۰٫۰۰۰ تکرار) ذخیره می‌شوند.
+              نقش‌ها: مدیر سامانه، حسابدار و بازدیدکننده. گذرواژه‌ها با PBKDF2 (۳۱۰٫۰۰۰ تکرار) ذخیره
+              می‌شوند.
             </CardDescription>
           </div>
           <Button onClick={() => setOpen(true)}>
@@ -1019,8 +1135,20 @@ function UsersPanel({ companyId }: { companyId: string }) {
                     <TableCell className="font-semibold">{user.fullName}</TableCell>
                     <TableCell className="dm-numeric text-xs">{user.username}</TableCell>
                     <TableCell>
-                      <Badge tone={user.role === 'admin' ? 'primary' : user.role === 'accountant' ? 'info' : 'neutral'}>
-                        {user.role === 'admin' ? 'مدیر سامانه' : user.role === 'accountant' ? 'حسابدار' : 'بازدیدکننده'}
+                      <Badge
+                        tone={
+                          user.role === 'admin'
+                            ? 'primary'
+                            : user.role === 'accountant'
+                              ? 'info'
+                              : 'neutral'
+                        }
+                      >
+                        {user.role === 'admin'
+                          ? 'مدیر سامانه'
+                          : user.role === 'accountant'
+                            ? 'حسابدار'
+                            : 'بازدیدکننده'}
                       </Badge>
                     </TableCell>
                     <TableCell className="dm-numeric text-xs">
@@ -1049,8 +1177,8 @@ function UsersPanel({ companyId }: { companyId: string }) {
           <CardHeader>
             <CardTitle>نقش فعال این دستگاه</CardTitle>
             <CardDescription>
-              در نسخه آفلاین، سطح دسترسی از اینجا تعیین می‌شود؛ پس از اتصال به همگام‌سازی، نقش هر کاربر از سرور
-              خوانده می‌شود.
+              در نسخه آفلاین، سطح دسترسی از اینجا تعیین می‌شود؛ پس از اتصال به همگام‌سازی، نقش هر
+              کاربر از سرور خوانده می‌شود.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -1082,14 +1210,23 @@ function UsersPanel({ companyId }: { companyId: string }) {
         <Card>
           <CardHeader>
             <CardTitle>ماتریس دسترسی نقش‌ها</CardTitle>
-            <CardDescription>بر پایه قانون «کمترین دسترسی لازم» و ثبت اجباری همه تغییرات.</CardDescription>
+            <CardDescription>
+              بر پایه قانون «کمترین دسترسی لازم» و ثبت اجباری همه تغییرات.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {permissions.map((item) => (
-              <div key={item.roleKey} className="rounded-[var(--dm-radius-lg)] border border-[rgb(var(--dm-border))] p-3">
+              <div
+                key={item.roleKey}
+                className="rounded-[var(--dm-radius-lg)] border border-[rgb(var(--dm-border))] p-3"
+              >
                 <p className="mb-2 flex items-center gap-2 text-sm font-bold">
                   <ShieldCheck className="size-4 text-[rgb(var(--dm-primary))]" aria-hidden />
-                  {item.roleKey === 'admin' ? 'مدیر سامانه' : item.roleKey === 'accountant' ? 'حسابدار' : 'بازدیدکننده'}
+                  {item.roleKey === 'admin'
+                    ? 'مدیر سامانه'
+                    : item.roleKey === 'accountant'
+                      ? 'حسابدار'
+                      : 'بازدیدکننده'}
                 </p>
                 <ul className="flex flex-wrap gap-1.5">
                   {item.labels.map((label) => (
@@ -1123,7 +1260,11 @@ function UsersPanel({ companyId }: { companyId: string }) {
                       companyIds: companyId ? [companyId] : [],
                       password: form.password,
                     });
-                    toast({ tone: 'success', title: 'کاربر ایجاد شد', description: `${form.fullName} اکنون می‌تواند وارد شود.` });
+                    toast({
+                      tone: 'success',
+                      title: 'کاربر ایجاد شد',
+                      description: `${form.fullName} اکنون می‌تواند وارد شود.`,
+                    });
                     setForm({ fullName: '', username: '', password: '', role: 'accountant' });
                     setOpen(false);
                   } catch (error) {
@@ -1146,16 +1287,25 @@ function UsersPanel({ companyId }: { companyId: string }) {
               <Input
                 id="user-name"
                 value={form.fullName}
-                onChange={(event) => setForm((current) => ({ ...current, fullName: event.target.value }))}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, fullName: event.target.value }))
+                }
               />
             </FormField>
-            <FormField label="نام کاربری" htmlFor="user-username" required hint="حروف لاتین، بدون فاصله.">
+            <FormField
+              label="نام کاربری"
+              htmlFor="user-username"
+              required
+              hint="حروف لاتین، بدون فاصله."
+            >
               <Input
                 id="user-username"
                 dir="ltr"
                 className="text-left"
                 value={form.username}
-                onChange={(event) => setForm((current) => ({ ...current, username: event.target.value }))}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, username: event.target.value }))
+                }
               />
             </FormField>
             <FormField label="گذرواژه" htmlFor="user-password" required hint="حداقل ۸ نویسه.">
@@ -1164,7 +1314,9 @@ function UsersPanel({ companyId }: { companyId: string }) {
                 type="password"
                 autoComplete="new-password"
                 value={form.password}
-                onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, password: event.target.value }))
+                }
               />
             </FormField>
             <FormField label="نقش" htmlFor="user-role">
@@ -1176,7 +1328,9 @@ function UsersPanel({ companyId }: { companyId: string }) {
                   { value: 'accountant', label: 'حسابدار' },
                   { value: 'viewer', label: 'بازدیدکننده' },
                 ]}
-                onChange={(event) => setForm((current) => ({ ...current, role: event.target.value as UserRole }))}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, role: event.target.value as UserRole }))
+                }
               />
             </FormField>
           </div>
@@ -1219,18 +1373,23 @@ function AppearancePanel() {
   const persianDigits = useAppStore((state) => state.persianDigits);
   const setPersianDigits = useAppStore((state) => state.setPersianDigits);
   const { toast } = useToast();
-  const settings = useLiveQuery(() => db.settings.get('app'), [], undefined) as AppSettings | undefined;
+  const settings = useLiveQuery(() => db.settings.get('app'), [], undefined) as
+    AppSettings | undefined;
 
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       <Card>
         <CardHeader>
           <CardTitle>ظاهر برنامه</CardTitle>
-          <CardDescription>تم روشن، تیره یا هم‌گام با تنظیم سیستم‌عامل؛ همه عناصر رنگ از نشان برند مشتق می‌شوند.</CardDescription>
+          <CardDescription>
+            تم روشن، تیره یا هم‌گام با تنظیم سیستم‌عامل؛ همه عناصر رنگ از نشان برند مشتق می‌شوند.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <fieldset className="space-y-2">
-            <legend className="text-xs font-semibold text-[rgb(var(--dm-text-muted))]">تم نمایش</legend>
+            <legend className="text-xs font-semibold text-[rgb(var(--dm-text-muted))]">
+              تم نمایش
+            </legend>
             {(
               [
                 { value: 'light', label: 'روشن' },
@@ -1254,7 +1413,11 @@ function AppearancePanel() {
 
           <Separator />
 
-          <FormField label="واحد نمایش مبالغ" htmlFor="currency-unit" hint="ذخیره‌سازی همیشه به ریال است؛ این گزینه فقط نمایش را تغییر می‌دهد.">
+          <FormField
+            label="واحد نمایش مبالغ"
+            htmlFor="currency-unit"
+            hint="ذخیره‌سازی همیشه به ریال است؛ این گزینه فقط نمایش را تغییر می‌دهد."
+          >
             <Select
               id="currency-unit"
               value={currencyUnit}
@@ -1276,8 +1439,8 @@ function AppearancePanel() {
           />
 
           <Alert tone="info" title="خروجی‌های رسمی">
-            در فایل‌های اکسل و دیسکت بیمه، ارقام همیشه لاتین و بدون جداکننده صادر می‌شوند تا در سامانه‌های رسمی
-            قابل بارگذاری باشند.
+            در فایل‌های اکسل و دیسکت بیمه، ارقام همیشه لاتین و بدون جداکننده صادر می‌شوند تا در
+            سامانه‌های رسمی قابل بارگذاری باشند.
           </Alert>
         </CardContent>
       </Card>
@@ -1285,13 +1448,17 @@ function AppearancePanel() {
       <Card>
         <CardHeader>
           <CardTitle>زبان و منطقه</CardTitle>
-          <CardDescription>زبان پیش‌فرض فارسی (fa-IR) با تقویم شمسی و راست‌چین کامل است.</CardDescription>
+          <CardDescription>
+            زبان پیش‌فرض فارسی (fa-IR) با تقویم شمسی و راست‌چین کامل است.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between rounded-[var(--dm-radius-lg)] border border-[rgb(var(--dm-border))] p-3">
             <div>
               <p className="text-sm font-bold">فارسی (fa-IR)</p>
-              <p className="text-xs text-[rgb(var(--dm-text-muted))]">زبان فعال، تقویم هجری شمسی، جهت راست‌به‌چپ</p>
+              <p className="text-xs text-[rgb(var(--dm-text-muted))]">
+                زبان فعال، تقویم هجری شمسی، جهت راست‌به‌چپ
+              </p>
             </div>
             <Badge tone="success">فعال</Badge>
           </div>
@@ -1299,8 +1466,8 @@ function AppearancePanel() {
             <div>
               <p className="text-sm font-bold">English (en-US)</p>
               <p className="text-xs text-[rgb(var(--dm-text-muted))]">
-                ترجمه رابط در دست آماده‌سازی است؛ ساختار پیام‌ها (next-intl) از پیش تعبیه شده و افزودن زبان، بدون
-                تغییر منطق محاسبات انجام می‌شود.
+                ترجمه رابط در دست آماده‌سازی است؛ ساختار پیام‌ها (next-intl) از پیش تعبیه شده و
+                افزودن زبان، بدون تغییر منطق محاسبات انجام می‌شود.
               </p>
             </div>
             <Badge tone="neutral">در دست توسعه</Badge>
@@ -1312,15 +1479,18 @@ function AppearancePanel() {
             <p className="font-bold">پیکربندی فعلی سامانه</p>
             <ul className="space-y-1 text-xs text-[rgb(var(--dm-text-muted))]">
               <li>
-                حالت ذخیره‌سازی: {settings?.encryptionEnabled ? 'رمزنگاری‌شده' : 'عادی (IndexedDB روی همین دستگاه)'}
+                حالت ذخیره‌سازی:{' '}
+                {settings?.encryptionEnabled ? 'رمزنگاری‌شده' : 'عادی (IndexedDB روی همین دستگاه)'}
               </li>
               <li>
-                پشتیبان خودکار: {' '}
+                پشتیبان خودکار:{' '}
                 {settings && settings.autoBackupHours > 0
                   ? `هر ${toPersianDigits(settings.autoBackupHours)} ساعت`
                   : 'غیرفعال'}
               </li>
-              <li>اعتبارسنجی خودکار فرم‌ها: فعال (React Hook Form + Zod + موتور اعتبارسنجی دامنه)</li>
+              <li>
+                اعتبارسنجی خودکار فرم‌ها: فعال (React Hook Form + Zod + موتور اعتبارسنجی دامنه)
+              </li>
               <li>هیچ داده‌ای بدون درخواست صریح شما به اینترنت ارسال نمی‌شود.</li>
             </ul>
           </div>

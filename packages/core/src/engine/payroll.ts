@@ -10,7 +10,12 @@ import { roundRial, roundToStep, safeDivide, sum } from '../utils/money';
 import { jalaliMonthLength, jalaliToIso } from '../utils/jalali';
 import { makeVerificationCode } from '../utils/code';
 import { buildDeductions } from './deductions';
-import { buildEarnings, creditDaysOf, isSeniorityEligible, type BuildEarningsOutput } from './earnings';
+import {
+  buildEarnings,
+  creditDaysOf,
+  isSeniorityEligible,
+  type BuildEarningsOutput,
+} from './earnings';
 import { computeInsurance } from './insurance';
 import { computeTax } from './tax';
 import { buildPayrollRates, deriveRates } from './rates';
@@ -71,7 +76,10 @@ export function calculatePayroll(input: PayrollInput): PayrollResult {
       ? (employee.wage.seniorityMonthly ?? profile.seniorityMonthly)
       : 0;
   const rateBaseMode = runOptions.rateBaseMode ?? 'base';
-  const rateBase = rateBaseMode === 'base' ? employee.wage.baseMonthly : employee.wage.baseMonthly + seniorityMonthly;
+  const rateBase =
+    rateBaseMode === 'base'
+      ? employee.wage.baseMonthly
+      : employee.wage.baseMonthly + seniorityMonthly;
   const rates = deriveRates({
     baseMonthly: rateBase,
     // In `base` mode the seniority allowance is paid as its own line and is not
@@ -124,9 +132,10 @@ export function calculatePayroll(input: PayrollInput): PayrollResult {
     pushTrace({
       code: 'wage.seniority',
       title: 'پایه سنوات',
-      detail: seniorityMonthly > 0
-        ? 'کارمند واجد شرایط پایه سنوات تشخیص داده شد.'
-        : 'کارمند واجد شرایط پایه سنوات نبود یا پرداخت آن غیرفعال است.',
+      detail:
+        seniorityMonthly > 0
+          ? 'کارمند واجد شرایط پایه سنوات تشخیص داده شد.'
+          : 'کارمند واجد شرایط پایه سنوات نبود یا پرداخت آن غیرفعال است.',
       value: seniorityMonthly,
       legalRef: 'ماده ۴۹ قانون کار',
     });
@@ -134,54 +143,60 @@ export function calculatePayroll(input: PayrollInput): PayrollResult {
 
   // --- 3) Insurance -------------------------------------------------------
   const reductionBase = roundRial(
-    sum(earningsResult.reductions.filter((line) => line.reducesBase !== false).map((line) => line.amount)),
+    sum(
+      earningsResult.reductions
+        .filter((line) => line.reducesBase !== false)
+        .map((line) => line.amount),
+    ),
   );
-  const insuranceResult = options.insuranceEnabled === false
-    ? {
-        insurance: {
-          included: [],
-          excluded: [],
-          rawBase: 0,
-          ceiling: 0,
-          base: 0,
-          employeeRate: profile.insurance.employeeRate,
-          employerRate: profile.insurance.employerRate,
-          unemploymentRate: profile.insurance.unemploymentRate,
-          employeeShare: 0,
-          employerShare: 0,
-          unemploymentShare: 0,
-          totalShare: 0,
-        },
-        trace: [],
-      }
-    : computeInsurance({
-        profile,
-        earnings: earningsResult.earnings,
-        reductions: reductionBase,
-        options: runOptions,
-      });
+  const insuranceResult =
+    options.insuranceEnabled === false
+      ? {
+          insurance: {
+            included: [],
+            excluded: [],
+            rawBase: 0,
+            ceiling: 0,
+            base: 0,
+            employeeRate: profile.insurance.employeeRate,
+            employerRate: profile.insurance.employerRate,
+            unemploymentRate: profile.insurance.unemploymentRate,
+            employeeShare: 0,
+            employerShare: 0,
+            unemploymentShare: 0,
+            totalShare: 0,
+          },
+          trace: [],
+        }
+      : computeInsurance({
+          profile,
+          earnings: earningsResult.earnings,
+          reductions: reductionBase,
+          options: runOptions,
+        });
 
   // --- 4) Tax -------------------------------------------------------------
-  const taxResult = options.taxEnabled === false
-    ? {
-        tax: {
-          taxableIncome: 0,
-          exemption: profile.tax.monthlyExemption,
-          afterExemption: 0,
-          brackets: [],
-          flatTax: 0,
-          flatSegments: [],
-          total: 0,
-          effectiveRate: 0,
-        },
-        trace: [],
-      }
-    : computeTax({
-        profile,
-        earnings: earningsResult.earnings,
-        reductions: reductionBase,
-        options: runOptions,
-      });
+  const taxResult =
+    options.taxEnabled === false
+      ? {
+          tax: {
+            taxableIncome: 0,
+            exemption: profile.tax.monthlyExemption,
+            afterExemption: 0,
+            brackets: [],
+            flatTax: 0,
+            flatSegments: [],
+            total: 0,
+            effectiveRate: 0,
+          },
+          trace: [],
+        }
+      : computeTax({
+          profile,
+          earnings: earningsResult.earnings,
+          reductions: reductionBase,
+          options: runOptions,
+        });
 
   // --- 5) Deduction lines -------------------------------------------------
   const extraDeductions = buildDeductions({
@@ -232,7 +247,9 @@ export function calculatePayroll(input: PayrollInput): PayrollResult {
   const totals: PayrollTotals = {
     grossEarnings,
     otherDeductions: roundRial(
-      totalOf(deductions.filter((line) => line.key !== 'social-security' && line.key !== 'income-tax')),
+      totalOf(
+        deductions.filter((line) => line.key !== 'social-security' && line.key !== 'income-tax'),
+      ),
     ),
     tax: taxResult.tax.total,
     insurance: insuranceResult.insurance.employeeShare,
@@ -251,11 +268,21 @@ export function calculatePayroll(input: PayrollInput): PayrollResult {
   // --- 7) Warnings --------------------------------------------------------
   const warnings: PayrollWarning[] = [
     ...earningsResult.warnings,
-    ...detectGlobalWarnings({ totals, insurance: insuranceResult.insurance, profile, employeeText: employee }),
+    ...detectGlobalWarnings({
+      totals,
+      insurance: insuranceResult.insurance,
+      profile,
+      employeeText: employee,
+    }),
   ];
 
   // --- 8) Trace assembly --------------------------------------------------
-  trace.push(...earningsResult.trace, ...insuranceResult.trace, ...taxResult.trace, ...extraDeductions.trace);
+  trace.push(
+    ...earningsResult.trace,
+    ...insuranceResult.trace,
+    ...taxResult.trace,
+    ...extraDeductions.trace,
+  );
   pushTrace({
     code: 'totals.net',
     title: 'خالص پرداختی',
@@ -264,7 +291,9 @@ export function calculatePayroll(input: PayrollInput): PayrollResult {
     formula: `${grossEarnings.toLocaleString('en-US')} − ${totalDeductions.toLocaleString('en-US')}`,
   });
 
-  const payableDailyWage = roundRial(safeDivide(employee.wage.baseMonthly - reductionBase, creditDays));
+  const payableDailyWage = roundRial(
+    safeDivide(employee.wage.baseMonthly - reductionBase, creditDays),
+  );
   const verificationCode = makeVerificationCode([
     employee.id,
     employee.nationalId ?? '',
@@ -345,7 +374,10 @@ function detectGlobalWarnings({
 }
 
 /** Calculates a full month payroll for many employees (progress friendly). */
-export function calculatePayrollBatch({ employees, onProgress }: BatchPayrollInput): BatchPayrollResult {
+export function calculatePayrollBatch({
+  employees,
+  onProgress,
+}: BatchPayrollInput): BatchPayrollResult {
   const results: PayrollResult[] = [];
   const total = employees.length;
   for (let index = 0; index < total; index += 1) {

@@ -26,7 +26,16 @@ function slip(overrides: Partial<Payslip> = {}): Payslip {
     id: 'slip-1',
     employeeId: 'emp-1',
     period: { jy: 1405, jm: 7 },
-    earnings: [{ key: 'base-wage', title: 'مزد پایه', type: 'earning', amount: 166_255_500, quantity: 30, unit: 'day' }],
+    earnings: [
+      {
+        key: 'base-wage',
+        title: 'مزد پایه',
+        type: 'earning',
+        amount: 166_255_500,
+        quantity: 30,
+        unit: 'day',
+      },
+    ],
     deductions: [],
     tax: { total: 0 },
     insurance: {
@@ -104,7 +113,11 @@ describe('buildInsuranceDiskette', () => {
       payslips: [
         slip(),
         slip({ id: 'slip-2', employeeId: 'emp-2' }),
-        slip({ id: 'slip-3', employeeId: 'emp-3', insurance: { base: 0, employeeShare: 0, employerShare: 0 } as never }),
+        slip({
+          id: 'slip-3',
+          employeeId: 'emp-3',
+          insurance: { base: 0, employeeShare: 0, employerShare: 0 } as never,
+        }),
       ],
       employees: [EMPLOYEE, withoutInsurance],
       company: COMPANY,

@@ -123,7 +123,11 @@ export function AttendanceImportDialog({
         }
       >
         <div className="grid gap-3 sm:grid-cols-2">
-          <FormField label="نرم‌افزار مبدأ" htmlFor="attendance-adapter" hint={adapter?.description}>
+          <FormField
+            label="نرم‌افزار مبدأ"
+            htmlFor="attendance-adapter"
+            hint={adapter?.description}
+          >
             <Select
               id="attendance-adapter"
               value={adapterId}
@@ -150,8 +154,8 @@ export function AttendanceImportDialog({
         </div>
 
         <Alert tone="info" title="راهنمای تطبیق کارکنان">
-          کارکنان بر پایه «شماره پرسنلی» تطبیق داده می‌شوند؛ شماره‌های ناشناخته در گزارش خطاها فهرست می‌شوند.
-          ساعت‌ها می‌توانند به شکل ۸:۳۰، 08:30 یا 0830 در فایل باشند.
+          کارکنان بر پایه «شماره پرسنلی» تطبیق داده می‌شوند؛ شماره‌های ناشناخته در گزارش خطاها فهرست
+          می‌شوند. ساعت‌ها می‌توانند به شکل ۸:۳۰، 08:30 یا 0830 در فایل باشند.
         </Alert>
 
         {result ? (

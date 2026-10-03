@@ -16,7 +16,13 @@ import { fileURLToPath } from 'node:url';
 const logoDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'logo');
 
 /** دندانه‌های چرخ‌دنده: هشت دندانه گرد با فاصله مساوی. */
-function gearTeeth({ color = '#ffffff', radius = 24.4, length = 7.6, width = 3.4, rotation = 0 } = {}) {
+function gearTeeth({
+  color = '#ffffff',
+  radius = 24.4,
+  length = 7.6,
+  width = 3.4,
+  rotation = 0,
+} = {}) {
   const teeth = [];
   for (let index = 0; index < 8; index += 1) {
     const angle = rotation + index * 45;
@@ -37,7 +43,10 @@ const coinBody = (indent = '  ') =>
   ].join('\n');
 
 /** برگ/پر با رگه روشن و دُم. */
-const leaf = (indent = '  ', { leafFill = '#0d9488', ribColor = '#ffffff', stemColor = '#0b6f77' } = {}) =>
+const leaf = (
+  indent = '  ',
+  { leafFill = '#0d9488', ribColor = '#ffffff', stemColor = '#0b6f77' } = {},
+) =>
   [
     `${indent}<path d="M40.6 23.4c-8.6 1.2-13.8 5.9-14.9 13.3 8-1 13-5.8 14.9-13.3z" fill="${leafFill}"/>`,
     `${indent}<path d="M27.2 35.2c2.2-3.9 5.2-7 9.5-9.5" fill="none" stroke="${ribColor}" stroke-opacity="0.85" stroke-width="1.5" stroke-linecap="round"/>`,

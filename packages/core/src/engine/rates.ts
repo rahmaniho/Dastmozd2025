@@ -33,7 +33,12 @@ export interface DerivedRatesInput {
 }
 
 /** Computes the raw rates before attendance proration. */
-export function deriveRates({ baseMonthly, seniorityMonthly, options, profile }: DerivedRatesInput): DerivedRates {
+export function deriveRates({
+  baseMonthly,
+  seniorityMonthly,
+  options,
+  profile,
+}: DerivedRatesInput): DerivedRates {
   const monthlyWage = roundRial(baseMonthly + seniorityMonthly);
   const dailyWage = roundRial(safeDivide(monthlyWage, profile.monthlyDayDivisor));
   const hourlyWage = roundRial(safeDivide(monthlyWage, profile.monthlyHourDivisor));
@@ -79,7 +84,11 @@ export function dailyWageOf(monthlyWage: number, profile: LegalProfile): number 
 }
 
 /** Overtime wage of a single hour (۱٫۴ برابر مزد ساعتی). */
-export function overtimeHourlyWage(monthlyWage: number, profile: LegalProfile, coefficient?: number): number {
+export function overtimeHourlyWage(
+  monthlyWage: number,
+  profile: LegalProfile,
+  coefficient?: number,
+): number {
   const hourly = hourlyWageOf(monthlyWage, profile);
   return amountOf(hourly, coefficient ?? profile.overtimeCoefficient);
 }

@@ -36,7 +36,16 @@ interface SeedEmployee {
   iban: string;
   bankName: string;
   /** الگوی کارکرد ماهانه این کارمند در داده نمونه. */
-  attendance: { present: number; overtimeHours: number; nightHours: number; holidayHours: number; paidLeave: number; absence: number; unpaidLeave: number; missionDays: number };
+  attendance: {
+    present: number;
+    overtimeHours: number;
+    nightHours: number;
+    holidayHours: number;
+    paidLeave: number;
+    absence: number;
+    unpaidLeave: number;
+    missionDays: number;
+  };
 }
 
 const CHILD = (jy: number, jm: number, jd: number, id: string): EmployeeChild => ({
@@ -66,7 +75,16 @@ const SEED_EMPLOYEES: SeedEmployee[] = [
     insuranceNumber: '1234567890',
     iban: 'IR170170000000123456789012',
     bankName: 'بانک ملی ایران',
-    attendance: { present: 30, overtimeHours: 12, nightHours: 0, holidayHours: 0, paidLeave: 0, absence: 0, unpaidLeave: 0, missionDays: 0 },
+    attendance: {
+      present: 30,
+      overtimeHours: 12,
+      nightHours: 0,
+      holidayHours: 0,
+      paidLeave: 0,
+      absence: 0,
+      unpaidLeave: 0,
+      missionDays: 0,
+    },
   },
   {
     personnelCode: 'AR-1002',
@@ -89,7 +107,16 @@ const SEED_EMPLOYEES: SeedEmployee[] = [
     insuranceNumber: '2045871236',
     iban: 'IR120120000000204587123600',
     bankName: 'بانک ملت',
-    attendance: { present: 26, overtimeHours: 34, nightHours: 18, holidayHours: 8, paidLeave: 2, absence: 1, unpaidLeave: 1, missionDays: 0 },
+    attendance: {
+      present: 26,
+      overtimeHours: 34,
+      nightHours: 18,
+      holidayHours: 8,
+      paidLeave: 2,
+      absence: 1,
+      unpaidLeave: 1,
+      missionDays: 0,
+    },
   },
   {
     personnelCode: 'AR-1003',
@@ -112,7 +139,16 @@ const SEED_EMPLOYEES: SeedEmployee[] = [
     insuranceNumber: '3190456712',
     iban: 'IR230130000000319045671200',
     bankName: 'بانک رفاه کارگران',
-    attendance: { present: 29, overtimeHours: 6, nightHours: 0, holidayHours: 0, paidLeave: 1, absence: 0, unpaidLeave: 0, missionDays: 1 },
+    attendance: {
+      present: 29,
+      overtimeHours: 6,
+      nightHours: 0,
+      holidayHours: 0,
+      paidLeave: 1,
+      absence: 0,
+      unpaidLeave: 0,
+      missionDays: 1,
+    },
   },
   {
     personnelCode: 'AR-1004',
@@ -135,7 +171,16 @@ const SEED_EMPLOYEES: SeedEmployee[] = [
     insuranceNumber: '1758432906',
     iban: 'IR350180000000175843290600',
     bankName: 'بانک تجارت',
-    attendance: { present: 28, overtimeHours: 20, nightHours: 10, holidayHours: 4, paidLeave: 2, absence: 0, unpaidLeave: 0, missionDays: 0 },
+    attendance: {
+      present: 28,
+      overtimeHours: 20,
+      nightHours: 10,
+      holidayHours: 4,
+      paidLeave: 2,
+      absence: 0,
+      unpaidLeave: 0,
+      missionDays: 0,
+    },
   },
   {
     personnelCode: 'AR-1005',
@@ -158,7 +203,16 @@ const SEED_EMPLOYEES: SeedEmployee[] = [
     insuranceNumber: '2865017439',
     iban: 'IR560150000000286501743900',
     bankName: 'بانک سپه',
-    attendance: { present: 30, overtimeHours: 4, nightHours: 0, holidayHours: 0, paidLeave: 0, absence: 0, unpaidLeave: 0, missionDays: 2 },
+    attendance: {
+      present: 30,
+      overtimeHours: 4,
+      nightHours: 0,
+      holidayHours: 0,
+      paidLeave: 0,
+      absence: 0,
+      unpaidLeave: 0,
+      missionDays: 2,
+    },
   },
 ];
 
@@ -264,7 +318,11 @@ export async function seedDemoData(options: SeedOptions = {}): Promise<SeedResul
       contractType: seed.contractType,
       status: 'active',
       insuranceNumber: seed.insuranceNumber,
-      bankAccount: { iban: seed.iban, bankName: seed.bankName, accountHolder: `${seed.firstName} ${seed.lastName}` },
+      bankAccount: {
+        iban: seed.iban,
+        bankName: seed.bankName,
+        accountHolder: `${seed.firstName} ${seed.lastName}`,
+      },
       salary: { baseMonthly: seed.baseMonthly, seniorityMonthly: seed.seniorityMonthly },
       notes: 'این پرونده به‌صورت داده نمونه ساخته شده است و برای آزمایش سامانه کاربرد دارد.',
       ...auditStamp('seed'),
@@ -311,8 +369,10 @@ export async function seedDemoData(options: SeedOptions = {}): Promise<SeedResul
     }
     for (let index = 0; index < pattern.paidLeave; index += 1) push('paid-leave', { leaveDays: 1 });
     for (let index = 0; index < pattern.absence; index += 1) push('absence', { leaveDays: 1 });
-    for (let index = 0; index < pattern.unpaidLeave; index += 1) push('unpaid-leave', { leaveDays: 1 });
-    for (let index = 0; index < pattern.missionDays; index += 1) push('mission', { missionHours: 8 });
+    for (let index = 0; index < pattern.unpaidLeave; index += 1)
+      push('unpaid-leave', { leaveDays: 1 });
+    for (let index = 0; index < pattern.missionDays; index += 1)
+      push('mission', { missionHours: 8 });
 
     await db.attendance.bulkAdd(records);
     attendanceCount += records.length;

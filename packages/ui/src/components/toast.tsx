@@ -33,19 +33,23 @@ export function useToast(): ToastContextValue {
 
 const TONE_STYLES: Record<ToastTone, { wrapper: string; icon: React.ReactNode }> = {
   success: {
-    wrapper: 'border-[rgb(var(--dm-success))]/30 bg-[rgb(var(--dm-success-soft))] text-[rgb(var(--dm-success))]',
+    wrapper:
+      'border-[rgb(var(--dm-success))]/30 bg-[rgb(var(--dm-success-soft))] text-[rgb(var(--dm-success))]',
     icon: <CheckCircle2 className="size-5" aria-hidden />,
   },
   error: {
-    wrapper: 'border-[rgb(var(--dm-danger))]/30 bg-[rgb(var(--dm-danger-soft))] text-[rgb(var(--dm-danger))]',
+    wrapper:
+      'border-[rgb(var(--dm-danger))]/30 bg-[rgb(var(--dm-danger-soft))] text-[rgb(var(--dm-danger))]',
     icon: <XCircle className="size-5" aria-hidden />,
   },
   info: {
-    wrapper: 'border-[rgb(var(--dm-info))]/30 bg-[rgb(var(--dm-info-soft))] text-[rgb(var(--dm-info))]',
+    wrapper:
+      'border-[rgb(var(--dm-info))]/30 bg-[rgb(var(--dm-info-soft))] text-[rgb(var(--dm-info))]',
     icon: <Info className="size-5" aria-hidden />,
   },
   warning: {
-    wrapper: 'border-[rgb(var(--dm-warning))]/30 bg-[rgb(var(--dm-warning-soft))] text-[rgb(var(--dm-warning))]',
+    wrapper:
+      'border-[rgb(var(--dm-warning))]/30 bg-[rgb(var(--dm-warning-soft))] text-[rgb(var(--dm-warning))]',
     icon: <AlertTriangle className="size-5" aria-hidden />,
   },
 };
@@ -105,7 +109,9 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               <span className="mt-0.5">{style.icon}</span>
               <div className="flex-1 space-y-0.5">
                 <p className="text-sm font-bold">{item.title}</p>
-                {item.description ? <p className="text-xs leading-relaxed opacity-90">{item.description}</p> : null}
+                {item.description ? (
+                  <p className="text-xs leading-relaxed opacity-90">{item.description}</p>
+                ) : null}
                 {item.onUndo ? (
                   <button
                     type="button"

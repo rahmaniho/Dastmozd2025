@@ -7,14 +7,7 @@
  */
 
 // ---------------------------------------------------------------- utilities
-export {
-  roundRial,
-  roundToStep,
-  amountOf,
-  sum,
-  clamp,
-  safeDivide,
-} from './utils/money';
+export { roundRial, roundToStep, amountOf, sum, clamp, safeDivide } from './utils/money';
 export {
   toPersianDigits,
   toLatinDigits,
@@ -61,10 +54,7 @@ export { validateEmployee } from './validation/employee';
 export type { EmployeeField, EmployeeIssue } from './validation/employee';
 
 // ------------------------------------------------------------------ engine
-export {
-  ENGINE_VERSION,
-  emptyAttendance,
-} from './engine/types';
+export { ENGINE_VERSION, emptyAttendance } from './engine/types';
 export type {
   AttendanceSummary,
   BatchPayrollInput,
@@ -100,7 +90,13 @@ export {
 } from './engine/attendance';
 export type { SummarizeAttendanceOptions } from './engine/attendance';
 
-export { absorbReduction, applyProgressiveBrackets, bucketTaxableEarnings, computeTax, taxableComponentKeys } from './engine/tax';
+export {
+  absorbReduction,
+  applyProgressiveBrackets,
+  bucketTaxableEarnings,
+  computeTax,
+  taxableComponentKeys,
+} from './engine/tax';
 export type { CategoryBuckets, ProgressiveTaxResult, TaxInput, TaxOutput } from './engine/tax';
 
 export { computeInsurance } from './engine/insurance';

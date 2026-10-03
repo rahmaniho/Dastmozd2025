@@ -2,21 +2,25 @@ import * as React from 'react';
 import { cn } from '../lib/cn';
 
 /** جدول داده با پشتیبانی راست‌چین، پیمایش افقی و سطرهای راه‌راه. */
-export const Table = React.forwardRef<HTMLTableElement, React.TableHTMLAttributes<HTMLTableElement>>(
-  function Table({ className, ...props }, ref) {
-    return (
-      <div className="dm-scroll w-full overflow-x-auto">
-        <table
-          ref={ref}
-          className={cn('w-full min-w-[640px] border-collapse text-sm', className)}
-          {...props}
-        />
-      </div>
-    );
-  },
-);
+export const Table = React.forwardRef<
+  HTMLTableElement,
+  React.TableHTMLAttributes<HTMLTableElement>
+>(function Table({ className, ...props }, ref) {
+  return (
+    <div className="dm-scroll w-full overflow-x-auto">
+      <table
+        ref={ref}
+        className={cn('w-full min-w-[640px] border-collapse text-sm', className)}
+        {...props}
+      />
+    </div>
+  );
+});
 
-export function TableHeader({ className, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
+export function TableHeader({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLTableSectionElement>) {
   return <thead className={cn('bg-[rgb(var(--dm-surface-sunken))]', className)} {...props} />;
 }
 
@@ -56,9 +60,15 @@ export function TableCell({ className, ...props }: React.TdHTMLAttributes<HTMLTa
   );
 }
 
-export function TableCaption({ className, ...props }: React.HTMLAttributes<HTMLTableCaptionElement>) {
+export function TableCaption({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLTableCaptionElement>) {
   return (
-    <caption className={cn('mt-3 text-xs text-[rgb(var(--dm-text-subtle))]', className)} {...props} />
+    <caption
+      className={cn('mt-3 text-xs text-[rgb(var(--dm-text-subtle))]', className)}
+      {...props}
+    />
   );
 }
 
@@ -99,6 +109,7 @@ export function Tabs({ tabs, value, onValueChange, className, ariaLabel = 'زب�
       ref={listRef}
       role="tablist"
       aria-label={ariaLabel}
+      tabIndex={0}
       onKeyDown={handleKeyDown}
       className={cn(
         'dm-scroll flex gap-1 overflow-x-auto rounded-[var(--dm-radius-lg)] border border-[rgb(var(--dm-border))] bg-[rgb(var(--dm-surface))] p-1',

@@ -25,6 +25,15 @@ test-results/
 .env.*
 !.env.example
 
+# Husky runtime
+.husky/_/
+
+# Tauri build & signed updater config (generated in CI from secrets)
+apps/desktop/src-tauri/target/
+apps/desktop/src-tauri/gen/
+apps/desktop/src-tauri/tauri.updater.conf.json
+apps/desktop/src-tauri/capabilities/updater.json
+
 # Editor / OS
 .DS_Store
 Thumbs.db

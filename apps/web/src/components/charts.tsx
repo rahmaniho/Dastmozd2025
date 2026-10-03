@@ -37,7 +37,9 @@ function PersianTooltip({
       dir="rtl"
       className="rounded-[var(--dm-radius-md)] border border-[rgb(var(--dm-border))] bg-[rgb(var(--dm-surface))] p-2.5 text-xs shadow-[var(--dm-shadow-md)]"
     >
-      <p className="mb-1 font-bold text-[rgb(var(--dm-text))]">{toPersianDigits(String(label ?? ''))}</p>
+      <p className="mb-1 font-bold text-[rgb(var(--dm-text))]">
+        {toPersianDigits(String(label ?? ''))}
+      </p>
       {payload.map((item, index) => (
         <p key={index} className="flex items-center justify-between gap-3">
           <span style={{ color: item.color }}>{item.name}</span>
@@ -74,7 +76,11 @@ export function PayrollTrendChart({ data }: { data: TrendPoint[] }) {
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="rgb(var(--dm-border))" vertical={false} />
-          <XAxis dataKey="month" reversed tick={{ ...AXIS_STYLE, fill: 'rgb(var(--dm-text-muted))' }} />
+          <XAxis
+            dataKey="month"
+            reversed
+            tick={{ ...AXIS_STYLE, fill: 'rgb(var(--dm-text-muted))' }}
+          />
           <YAxis
             orientation="right"
             tickFormatter={(value: number) => `${Math.round(value / 1_000_000)}م`}
@@ -170,7 +176,11 @@ export function TaxBracketChart({ data }: { data: TaxBracketPoint[] }) {
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={filtered} margin={{ top: 8, right: 8, left: 8, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="rgb(var(--dm-border))" vertical={false} />
-          <XAxis dataKey="label" reversed tick={{ ...AXIS_STYLE, fill: 'rgb(var(--dm-text-muted))' }} />
+          <XAxis
+            dataKey="label"
+            reversed
+            tick={{ ...AXIS_STYLE, fill: 'rgb(var(--dm-text-muted))' }}
+          />
           <YAxis
             orientation="right"
             tickFormatter={(value: number) => `${Math.round(value / 1_000_000)}م`}

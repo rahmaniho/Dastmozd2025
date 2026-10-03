@@ -14,7 +14,8 @@
     "build": "echo \"ui is consumed as source by the apps\"",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --passWithNoTests",
-    "clean": "rm -rf .turbo"
+    "clean": "rm -rf .turbo",
+    "lint": "eslint src"
   },
   "dependencies": {
     "@dastmozd/brand": "workspace:*",

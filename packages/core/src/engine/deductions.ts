@@ -1,5 +1,9 @@
 import type { LegalProfile } from '@dastmozd/legal';
-import type { CalculationTraceEntry, DeductionComponentKey, PayrollLineItem } from '@dastmozd/types';
+import type {
+  CalculationTraceEntry,
+  DeductionComponentKey,
+  PayrollLineItem,
+} from '@dastmozd/types';
 import { roundRial } from '../utils/money';
 import type { AttendanceSummary, ExtraDeduction, PayrollRunOptions } from './types';
 
@@ -61,7 +65,8 @@ export function buildDeductions({
     });
   }
 
-  const perMinute = options?.latePenaltyPerMinute ?? (latePenalty?.enabled ? latePenalty.perMinute : 0);
+  const perMinute =
+    options?.latePenaltyPerMinute ?? (latePenalty?.enabled ? latePenalty.perMinute : 0);
   const penaltyMinutes = attendance.lateMinutes + attendance.earlyLeaveMinutes;
   if (perMinute > 0 && penaltyMinutes > 0) {
     const amount = roundRial(perMinute * penaltyMinutes);

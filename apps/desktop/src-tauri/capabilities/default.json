@@ -27,7 +27,10 @@
     "autostart:allow-is-enabled",
     {
       "identifier": "fs:scope",
-      "allow": [{ "path": "$APPDATA/Dastmozd/**" }, { "path": "$HOME/Library/Application Support/Dastmozd/**" }]
+      "allow": [
+        { "path": "$APPDATA/Dastmozd/**" },
+        { "path": "$HOME/Library/Application Support/Dastmozd/**" }
+      ]
     }
   ]
 }

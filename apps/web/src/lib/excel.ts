@@ -98,9 +98,9 @@ const MARITAL_MAP: Record<string, 'single' | 'married'> = {
 
 const CONTRACT_MAP: Record<string, EmployeeInput['contractType']> = {
   'قانون کار': 'labour',
-  'تمام‌وقت': 'labour',
+  تمام‌وقت: 'labour',
   labour: 'labour',
-  'پاره‌وقت': 'part-time',
+  پاره‌وقت: 'part-time',
   'part-time': 'part-time',
   موقت: 'temporary',
   temporary: 'temporary',
@@ -121,7 +121,7 @@ const STATUS_MAP: Record<string, EmployeeInput['status']> = {
   inactive: 'inactive',
   'مرخصی بدون حقوق': 'unpaid-leave',
   'unpaid-leave': 'unpaid-leave',
-  'تسویه‌شده': 'terminated',
+  تسویه‌شده: 'terminated',
   terminated: 'terminated',
 };
 
@@ -173,8 +173,13 @@ export function previewEmployeeImport(
       position: cell(row, 'سمت', 'position'),
       departmentTitle: cell(row, 'دپارتمان', 'departmentTitle'),
       baseMonthly: parseAmountCell(cell(row, 'پایه حقوق ماهانه', 'baseMonthly', 'پایه حقوق')),
-      seniorityMonthly: parseAmountCell(cell(row, 'پایه سنوات ماهانه', 'seniorityMonthly', 'پایه سنوات')),
-      childCount: Math.max(0, Math.round(parseAmountCell(cell(row, 'تعداد فرزندان', 'childCount')))),
+      seniorityMonthly: parseAmountCell(
+        cell(row, 'پایه سنوات ماهانه', 'seniorityMonthly', 'پایه سنوات'),
+      ),
+      childCount: Math.max(
+        0,
+        Math.round(parseAmountCell(cell(row, 'تعداد فرزندان', 'childCount'))),
+      ),
     };
 
     const parsed = IMPORT_ROW_SCHEMA.safeParse(raw);
@@ -190,7 +195,11 @@ export function previewEmployeeImport(
     }
 
     if (seenPersonnel.has(raw.personnelCode)) {
-      issues.push({ row: rowNumber, field: 'personnelCode', message: 'شماره پرسنلی در فایل تکراری است.' });
+      issues.push({
+        row: rowNumber,
+        field: 'personnelCode',
+        message: 'شماره پرسنلی در فایل تکراری است.',
+      });
       return;
     }
     seenPersonnel.add(raw.personnelCode);
@@ -205,8 +214,16 @@ export function previewEmployeeImport(
       context.departments.find((item) => item.id === context.defaults.departmentId);
     const departmentId = department?.id ?? context.defaults.departmentId;
 
-    const birthDate = parseJalaliCell(cell(row, 'تاریخ تولد', 'birthDate')) ?? { jy: 1370, jm: 1, jd: 1 };
-    const hireDate = parseJalaliCell(cell(row, 'تاریخ استخدام', 'hireDate')) ?? { jy: 1405, jm: 1, jd: 1 };
+    const birthDate = parseJalaliCell(cell(row, 'تاریخ تولد', 'birthDate')) ?? {
+      jy: 1370,
+      jm: 1,
+      jd: 1,
+    };
+    const hireDate = parseJalaliCell(cell(row, 'تاریخ استخدام', 'hireDate')) ?? {
+      jy: 1405,
+      jm: 1,
+      jd: 1,
+    };
     const children = Array.from({ length: Math.min(raw.childCount, 8) }, (_, childIndex) => ({
       id: `child-${rowNumber}-${childIndex}`,
       birthDate: { jy: Math.max(1360, birthDate.jy + 25), jm: 1, jd: 1 },
@@ -290,8 +307,8 @@ export function downloadEmployeeTemplate(): void {
 export function downloadImportIssues(issues: ImportIssue[]): void {
   const rows = issues.map((issue) => ({
     'شماره سطر': String(issue.row),
-    'فیلد': issue.field,
-    'پیام': issue.message,
+    فیلد: issue.field,
+    پیام: issue.message,
   }));
   const sheet = XLSX.utils.json_to_sheet(rows);
   sheet['!cols'] = [{ wch: 12 }, { wch: 22 }, { wch: 60 }];
@@ -343,7 +360,9 @@ export function exportToCsv<T>(options: {
   };
   const lines = [
     options.columns.map((column) => escape(column.header)).join(','),
-    ...options.rows.map((row) => options.columns.map((column) => escape(column.value(row))).join(',')),
+    ...options.rows.map((row) =>
+      options.columns.map((column) => escape(column.value(row))).join(','),
+    ),
   ];
   const blob = new Blob([`\uFEFF${lines.join('\r\n')}`], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);

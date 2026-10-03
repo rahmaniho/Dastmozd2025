@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { PROFILE_1404, PROFILE_1405 } from '@dastmozd/legal';
-import { absorbReduction, applyProgressiveBrackets, bucketTaxableEarnings, computeTax } from '../engine/tax';
+import {
+  absorbReduction,
+  applyProgressiveBrackets,
+  bucketTaxableEarnings,
+  computeTax,
+} from '../engine/tax';
 import { earningLine } from '../engine/earnings';
 
 describe('محاسبه مالیات پلکانی', () => {

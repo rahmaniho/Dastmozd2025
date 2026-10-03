@@ -1,0 +1,45 @@
+Copyright (c) 1405 / 2026 — شرکت صنعت بسته‌بندی نقش آرمانی (Armani Packaging Industry)
+تمامی حقوق محفوظ است. All rights reserved.
+
+## فارسی
+
+این نرم‌افزار و همه اجزای آن — شامل کد منبع، طرح‌های رابط کاربری، نشان و هویت بصری،
+متن‌ها، پروفایل‌های قانونی و مستندات — دارایی «شرکت صنعت بسته‌بندی نقش آرمانی» است و
+توسعه آن توسط کارن‌سافت انجام شده است.
+
+اجازه استفاده:
+
+1. استفاده داخلی شرکت مالک و شرکت‌های زیرمجموعه آن، برای تهیه لیست حقوق و دستمزد،
+   فیش حقوقی، گزارش‌های بیمه و مالیات، بدون محدودیت تعداد کارمند یا دستگاه، آزاد است.
+2. نسخه‌برداری، تغییر، انتشار عمومی، فروش، اجاره یا ارائه به‌عنوان خدمت (SaaS) به
+   اشخاص ثالث، بدون اجازه کتبی مالک، ممنوع است.
+3. نگهداری این اعلان حق نسخه‌برداری در همه نسخه‌های بازتولیدشده الزامی است.
+
+سلب مسئولیت: این نرم‌افزار ابزار محاسباتی است و تضمین حقوقی جایگزین بخشنامه‌های
+رسمی، قرارداد کار یا تأیید حسابدار رسمی نیست. مسئولیت تطبیق ارقام با مصوبات و
+بخشنامه‌های جاری بر عهده کاربر است.
+
+کتابخانه‌های شخص ثالث به‌کاررفته در این پروژه، مجوزهای آزاد خود را دارند؛ فهرست کامل
+در `pnpm-lock.yaml` و مخزن هر بسته قابل مشاهده است. هیچ وابستگی پولی یا بسته‌بسته
+(closed-source) برای ساخت یا اجرای برنامه لازم نیست.
+
+## English
+
+This software — including source code, UI designs, brand identity, legal profiles and
+documentation — is the property of **Armani Packaging Industry** and was developed by
+Karen Soft.
+
+Grant of use:
+
+1. The owning company and its affiliates may use the software internally, on any number
+   of devices, to produce payroll, payslips, insurance and tax filings.
+2. Copying, modifying, publicly distributing, selling, renting or offering the software as
+   a service to third parties without prior written permission is prohibited.
+3. This copyright notice must remain in all reproduced copies.
+
+Disclaimer: this software is a calculation tool and does not replace official circulars,
+employment contracts or the review of a licensed accountant. Users are responsible for
+verifying results against current regulations.
+
+Third-party libraries retain their own permissive licenses; no paid or closed-source
+dependency is required to build or run the application.

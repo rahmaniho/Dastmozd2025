@@ -33,7 +33,9 @@ describe('ابزارهای عددی و فارسی‌سازی', () => {
     expect(numberToPersianWords(19)).toBe('نوزده');
     expect(numberToPersianWords(100)).toBe('صد');
     expect(numberToPersianWords(1234)).toBe('یک هزار و دویست و سی و چهار');
-    expect(numberToPersianWords(1_662_555)).toBe('یک میلیون و ششصد و شصت و دو هزار و پانصد و پنجاه و پنج');
+    expect(numberToPersianWords(1_662_555)).toBe(
+      'یک میلیون و ششصد و شصت و دو هزار و پانصد و پنجاه و پنج',
+    );
     expect(numberToPersianWords(1_000_000_000)).toBe('یک میلیارد');
     expect(rialInWords(202_977_615)).toContain('ریال');
     expect(rialInWords(-5)).toContain('منفی');
@@ -61,9 +63,9 @@ describe('کدهای تأیید و اثر انگشت', () => {
     const first = makeVerificationCode([...parts]);
     expect(first).toMatch(/^DM-1405-07-[0-9A-F]{8}$/);
     expect(makeVerificationCode([...parts])).toBe(first);
-    expect(makeVerificationCode(['emp-1', '1234567891', 1405, 7, 218_255_501, 15_277_885, 202_977_615])).not.toBe(
-      first,
-    );
+    expect(
+      makeVerificationCode(['emp-1', '1234567891', 1405, 7, 218_255_501, 15_277_885, 202_977_615]),
+    ).not.toBe(first);
     expect(fnv1a('a')).not.toBe(fnv1a('b'));
     expect(makeRunCode(1405, 7, 1, 'payload')).toMatch(/^RUN-1405-07-[0-9A-F]{8}$/);
   });

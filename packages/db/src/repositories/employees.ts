@@ -26,8 +26,10 @@ export async function listEmployees(query: EmployeeQuery): Promise<Paginated<Emp
   rows = rows.filter((employee) => !employee.deletedAt);
 
   if (query.status) rows = rows.filter((employee) => employee.status === query.status);
-  if (query.contractType) rows = rows.filter((employee) => employee.contractType === query.contractType);
-  if (query.departmentId) rows = rows.filter((employee) => employee.departmentId === query.departmentId);
+  if (query.contractType)
+    rows = rows.filter((employee) => employee.contractType === query.contractType);
+  if (query.departmentId)
+    rows = rows.filter((employee) => employee.departmentId === query.departmentId);
 
   const search = query.search?.trim();
   if (search) {
@@ -84,7 +86,9 @@ export type EmployeeInput = Omit<Employee, 'id' | 'createdAt' | 'updatedAt'> &
  */
 export async function saveEmployee(input: EmployeeInput, actorId?: string): Promise<Employee> {
   const existingList = await db.employees.where('companyId').equals(input.companyId).toArray();
-  const duplicated = existingList.filter((employee) => employee.id !== input.id && !employee.deletedAt);
+  const duplicated = existingList.filter(
+    (employee) => employee.id !== input.id && !employee.deletedAt,
+  );
 
   const issues = validateEmployee(input, {
     existingPersonnelCodes: duplicated.map((employee) => employee.personnelCode),
@@ -107,7 +111,10 @@ export async function saveEmployee(input: EmployeeInput, actorId?: string): Prom
   await db.employees.put(record);
 
   const diff = existing
-    ? buildDiff(existing as unknown as Record<string, unknown>, record as unknown as Record<string, unknown>)
+    ? buildDiff(
+        existing as unknown as Record<string, unknown>,
+        record as unknown as Record<string, unknown>,
+      )
     : undefined;
   await recordAudit({
     action: existing ? 'update' : 'create',
@@ -126,7 +133,15 @@ function buildDiff(
   before: Record<string, unknown>,
   after: Record<string, unknown>,
 ): Array<{ field: string; before: unknown; after: unknown }> {
-  const fields = ['firstName', 'lastName', 'personnelCode', 'nationalId', 'position', 'status', 'contractType'];
+  const fields = [
+    'firstName',
+    'lastName',
+    'personnelCode',
+    'nationalId',
+    'position',
+    'status',
+    'contractType',
+  ];
   const diff: Array<{ field: string; before: unknown; after: unknown }> = [];
   for (const field of fields) {
     if (JSON.stringify(before[field]) !== JSON.stringify(after[field])) {
@@ -215,7 +230,10 @@ export async function saveDepartment(
 export async function deleteDepartment(id: string): Promise<void> {
   const inUse = await db.employees.where('departmentId').equals(id).count();
   if (inUse > 0) {
-    throw new DataError('این دپارتمان به کارکنان تخصیص یافته و قابل حذف نیست.', 'DEPARTMENT_IN_USE');
+    throw new DataError(
+      'این دپارتمان به کارکنان تخصیص یافته و قابل حذف نیست.',
+      'DEPARTMENT_IN_USE',
+    );
   }
   await db.departments.delete(id);
 }
@@ -248,12 +266,16 @@ export async function employeeStatistics(companyId: string): Promise<{
   const active = rows.filter((employee) => employee.status === 'active');
   const averageBaseSalary =
     active.length > 0
-      ? Math.round(active.reduce((total, employee) => total + employee.salary.baseMonthly, 0) / active.length)
+      ? Math.round(
+          active.reduce((total, employee) => total + employee.salary.baseMonthly, 0) /
+            active.length,
+        )
       : 0;
   return {
     active: active.length,
-    inactive: rows.filter((employee) => employee.status === 'inactive' || employee.status === 'unpaid-leave')
-      .length,
+    inactive: rows.filter(
+      (employee) => employee.status === 'inactive' || employee.status === 'unpaid-leave',
+    ).length,
     terminated: rows.filter((employee) => employee.status === 'terminated').length,
     averageBaseSalary,
   };

@@ -27,7 +27,9 @@ export interface EncryptedPayload {
 function subtle(): SubtleCrypto {
   const cryptoImpl = globalThis.crypto;
   if (!cryptoImpl?.subtle) {
-    throw new Error('این مرورگر از Web Crypto پشتیبانی نمی‌کند؛ برای رمزنگاری داده‌ها از مرورگر جدیدتر استفاده کنید.');
+    throw new Error(
+      'این مرورگر از Web Crypto پشتیبانی نمی‌کند؛ برای رمزنگاری داده‌ها از مرورگر جدیدتر استفاده کنید.',
+    );
   }
   return cryptoImpl.subtle;
 }
@@ -215,7 +217,10 @@ export async function parseBackupFile<T = unknown>(
       return {
         manifest,
         data: {} as T,
-        integrity: { valid: false, message: 'مجموع کنترلی فایل با محتوا مطابقت ندارد؛ فایل آسیب دیده است.' },
+        integrity: {
+          valid: false,
+          message: 'مجموع کنترلی فایل با محتوا مطابقت ندارد؛ فایل آسیب دیده است.',
+        },
       };
     }
     const plain = await decryptText(decryptPayload, passphrase);
@@ -231,7 +236,10 @@ export async function parseBackupFile<T = unknown>(
     return {
       manifest,
       data: {} as T,
-      integrity: { valid: false, message: 'مجموع کنترلی فایل با محتوا مطابقت ندارد؛ فایل آسیب دیده است.' },
+      integrity: {
+        valid: false,
+        message: 'مجموع کنترلی فایل با محتوا مطابقت ندارد؛ فایل آسیب دیده است.',
+      },
     };
   }
   return {

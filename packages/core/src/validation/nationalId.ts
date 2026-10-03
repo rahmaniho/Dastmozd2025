@@ -39,7 +39,8 @@ export function validateNationalId(input: string): ValidationResult {
 export function validateInsuranceNumber(input: string): ValidationResult {
   const value = toLatinDigits(String(input ?? '').trim());
   if (!value) return { valid: false, reason: 'شماره بیمه را وارد کنید.' };
-  if (!ALL_DIGITS.test(value)) return { valid: false, reason: 'شماره بیمه باید فقط شامل ارقام باشد.' };
+  if (!ALL_DIGITS.test(value))
+    return { valid: false, reason: 'شماره بیمه باید فقط شامل ارقام باشد.' };
   if (value.length < 8 || value.length > 10) {
     return { valid: false, reason: 'شماره بیمه تأمین اجتماعی باید بین ۸ تا ۱۰ رقم باشد.' };
   }
@@ -50,8 +51,10 @@ export function validateInsuranceNumber(input: string): ValidationResult {
 export function validateIdCardNumber(input: string): ValidationResult {
   const value = toLatinDigits(String(input ?? '').trim());
   if (!value) return { valid: false, reason: 'شماره شناسنامه را وارد کنید.' };
-  if (!ALL_DIGITS.test(value)) return { valid: false, reason: 'شماره شناسنامه باید فقط شامل ارقام باشد.' };
-  if (value.length > 10) return { valid: false, reason: 'شماره شناسنامه نمی‌تواند بیش از ۱۰ رقم باشد.' };
+  if (!ALL_DIGITS.test(value))
+    return { valid: false, reason: 'شماره شناسنامه باید فقط شامل ارقام باشد.' };
+  if (value.length > 10)
+    return { valid: false, reason: 'شماره شناسنامه نمی‌تواند بیش از ۱۰ رقم باشد.' };
   return { valid: true };
 }
 
@@ -60,7 +63,10 @@ export function validatePersonnelCode(input: string): ValidationResult {
   const value = toLatinDigits(String(input ?? '').trim());
   if (!value) return { valid: false, reason: 'شماره پرسنلی را وارد کنید.' };
   if (!/^[A-Za-z0-9-]{2,20}$/.test(value)) {
-    return { valid: false, reason: 'شماره پرسنلی باید ۲ تا ۲۰ کاراکتر و شامل حروف، ارقام یا خط تیره باشد.' };
+    return {
+      valid: false,
+      reason: 'شماره پرسنلی باید ۲ تا ۲۰ کاراکتر و شامل حروف، ارقام یا خط تیره باشد.',
+    };
   }
   return { valid: true };
 }

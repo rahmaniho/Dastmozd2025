@@ -64,7 +64,10 @@ export function JalaliDateField({
   }, [fromYear, toYear]);
 
   const monthLength = useMemo(() => jalaliMonthLength(value.jy, value.jm), [value.jy, value.jm]);
-  const days = useMemo(() => Array.from({ length: monthLength }, (_, index) => index + 1), [monthLength]);
+  const days = useMemo(
+    () => Array.from({ length: monthLength }, (_, index) => index + 1),
+    [monthLength],
+  );
 
   const selectClass = cn(
     'h-9 rounded-[var(--dm-radius-md)] border border-[rgb(var(--dm-border))] bg-[rgb(var(--dm-surface))] px-2 text-sm',
@@ -72,7 +75,11 @@ export function JalaliDateField({
   );
 
   return (
-    <div className={cn('flex flex-wrap items-center gap-2', className)} role="group" aria-label={ariaLabel}>
+    <div
+      className={cn('flex flex-wrap items-center gap-2', className)}
+      role="group"
+      aria-label={ariaLabel}
+    >
       <label className="sr-only" htmlFor={id ? `${id}-day` : undefined}>
         روز
       </label>

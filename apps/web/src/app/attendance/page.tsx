@@ -56,7 +56,13 @@ import { Suspense, useEffect, useMemo, useState } from 'react';
 import { AttendanceImportDialog } from '@/components/attendance-import-dialog';
 import { downloadAttendanceTemplate } from '@/lib/attendance-import';
 import { exportToExcel, type ExportColumn } from '@/lib/excel';
-import { JALALI_MONTH_LABELS, useActiveEmployees, useAttendanceGrid, useLeaveBalances, usePeriodNavigator } from '@/lib/hooks';
+import {
+  JALALI_MONTH_LABELS,
+  useActiveEmployees,
+  useAttendanceGrid,
+  useLeaveBalances,
+  usePeriodNavigator,
+} from '@/lib/hooks';
 import { useAppStore } from '@/lib/store';
 
 /** نماد کوتاه هر نوع کارکرد در شبکه ماهانه. */
@@ -100,8 +106,16 @@ function AttendancePageInner() {
   const [departmentId, setDepartmentId] = useState('');
   const [tab, setTab] = useState('grid');
   const [importOpen, setImportOpen] = useState(false);
-  const [editing, setEditing] = useState<{ employee: Employee; day: number; record?: AttendanceRecord } | null>(null);
-  const [pendingClear, setPendingClear] = useState<{ employeeId: string; day: number; recordId: string } | null>(null);
+  const [editing, setEditing] = useState<{
+    employee: Employee;
+    day: number;
+    record?: AttendanceRecord;
+  } | null>(null);
+  const [pendingClear, setPendingClear] = useState<{
+    employeeId: string;
+    day: number;
+    recordId: string;
+  } | null>(null);
   const [busy, setBusy] = useState(false);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState('');
 
@@ -131,7 +145,8 @@ function AttendancePageInner() {
     if (!selectedEmployeeId && filteredEmployees[0]) setSelectedEmployeeId(filteredEmployees[0].id);
   }, [filteredEmployees, selectedEmployeeId]);
 
-  const selectedEmployee = filteredEmployees.find((employee) => employee.id === selectedEmployeeId) ?? null;
+  const selectedEmployee =
+    filteredEmployees.find((employee) => employee.id === selectedEmployeeId) ?? null;
   const { profile } = resolveLegalProfile(jy);
 
   const monthSummary = useLiveQuery(
@@ -165,7 +180,11 @@ function AttendancePageInner() {
         ...(payload.breakMinutes ? { breakMinutes: payload.breakMinutes } : {}),
         ...(payload.note ? { note: payload.note } : {}),
       });
-      toast({ tone: 'success', title: 'کارکرد ثبت شد', description: `روز ${toPersianDigits(payload.day)} ${monthLabel}` });
+      toast({
+        tone: 'success',
+        title: 'کارکرد ثبت شد',
+        description: `روز ${toPersianDigits(payload.day)} ${monthLabel}`,
+      });
       setEditing(null);
     } catch (error) {
       toast({
@@ -200,7 +219,11 @@ function AttendancePageInner() {
         }
       }
       if (drafts.length === 0) {
-        toast({ tone: 'info', title: 'کارکردی برای تکمیل وجود ندارد', description: 'همه روزهای کاری ثبت شده‌اند.' });
+        toast({
+          tone: 'info',
+          title: 'کارکردی برای تکمیل وجود ندارد',
+          description: 'همه روزهای کاری ثبت شده‌اند.',
+        });
         return;
       }
       const count = await bulkUpsertAttendance(drafts);
@@ -222,7 +245,10 @@ function AttendancePageInner() {
 
   const exportMonth = (): void => {
     const columns: ExportColumn<AttendanceRecord>[] = [
-      { header: 'شماره پرسنلی', value: (row) => employees.find((item) => item.id === row.employeeId)?.personnelCode ?? '' },
+      {
+        header: 'شماره پرسنلی',
+        value: (row) => employees.find((item) => item.id === row.employeeId)?.personnelCode ?? '',
+      },
       {
         header: 'نام و نام خانوادگی',
         value: (row) => {
@@ -286,8 +312,8 @@ function AttendancePageInner() {
       />
 
       <Alert tone="info" title="قاعده پیش‌فرض تکمیل خودکار">
-        روزهای شنبه تا پنج‌شنبه با ساعت ۸ تا ۱۷ و یک ساعت استراحت ثبت می‌شوند؛ روزهای جمعه به‌عنوان تعطیل هفتگی
-        خالی می‌مانند. روزهای دارای رکورد دست‌نخورده باقی می‌مانند.
+        روزهای شنبه تا پنج‌شنبه با ساعت ۸ تا ۱۷ و یک ساعت استراحت ثبت می‌شوند؛ روزهای جمعه به‌عنوان
+        تعطیل هفتگی خالی می‌مانند. روزهای دارای رکورد دست‌نخورده باقی می‌مانند.
       </Alert>
 
       <Card>
@@ -312,7 +338,10 @@ function AttendancePageInner() {
                 id="attendance-department"
                 value={departmentId}
                 placeholder="همه دپارتمان‌ها"
-                options={(departments ?? []).map((department) => ({ value: department.id, label: department.title }))}
+                options={(departments ?? []).map((department) => ({
+                  value: department.id,
+                  label: department.title,
+                }))}
                 onChange={(event) => setDepartmentId(event.target.value)}
               />
             </div>
@@ -340,8 +369,9 @@ function AttendancePageInner() {
           <CardHeader>
             <CardTitle>شبکه ماهانه کارکرد</CardTitle>
             <CardDescription>
-              برای ویرایش هر روز، روی خانه مربوطه کلیک کنید. راهنمای نمادها: ح=عادی، ا=اضافه‌کار، ش=شب‌کاری،
-              ت=تعطیل‌کاری، م=استحقاقی، ب=استعلاجی، خ=بدون حقوق، غ=غیبت، أ=مأموریت، د=دورکاری.
+              برای ویرایش هر روز، روی خانه مربوطه کلیک کنید. راهنمای نمادها: ح=عادی، ا=اضافه‌کار،
+              ش=شب‌کاری، ت=تعطیل‌کاری، م=استحقاقی، ب=استعلاجی، خ=بدون حقوق، غ=غیبت، أ=مأموریت،
+              د=دورکاری.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -385,7 +415,10 @@ function AttendancePageInner() {
                           </th>
                         );
                       })}
-                      <th scope="col" className="min-w-24 border-b border-r border-[rgb(var(--dm-border))] px-2 py-2">
+                      <th
+                        scope="col"
+                        className="min-w-24 border-b border-r border-[rgb(var(--dm-border))] px-2 py-2"
+                      >
                         ثبت‌شده
                       </th>
                     </tr>
@@ -417,7 +450,10 @@ function AttendancePageInner() {
                             const record = byEmployeeDate.get(`${employee.id}|${day}`);
                             const weekday = jalaliWeekday({ jy, jm, jd: day });
                             return (
-                              <td key={day} className="border-b border-[rgb(var(--dm-border))] p-0.5 text-center">
+                              <td
+                                key={day}
+                                className="border-b border-[rgb(var(--dm-border))] p-0.5 text-center"
+                              >
                                 <button
                                   type="button"
                                   className={`size-7 rounded-[var(--dm-radius-sm)] text-xs font-bold transition-transform hover:scale-110 ${
@@ -430,7 +466,9 @@ function AttendancePageInner() {
                                   aria-label={`${employee.firstName} ${employee.lastName}، روز ${day} ${
                                     JALALI_MONTH_LABELS[jm - 1]
                                   }${record ? `، ${ATTENDANCE_KIND_LABELS[record.kind]}` : '، ثبت‌نشده'}`}
-                                  onClick={() => setEditing({ employee, day, ...(record ? { record } : {}) })}
+                                  onClick={() =>
+                                    setEditing({ employee, day, ...(record ? { record } : {}) })
+                                  }
                                 >
                                   {record ? KIND_GLYPH[record.kind] : weekday === 6 ? 'ج' : '·'}
                                 </button>
@@ -473,10 +511,15 @@ function AttendancePageInner() {
                 <div className="space-y-2 pt-2">
                   <p className="text-sm font-semibold">{selectedEmployee.position}</p>
                   <p className="text-xs text-[rgb(var(--dm-text-muted))]">
-                    روزهای ثبت‌شده در {monthLabel}: {toPersianDigits(coverage?.get(selectedEmployee.id) ?? 0)} از{' '}
+                    روزهای ثبت‌شده در {monthLabel}:{' '}
+                    {toPersianDigits(coverage?.get(selectedEmployee.id) ?? 0)} از{' '}
                     {toPersianDigits(days.length)}
                   </p>
-                  <Progress value={coverage?.get(selectedEmployee.id) ?? 0} max={days.length} label="پیشرفت ثبت کارکرد" />
+                  <Progress
+                    value={coverage?.get(selectedEmployee.id) ?? 0}
+                    max={days.length}
+                    label="پیشرفت ثبت کارکرد"
+                  />
                 </div>
               ) : null}
             </CardContent>
@@ -484,8 +527,15 @@ function AttendancePageInner() {
 
           <Card>
             <CardHeader>
-              <CardTitle>کارکرد روز به روز {selectedEmployee ? `— ${selectedEmployee.firstName} ${selectedEmployee.lastName}` : ''}</CardTitle>
-              <CardDescription>هر روز را انتخاب و ساعت‌ها و نوع کارکرد را ثبت کنید.</CardDescription>
+              <CardTitle>
+                کارکرد روز به روز{' '}
+                {selectedEmployee
+                  ? `— ${selectedEmployee.firstName} ${selectedEmployee.lastName}`
+                  : ''}
+              </CardTitle>
+              <CardDescription>
+                هر روز را انتخاب و ساعت‌ها و نوع کارکرد را ثبت کنید.
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
               {!selectedEmployee ? (
@@ -495,15 +545,21 @@ function AttendancePageInner() {
                   const record = byEmployeeDate.get(`${selectedEmployee.id}|${day}`);
                   const weekday = jalaliWeekday({ jy, jm, jd: day });
                   const hours =
-                    record?.checkIn && record.checkOut ? minutesBetween(record.checkIn, record.checkOut) / 60 : null;
+                    record?.checkIn && record.checkOut
+                      ? minutesBetween(record.checkIn, record.checkOut) / 60
+                      : null;
                   return (
                     <div
                       key={day}
                       className="flex items-center justify-between gap-3 rounded-[var(--dm-radius-md)] border border-[rgb(var(--dm-border))] px-3 py-2"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="dm-numeric w-10 text-center text-sm font-bold">{toPersianDigits(day)}</span>
-                        <span className="text-xs text-[rgb(var(--dm-text-muted))]">{JALALI_WEEKDAYS[weekday]}</span>
+                        <span className="dm-numeric w-10 text-center text-sm font-bold">
+                          {toPersianDigits(day)}
+                        </span>
+                        <span className="text-xs text-[rgb(var(--dm-text-muted))]">
+                          {JALALI_WEEKDAYS[weekday]}
+                        </span>
                         {record ? (
                           <Badge tone="neutral">{ATTENDANCE_KIND_LABELS[record.kind]}</Badge>
                         ) : (
@@ -516,13 +572,21 @@ function AttendancePageInner() {
                         {record?.checkIn && record.checkOut ? (
                           <span className="dm-numeric text-xs text-[rgb(var(--dm-text-muted))]">
                             {toPersianDigits(record.checkIn)} – {toPersianDigits(record.checkOut)}
-                            {hours !== null ? ` (${toPersianDigits(Math.round(hours * 10) / 10)} ساعت)` : ''}
+                            {hours !== null
+                              ? ` (${toPersianDigits(Math.round(hours * 10) / 10)} ساعت)`
+                              : ''}
                           </span>
                         ) : null}
                         <Button
                           size="sm"
                           variant={record ? 'outline' : 'primary'}
-                          onClick={() => setEditing({ employee: selectedEmployee, day, ...(record ? { record } : {}) })}
+                          onClick={() =>
+                            setEditing({
+                              employee: selectedEmployee,
+                              day,
+                              ...(record ? { record } : {}),
+                            })
+                          }
                         >
                           {record ? 'ویرایش' : 'ثبت'}
                         </Button>
@@ -541,8 +605,8 @@ function AttendancePageInner() {
           <CardHeader>
             <CardTitle>مانده مرخصی سال {toPersianDigits(jy)}</CardTitle>
             <CardDescription>
-              استحقاق مرخصی سالانه {toPersianDigits(profile.leave.annualPaidLeaveDays)} روز (ماده ۶۴ قانون کار)؛
-              مصرف از رکوردهای همین سال محاسبه می‌شود.
+              استحقاق مرخصی سالانه {toPersianDigits(profile.leave.annualPaidLeaveDays)} روز (ماده ۶۴
+              قانون کار)؛ مصرف از رکوردهای همین سال محاسبه می‌شود.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -583,7 +647,10 @@ function AttendancePageInner() {
           />
           <SummaryTile
             label="اضافه‌کار / شب‌کاری"
-            value={records.filter((record) => record.kind === 'overtime' || record.kind === 'night').length}
+            value={
+              records.filter((record) => record.kind === 'overtime' || record.kind === 'night')
+                .length
+            }
             unit="روز"
           />
           <SummaryTile
@@ -710,7 +777,9 @@ function LeaveTable({
               <TableCell className="dm-numeric">{toPersianDigits(annualDays)} روز</TableCell>
               <TableCell className="dm-numeric">{toPersianDigits(balance.paidUsed)} روز</TableCell>
               <TableCell className="dm-numeric">{toPersianDigits(balance.sickUsed)} روز</TableCell>
-              <TableCell className="dm-numeric">{toPersianDigits(balance.unpaidUsed)} روز</TableCell>
+              <TableCell className="dm-numeric">
+                {toPersianDigits(balance.unpaidUsed)} روز
+              </TableCell>
               <TableCell>
                 <span className="flex items-center gap-2">
                   <span className="dm-numeric font-bold">{toPersianDigits(remaining)} روز</span>
@@ -773,7 +842,12 @@ function DayEditorDialog({
   }, [record, day]);
 
   const weekday = jalaliWeekday({ jy, jm, jd: day });
-  const needsTimes = kind === 'present' || kind === 'overtime' || kind === 'night' || kind === 'holiday' || kind === 'remote';
+  const needsTimes =
+    kind === 'present' ||
+    kind === 'overtime' ||
+    kind === 'night' ||
+    kind === 'holiday' ||
+    kind === 'remote';
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -859,7 +933,11 @@ function DayEditorDialog({
             </>
           ) : null}
           <FormField label="توضیحات" htmlFor="day-note" className="sm:col-span-2">
-            <Textarea id="day-note" value={note} onChange={(event) => setNote(event.target.value)} />
+            <Textarea
+              id="day-note"
+              value={note}
+              onChange={(event) => setNote(event.target.value)}
+            />
           </FormField>
         </div>
 
@@ -867,8 +945,9 @@ function DayEditorDialog({
           <div className="rounded-[var(--dm-radius-lg)] bg-[rgb(var(--dm-surface-sunken))] p-3 text-xs text-[rgb(var(--dm-text-muted))]">
             <p className="mb-1 font-bold text-[rgb(var(--dm-text))]">خلاصه ماه این کارمند</p>
             <p className="dm-numeric">
-              کارکرد {toPersianDigits(summary.presentDays)} روز · اضافه‌کار {toPersianDigits(summary.overtimeHours)}{' '}
-              ساعت · شب‌کاری {toPersianDigits(summary.nightHours)} ساعت · تأخیر{' '}
+              کارکرد {toPersianDigits(summary.presentDays)} روز · اضافه‌کار{' '}
+              {toPersianDigits(summary.overtimeHours)} ساعت · شب‌کاری{' '}
+              {toPersianDigits(summary.nightHours)} ساعت · تأخیر{' '}
               {toPersianDigits(summary.lateMinutes)} دقیقه
             </p>
           </div>
@@ -876,14 +955,15 @@ function DayEditorDialog({
 
         {record?.checkIn && record.checkOut ? (
           <p className="text-xs text-[rgb(var(--dm-text-subtle))]">
-            ساعات ثبت‌شده فعلی: {toPersianDigits(record.checkIn)} تا {toPersianDigits(record.checkOut)} · مبلغ ساعتی
-            پایه:{' '}
+            ساعات ثبت‌شده فعلی: {toPersianDigits(record.checkIn)} تا{' '}
+            {toPersianDigits(record.checkOut)} · مبلغ ساعتی پایه:{' '}
             <Money value={Math.round(employee.salary.baseMonthly / 220)} size="sm" />
           </p>
         ) : null}
 
         <Alert tone="info" title="محاسبه خودکار">
-          ساعات کارکرد، شب‌کاری و اضافه‌کار هنگام اجرای دوره حقوقی به‌صورت خودکار از همین رکوردها محاسبه می‌شود.
+          ساعات کارکرد، شب‌کاری و اضافه‌کار هنگام اجرای دوره حقوقی به‌صورت خودکار از همین رکوردها
+          محاسبه می‌شود.
         </Alert>
       </DialogContent>
     </Dialog>

@@ -70,7 +70,8 @@ export async function ensureActiveCompany(): Promise<CompanyProfile> {
 }
 
 export async function saveCompany(
-  input: Omit<CompanyProfile, 'createdAt' | 'updatedAt'> & Partial<Pick<CompanyProfile, 'createdAt'>>,
+  input: Omit<CompanyProfile, 'createdAt' | 'updatedAt'> &
+    Partial<Pick<CompanyProfile, 'createdAt'>>,
   actorId?: string,
 ): Promise<CompanyProfile> {
   if (!input.name?.trim()) throw new DataError('نام شرکت الزامی است.', 'COMPANY_NAME_REQUIRED');
@@ -87,7 +88,9 @@ export async function saveCompany(
     action: existing ? 'update' : 'create',
     entityType: 'company',
     entityId: record.id,
-    summary: existing ? `اطلاعات شرکت «${record.name}» ویرایش شد.` : `شرکت «${record.name}» ایجاد شد.`,
+    summary: existing
+      ? `اطلاعات شرکت «${record.name}» ویرایش شد.`
+      : `شرکت «${record.name}» ایجاد شد.`,
     ...(actorId ? { actorId } : {}),
   });
   return record;

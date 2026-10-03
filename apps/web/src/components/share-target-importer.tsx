@@ -1,7 +1,13 @@
 'use client';
 
 import { toPersianDigits } from '@dastmozd/core';
-import { bulkUpsertAttendance, listDepartments, makeId, saveDepartment, saveEmployee } from '@dastmozd/db';
+import {
+  bulkUpsertAttendance,
+  listDepartments,
+  makeId,
+  saveDepartment,
+  saveEmployee,
+} from '@dastmozd/db';
 import type { Department, Employee } from '@dastmozd/types';
 import {
   Alert,
@@ -58,12 +64,15 @@ export function ShareTargetImporter() {
   const { toast } = useToast();
 
   const [shared, setShared] = useState<SharedFile | null>(null);
-  const [departments, setDepartments] = useState<Department[]>([]);
   const [detection, setDetection] = useState<Detection | null>(null);
   const [busy, setBusy] = useState(false);
 
   const detect = useCallback(
-    async (buffer: ArrayBuffer, list: Department[], employeeList: Employee[]): Promise<Detection> => {
+    async (
+      buffer: ArrayBuffer,
+      list: Department[],
+      employeeList: Employee[],
+    ): Promise<Detection> => {
       const employeePreview = previewEmployeeImport(buffer, {
         companyId: companyId ?? '',
         departments: list,
@@ -71,7 +80,10 @@ export function ShareTargetImporter() {
       });
       if (employeePreview.rows.length > 0) return { kind: 'employees', preview: employeePreview };
 
-      const attendance = readAttendanceWorkbook(buffer, { employees: employeeList, adapterId: 'generic' });
+      const attendance = readAttendanceWorkbook(buffer, {
+        employees: employeeList,
+        adapterId: 'generic',
+      });
       if (attendance.rows.length > 0) {
         return {
           kind: 'attendance',
@@ -88,7 +100,6 @@ export function ShareTargetImporter() {
     void (async () => {
       if (typeof caches === 'undefined' || !companyId) return;
       const list = await ensureDepartments(companyId);
-      setDepartments(list);
       const cache = await caches.open(SHARE_CACHE);
       const response = await cache.match(SHARE_URL);
       if (!response) return;
@@ -175,7 +186,8 @@ export function ShareTargetImporter() {
             فایل دریافت‌شده
           </CardTitle>
           <CardDescription>
-            نام فایل: {shared.name} — اندازه {toPersianDigits(Math.round(shared.buffer.byteLength / 1024))} کیلوبایت
+            نام فایل: {shared.name} — اندازه{' '}
+            {toPersianDigits(Math.round(shared.buffer.byteLength / 1024))} کیلوبایت
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -184,11 +196,15 @@ export function ShareTargetImporter() {
           ) : detection.kind === 'employees' ? (
             <>
               <div className="flex flex-wrap gap-2">
-                <Badge tone="success">{toPersianDigits(detection.preview.rows.length)} سطر معتبر کارمند</Badge>
+                <Badge tone="success">
+                  {toPersianDigits(detection.preview.rows.length)} سطر معتبر کارمند
+                </Badge>
                 <Badge tone={detection.preview.issues.length > 0 ? 'warning' : 'neutral'}>
                   {toPersianDigits(detection.preview.issues.length)} خطا
                 </Badge>
-                <Badge tone="info">دوره {toPersianDigits(currentMonth)}/{toPersianDigits(fiscalYear)}</Badge>
+                <Badge tone="info">
+                  دوره {toPersianDigits(currentMonth)}/{toPersianDigits(fiscalYear)}
+                </Badge>
               </div>
               <Table>
                 <TableHeader>
@@ -204,8 +220,12 @@ export function ShareTargetImporter() {
                     <TableRow key={row.row}>
                       <TableCell className="dm-numeric">{toPersianDigits(row.row)}</TableCell>
                       <TableCell>{row.fullName}</TableCell>
-                      <TableCell className="dm-numeric">{toPersianDigits(row.input.personnelCode)}</TableCell>
-                      <TableCell className="dm-numeric">{toPersianDigits(row.input.salary.baseMonthly)}</TableCell>
+                      <TableCell className="dm-numeric">
+                        {toPersianDigits(row.input.personnelCode)}
+                      </TableCell>
+                      <TableCell className="dm-numeric">
+                        {toPersianDigits(row.input.salary.baseMonthly)}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -222,7 +242,10 @@ export function ShareTargetImporter() {
                 </Alert>
               ) : null}
               <div className="flex flex-wrap gap-2">
-                <Button onClick={importEmployees} disabled={busy || detection.preview.rows.length === 0}>
+                <Button
+                  onClick={importEmployees}
+                  disabled={busy || detection.preview.rows.length === 0}
+                >
                   <Users className="size-4" />
                   {busy ? 'در حال ثبت…' : 'ثبت کارکنان این فایل'}
                 </Button>
@@ -233,7 +256,10 @@ export function ShareTargetImporter() {
             </>
           ) : detection.kind === 'attendance' ? (
             <>
-              <Alert tone="success" title={`${toPersianDigits(detection.count)} رکورد کارکرد شناسایی شد`}>
+              <Alert
+                tone="success"
+                title={`${toPersianDigits(detection.count)} رکورد کارکرد شناسایی شد`}
+              >
                 رکوردها بر پایه شماره پرسنلی به کارکنان تطبیق داده شده‌اند.
               </Alert>
               {detection.issues.length > 0 ? (

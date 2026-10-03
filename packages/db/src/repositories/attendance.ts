@@ -1,4 +1,10 @@
-import { emptyAttendance, gregorianIsoToJalali, jalaliMonthLength, jalaliToGregorianIso, summarizeAttendance } from '@dastmozd/core';
+import {
+  emptyAttendance,
+  gregorianIsoToJalali,
+  jalaliMonthLength,
+  jalaliToGregorianIso,
+  summarizeAttendance,
+} from '@dastmozd/core';
 import type { AttendanceKind, AttendanceRecord } from '@dastmozd/types';
 import type { AttendanceSummary } from '@dastmozd/core';
 import { db } from '../schema';
@@ -11,12 +17,15 @@ export async function attendanceOfMonth(
   jy: number,
   jm: number,
 ): Promise<AttendanceRecord[]> {
-  const records = await db.attendance.where('[employeeId+date]').between(
-    [employeeId, jalaliToGregorianIso({ jy, jm, jd: 1 })],
-    [employeeId, jalaliToGregorianIso({ jy, jm, jd: jalaliMonthLength(jy, jm) })],
-    true,
-    true,
-  ).toArray();
+  const records = await db.attendance
+    .where('[employeeId+date]')
+    .between(
+      [employeeId, jalaliToGregorianIso({ jy, jm, jd: 1 })],
+      [employeeId, jalaliToGregorianIso({ jy, jm, jd: jalaliMonthLength(jy, jm) })],
+      true,
+      true,
+    )
+    .toArray();
   return records.sort((a, b) => a.date.localeCompare(b.date));
 }
 
@@ -45,7 +54,10 @@ export async function upsertAttendance(
   if (existing?.payrollRunId) {
     const run = await db.payrollRuns.get(existing.payrollRunId);
     if (run && (run.status === 'locked' || run.status === 'paid')) {
-      throw new DataError('این روز در دوره قفل‌شده حقوقی ثبت شده و قابل ویرایش نیست.', 'PERIOD_LOCKED');
+      throw new DataError(
+        'این روز در دوره قفل‌شده حقوقی ثبت شده و قابل ویرایش نیست.',
+        'PERIOD_LOCKED',
+      );
     }
   }
 

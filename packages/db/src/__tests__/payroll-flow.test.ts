@@ -1,9 +1,16 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+import { validateInsuranceNumber, validateNationalId } from '@dastmozd/core';
 import { db } from '../schema';
 import { seedDemoData } from '../seed';
 import { listEmployees, employeeStatistics } from '../repositories/employees';
 import { attendanceOfPeriod } from '../repositories/attendance';
-import { listPayrollRuns, lockPayrollRun, payslipsOfRun, runPayroll, unlockPayrollRun } from '../repositories/payroll';
+import {
+  listPayrollRuns,
+  lockPayrollRun,
+  payslipsOfRun,
+  runPayroll,
+  unlockPayrollRun,
+} from '../repositories/payroll';
 import { insertThroughUpsert } from './helpers.test-utils';
 
 beforeEach(async () => {
@@ -31,7 +38,13 @@ describe('داده نمونه سامانه', () => {
     expect(new Set(page.rows.map((employee) => employee.personnelCode))).toEqual(
       new Set(['AR-1001', 'AR-1002', 'AR-1003', 'AR-1004', 'AR-1005']),
     );
-    expect(page.rows.every((employee) => employee.nationalId.length === 10)).toBe(true);
+    // کد ملی و شماره بیمه باید از اعتبارسنجی قانونی عبور کنند تا داده نمونه
+    // برای آموزش و آزمون محاسبه واقعی قابل استفاده باشد.
+    expect(page.rows.every((employee) => validateNationalId(employee.nationalId).valid)).toBe(true);
+    expect(
+      page.rows.every((employee) => validateInsuranceNumber(employee.insuranceNumber ?? '').valid),
+    ).toBe(true);
+    expect(page.rows.every((employee) => employee.salary.baseMonthly >= 166_255_500)).toBe(true);
   });
 
   it('کارکرد ماهانه برای همه کارکنان ثبت می‌شود', async () => {

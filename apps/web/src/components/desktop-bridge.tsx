@@ -2,11 +2,7 @@
 
 import { toPersianDigits } from '@dastmozd/core';
 import { createBackup, getSettings, listCompanies, restoreBackup } from '@dastmozd/db';
-import {
-  Button,
-  ConfirmDialog,
-  useToast,
-} from '@dastmozd/ui';
+import { Button, ConfirmDialog, useToast } from '@dastmozd/ui';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import {
@@ -38,7 +34,8 @@ export function DesktopBridge() {
       try {
         const settings = await getSettings();
         const companies = await listCompanies(true);
-        const company = companies.find((item) => item.id === settings.activeCompanyId) ?? companies[0];
+        const company =
+          companies.find((item) => item.id === settings.activeCompanyId) ?? companies[0];
         if (!company) return;
         const { content, fileName } = await createBackup({
           companyId: company.id,
@@ -76,7 +73,11 @@ export function DesktopBridge() {
             break;
           case 'quick-backup':
             void autoBackup('manual').then(() =>
-              toast({ tone: 'success', title: 'پشتیبان‌گیری سریع انجام شد', description: 'نسخه جدید در پوشه بومی ذخیره شد.' }),
+              toast({
+                tone: 'success',
+                title: 'پشتیبان‌گیری سریع انجام شد',
+                description: 'نسخه جدید در پوشه بومی ذخیره شد.',
+              }),
             );
             break;
           case 'restore-backup':
@@ -103,7 +104,11 @@ export function DesktopBridge() {
                 setUpdate(info);
                 toast(
                   info
-                    ? { tone: 'info', title: `نسخه ${info.version} آماده نصب است`, description: 'از تنظیمات ← نسخه دسکتاپ نصب کنید.' }
+                    ? {
+                        tone: 'info',
+                        title: `نسخه ${info.version} آماده نصب است`,
+                        description: 'از تنظیمات ← نسخه دسکتاپ نصب کنید.',
+                      }
                     : { tone: 'success', title: 'برنامه به‌روز است' },
                 );
               })
@@ -160,7 +165,10 @@ export function DesktopBridge() {
     try {
       const content = await nativeReadTextFile(pendingFile);
       const result = await restoreBackup({ content, mode: 'replace' });
-      const restoredCount = Object.values(result.restored).reduce((total, value) => total + value, 0);
+      const restoredCount = Object.values(result.restored).reduce(
+        (total, value) => total + value,
+        0,
+      );
       toast({
         tone: result.integrity.valid ? 'success' : 'warning',
         title: result.integrity.valid ? 'پشتیبان بازگردانی شد' : 'بازگردانی با هشدار صحت',

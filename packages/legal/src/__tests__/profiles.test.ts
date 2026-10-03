@@ -24,11 +24,15 @@ describe('پروفایل‌های حقوقی سالانه', () => {
 
   it.each(ALL_PROFILES)('پروفایل $year از نظر داخلی سازگار است', (profile) => {
     expect(profile.minMonthlyWage).toBe(profile.minDailyWage * profile.monthlyDayDivisor);
-    expect(profile.childAllowanceDaily).toBe(profile.minDailyWage * profile.childAllowanceDayMultiplier);
+    expect(profile.childAllowanceDaily).toBe(
+      profile.minDailyWage * profile.childAllowanceDayMultiplier,
+    );
     expect(profile.childAllowanceDayMultiplier).toBe(3);
     expect(profile.maxChildren).toBe(4);
     expect(profile.seniorityMonthly).toBeCloseTo(profile.seniorityDaily * 30, -4);
-    expect(profile.insurance.ceiling).toBe(profile.minMonthlyWage * profile.insurance.ceilingMultiplier);
+    expect(profile.insurance.ceiling).toBe(
+      profile.minMonthlyWage * profile.insurance.ceilingMultiplier,
+    );
     expect(profile.insurance.employeeRate + profile.insurance.employerRate).toBeCloseTo(0.3, 6);
     expect(profile.insurance.unemploymentRate).toBe(0.03);
     expect(profile.tax.annualExemption).toBe(profile.tax.monthlyExemption * 12);

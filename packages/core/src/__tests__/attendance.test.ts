@@ -10,7 +10,9 @@ import {
 import { emptyAttendance } from '../engine/types';
 import type { AttendanceRecord } from '@dastmozd/types';
 
-function record(partial: Partial<AttendanceRecord> & Pick<AttendanceRecord, 'date' | 'kind'>): AttendanceRecord {
+function record(
+  partial: Partial<AttendanceRecord> & Pick<AttendanceRecord, 'date' | 'kind'>,
+): AttendanceRecord {
   return {
     id: `rec-${partial.date}-${partial.kind}`,
     employeeId: 'emp-1',
@@ -29,8 +31,20 @@ describe('محاسبات پایه حضور و غیاب', () => {
   });
 
   it('ساعات کارکرد روزانه با کسر استراحت محاسبه می‌شود', () => {
-    expect(workedHoursOf(record({ date: '2026-09-23', kind: 'present', checkIn: '08:00', checkOut: '17:00', breakMinutes: 60 }))).toBe(8);
-    expect(workedHoursOf(record({ date: '2026-09-24', kind: 'present', workedHours: 7.5 }))).toBe(7.5);
+    expect(
+      workedHoursOf(
+        record({
+          date: '2026-09-23',
+          kind: 'present',
+          checkIn: '08:00',
+          checkOut: '17:00',
+          breakMinutes: 60,
+        }),
+      ),
+    ).toBe(8);
+    expect(workedHoursOf(record({ date: '2026-09-24', kind: 'present', workedHours: 7.5 }))).toBe(
+      7.5,
+    );
     expect(workedHoursOf(record({ date: '2026-09-25', kind: 'present' }))).toBe(0);
   });
 
@@ -47,8 +61,21 @@ describe('جمع‌بندی ماهانه کارکرد', () => {
   it('روزهای عادی، مرخصی، غیبت و مأموریت درست شمارش می‌شود', () => {
     const summary = summarizeAttendance(
       [
-        record({ date: '2026-09-23', kind: 'present', checkIn: '08:00', checkOut: '17:00', breakMinutes: 60, overtimeHours: 2 }),
-        record({ date: '2026-09-24', kind: 'present', checkIn: '08:00', checkOut: '16:00', breakMinutes: 0 }),
+        record({
+          date: '2026-09-23',
+          kind: 'present',
+          checkIn: '08:00',
+          checkOut: '17:00',
+          breakMinutes: 60,
+          overtimeHours: 2,
+        }),
+        record({
+          date: '2026-09-24',
+          kind: 'present',
+          checkIn: '08:00',
+          checkOut: '16:00',
+          breakMinutes: 0,
+        }),
         record({ date: '2026-09-25', kind: 'paid-leave' }),
         record({ date: '2026-09-26', kind: 'unpaid-leave' }),
         record({ date: '2026-09-27', kind: 'absence' }),
@@ -87,7 +114,13 @@ describe('جمع‌بندی ماهانه کارکرد', () => {
           overtimeHours: 2,
           shiftKind: 'night',
         }),
-        record({ date: '2026-09-25', kind: 'overtime', checkIn: '17:00', checkOut: '21:00', overtimeHours: 4 }),
+        record({
+          date: '2026-09-25',
+          kind: 'overtime',
+          checkIn: '17:00',
+          checkOut: '21:00',
+          overtimeHours: 4,
+        }),
       ],
       30,
     );
@@ -100,7 +133,14 @@ describe('جمع‌بندی ماهانه کارکرد', () => {
   it('تأخیر و تعجیل و تعطیلات رسمی پشتیبانی می‌شود', () => {
     const summary = summarizeAttendance(
       [
-        record({ date: '2026-09-23', kind: 'present', checkIn: '08:30', checkOut: '17:00', lateMinutes: 30, earlyLeaveMinutes: 15 }),
+        record({
+          date: '2026-09-23',
+          kind: 'present',
+          checkIn: '08:30',
+          checkOut: '17:00',
+          lateMinutes: 30,
+          earlyLeaveMinutes: 15,
+        }),
       ],
       30,
       { holidayDates: ['2026-09-23'] },

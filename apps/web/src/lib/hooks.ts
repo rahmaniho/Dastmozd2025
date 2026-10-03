@@ -69,15 +69,31 @@ export function useEmployees(query: Partial<EmployeeQuery> & { companyId?: strin
             pageSize: query.pageSize ?? 20,
           })
         : Promise.resolve({ rows: [], total: 0, page: 1, pageSize: 20 }),
-    [companyId, query.search, query.departmentId, query.status, query.contractType, query.page, query.pageSize, query.sort?.field, query.sort?.direction],
+    [
+      companyId,
+      query.search,
+      query.departmentId,
+      query.status,
+      query.contractType,
+      query.page,
+      query.pageSize,
+      query.sort?.field,
+      query.sort?.direction,
+    ],
     undefined,
   );
   return result ?? { rows: [], total: 0, page: 1, pageSize: 20 };
 }
 
-export function useDepartments(): { departments: Awaited<ReturnType<typeof listDepartments>>; loading: boolean } {
+export function useDepartments(): {
+  departments: Awaited<ReturnType<typeof listDepartments>>;
+  loading: boolean;
+} {
   const companyId = useAppStore((state) => state.companyId);
-  const departments = useLiveQuery(() => (companyId ? listDepartments(companyId) : []), [companyId]);
+  const departments = useLiveQuery(
+    () => (companyId ? listDepartments(companyId) : []),
+    [companyId],
+  );
   return { departments: departments ?? [], loading: departments === undefined };
 }
 
@@ -113,7 +129,10 @@ export function useDashboardStats() {
 /** کارکنان فعال برای انتخاب در محاسبه حقوق. */
 export function useActiveEmployees(): Employee[] {
   const companyId = useAppStore((state) => state.companyId);
-  const employees = useLiveQuery(() => (companyId ? allActiveEmployees(companyId) : []), [companyId]);
+  const employees = useLiveQuery(
+    () => (companyId ? allActiveEmployees(companyId) : []),
+    [companyId],
+  );
   return employees ?? [];
 }
 
@@ -193,7 +212,14 @@ export function usePeriodNavigator(): {
     else setStorePeriod(fiscalYear, currentMonth - 1);
   }, [currentMonth, fiscalYear, setStorePeriod]);
 
-  return { jy: fiscalYear, jm: currentMonth, monthLabel, next, previous, setPeriod: setStorePeriod };
+  return {
+    jy: fiscalYear,
+    jm: currentMonth,
+    monthLabel,
+    next,
+    previous,
+    setPeriod: setStorePeriod,
+  };
 }
 
 export const JALALI_MONTH_LABELS = [
@@ -227,7 +253,10 @@ export function useDatabaseCounts() {
 }
 
 /** مانده مرخصی هر کارمند در سال مالی جاری (بر پایه ۲۶ روز استحقاقی سالانه). */
-export function useLeaveBalances(): Map<string, { paidUsed: number; sickUsed: number; unpaidUsed: number }> {
+export function useLeaveBalances(): Map<
+  string,
+  { paidUsed: number; sickUsed: number; unpaidUsed: number }
+> {
   const fiscalYear = useAppStore((state) => state.fiscalYear);
   const balances = useLiveQuery(
     async () => {

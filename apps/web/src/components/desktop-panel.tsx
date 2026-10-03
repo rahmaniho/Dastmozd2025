@@ -1,7 +1,13 @@
 'use client';
 
 import { toPersianDigits } from '@dastmozd/core';
-import { createBackup, enforceRetention, listBackups, restoreBackup, type BackupRecord } from '@dastmozd/db';
+import {
+  createBackup,
+  enforceRetention,
+  listBackups,
+  restoreBackup,
+  type BackupRecord,
+} from '@dastmozd/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
   Alert,
@@ -22,7 +28,15 @@ import {
   TableRow,
   useToast,
 } from '@dastmozd/ui';
-import { FolderOpen, HardDriveDownload, Printer, RefreshCw, ShieldCheck, Trash2, Upload } from 'lucide-react';
+import {
+  FolderOpen,
+  HardDriveDownload,
+  Printer,
+  RefreshCw,
+  ShieldCheck,
+  Trash2,
+  Upload,
+} from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import {
   checkForUpdate,
@@ -52,7 +66,13 @@ const APP_VERSION = '1.0.0';
  * بخش «نسخه دسکتاپ» در تنظیمات: پشتیبان بومی روی `%APPDATA%\Dastmozd\backups`،
  * اجرای خودکار در ویندوز، چاپ بومی و به‌روزرسانی امضاشده.
  */
-export function DesktopPanel({ companyId, companyName }: { companyId: string; companyName: string }) {
+export function DesktopPanel({
+  companyId,
+  companyName,
+}: {
+  companyId: string;
+  companyName: string;
+}) {
   const desktop = isDesktop();
   const { toast } = useToast();
   const [paths, setPaths] = useState<NativeAppPaths | null>(null);
@@ -107,16 +127,17 @@ export function DesktopPanel({ companyId, companyName }: { companyId: string; co
       <div className="space-y-4">
         <Alert tone="info" title="این بخش در نسخه دسکتاپ فعال است">
           در نسخه وب، پشتیبان‌گیری در مرورگر ذخیره می‌شود. برای پشتیبان بومی روی
-          <span className="dm-ltr-inline mx-1 font-medium">%APPDATA%\Dastmozd\backups</span>
-          و اجرای خودکار همراه ویندوز، برنامه ویندوزی «دستمزد آرمانی» را از بخش «تنظیمات ← درباره» یا صفحه
+          <span className="dm-ltr-inline mx-1 font-medium">%APPDATA%\Dastmozd\backups</span>و اجرای
+          خودکار همراه ویندوز، برنامه ویندوزی «دستمزد آرمانی» را از بخش «تنظیمات ← درباره» یا صفحه
           انتشار همین سامانه نصب کنید.
         </Alert>
         <Card>
           <CardHeader>
             <CardTitle>تفاوت نسخه وب و دسکتاپ</CardTitle>
             <CardDescription>
-              هر دو نسخه از یک پایگاه‌داده و یک موتور محاسبه استفاده می‌کنند؛ نسخه دسکتاپ افزون بر آن، فایل‌های فیزیکی
-              پشتیبان، انجمن پرونده <span className="dm-ltr-inline">.dastmozd</span>، چاپ بومی و به‌روزرسانی خودکار دارد.
+              هر دو نسخه از یک پایگاه‌داده و یک موتور محاسبه استفاده می‌کنند؛ نسخه دسکتاپ افزون بر
+              آن، فایل‌های فیزیکی پشتیبان، انجمن پرونده{' '}
+              <span className="dm-ltr-inline">.dastmozd</span>، چاپ بومی و به‌روزرسانی خودکار دارد.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -133,8 +154,8 @@ export function DesktopPanel({ companyId, companyName }: { companyId: string; co
             پشتیبان بومی روی رایانه
           </CardTitle>
           <CardDescription>
-            نسخه‌ها در پوشه‌ای مستقل ذخیره می‌شوند و سیاست نگهداری ۳۰ نسخه روزانه، ۱۲ ماهانه و ۵ سالانه به‌طور خودکار
-            اجرا می‌شود.
+            نسخه‌ها در پوشه‌ای مستقل ذخیره می‌شوند و سیاست نگهداری ۳۰ نسخه روزانه، ۱۲ ماهانه و ۵
+            سالانه به‌طور خودکار اجرا می‌شود.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -144,7 +165,9 @@ export function DesktopPanel({ companyId, companyName }: { companyId: string; co
               {paths?.backupDir ?? 'در حال خواندن…'}
             </p>
             <p className="mt-2 font-medium text-[rgb(var(--dm-text-muted))]">نسخه برنامه</p>
-            <p className="dm-ltr-inline mt-1 text-[rgb(var(--dm-text))]">{paths?.version ?? APP_VERSION}</p>
+            <p className="dm-ltr-inline mt-1 text-[rgb(var(--dm-text))]">
+              {paths?.version ?? APP_VERSION}
+            </p>
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -247,12 +270,20 @@ export function DesktopPanel({ companyId, companyName }: { companyId: string; co
               <TableBody>
                 {files.map((file) => (
                   <TableRow key={file.name}>
-                    <TableCell className="dm-ltr-inline max-w-[280px] truncate text-xs">{file.name}</TableCell>
-                    <TableCell>
-                      <Badge tone={file.kind === 'manual' ? 'info' : 'neutral'}>{kindLabel(file.kind)}</Badge>
+                    <TableCell className="dm-ltr-inline max-w-[280px] truncate text-xs">
+                      {file.name}
                     </TableCell>
-                    <TableCell className="dm-numeric">{toPersianDigits(Math.round(file.sizeBytes / 1024))} کیلوبایت</TableCell>
-                    <TableCell className="dm-numeric text-xs">{formatStamp(file.modifiedAt)}</TableCell>
+                    <TableCell>
+                      <Badge tone={file.kind === 'manual' ? 'info' : 'neutral'}>
+                        {kindLabel(file.kind)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="dm-numeric">
+                      {toPersianDigits(Math.round(file.sizeBytes / 1024))} کیلوبایت
+                    </TableCell>
+                    <TableCell className="dm-numeric text-xs">
+                      {formatStamp(file.modifiedAt)}
+                    </TableCell>
                     <TableCell className="flex justify-end gap-1">
                       <Button
                         size="sm"
@@ -275,7 +306,11 @@ export function DesktopPanel({ companyId, companyName }: { companyId: string; co
                       >
                         بازگردانی
                       </Button>
-                      <Button size="sm" variant="ghost" onClick={() => nativeRevealInDir(file.path)}>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => nativeRevealInDir(file.path)}
+                      >
                         نمایش
                       </Button>
                       <Button
@@ -303,7 +338,9 @@ export function DesktopPanel({ companyId, companyName }: { companyId: string; co
         <Card>
           <CardHeader>
             <CardTitle>رفتار برنامه در ویندوز</CardTitle>
-            <CardDescription>اجرای خودکار همراه ویندوز و ارسال به سینی سیستم هنگام بستن پنجره.</CardDescription>
+            <CardDescription>
+              اجرای خودکار همراه ویندوز و ارسال به سینی سیستم هنگام بستن پنجره.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <Switch
@@ -314,13 +351,16 @@ export function DesktopPanel({ companyId, companyName }: { companyId: string; co
                 run('autostart', async () => {
                   await setAutostart(checked);
                   setAutostartState(checked);
-                  toast({ tone: 'success', title: checked ? 'اجرای خودکار فعال شد' : 'اجرای خودکار غیرفعال شد' });
+                  toast({
+                    tone: 'success',
+                    title: checked ? 'اجرای خودکار فعال شد' : 'اجرای خودکار غیرفعال شد',
+                  });
                 })
               }
             />
             <p className="text-xs text-[rgb(var(--dm-text-subtle))]">
-              بستن پنجره، برنامه را می‌بندد اما پیش از آن یک پشتیبان خودکار ساخته می‌شود؛ برای خروج کامل از منوی
-              «پرونده ← خروج» استفاده کنید.
+              بستن پنجره، برنامه را می‌بندد اما پیش از آن یک پشتیبان خودکار ساخته می‌شود؛ برای خروج
+              کامل از منوی «پرونده ← خروج» استفاده کنید.
             </p>
           </CardContent>
         </Card>
@@ -373,7 +413,8 @@ export function DesktopPanel({ companyId, companyName }: { companyId: string; co
               </div>
             ) : null}
             <p className="text-xs text-[rgb(var(--dm-text-subtle))]">
-              تا زمانی که نسخه جدید نصب نشده است، پایگاه‌داده شما دست‌نخورده می‌ماند؛ پیش از نصب، پشتیبان بومی بگیرید.
+              تا زمانی که نسخه جدید نصب نشده است، پایگاه‌داده شما دست‌نخورده می‌ماند؛ پیش از نصب،
+              پشتیبان بومی بگیرید.
             </p>
           </CardContent>
         </Card>
@@ -383,7 +424,8 @@ export function DesktopPanel({ companyId, companyName }: { companyId: string; co
         <CardHeader>
           <CardTitle>پشتیبان‌های مرورگر</CardTitle>
           <CardDescription>
-            نسخه‌های ذخیره‌شده در پایگاه‌داده داخلی: {toPersianDigits((localBackups ?? []).length)} نسخه.
+            نسخه‌های ذخیره‌شده در پایگاه‌داده داخلی: {toPersianDigits((localBackups ?? []).length)}{' '}
+            نسخه.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap items-center gap-2">
@@ -403,8 +445,8 @@ export function DesktopPanel({ companyId, companyName }: { companyId: string; co
             اجرای سیاست نگهداری مرورگر
           </Button>
           <span className="text-xs text-[rgb(var(--dm-text-subtle))]">
-            فایل بازشده با دوبار کلیک{' '}
-            <span className="dm-ltr-inline">.dastmozd</span> نیز در همین بخش قابل بازگردانی است.
+            فایل بازشده با دوبار کلیک <span className="dm-ltr-inline">.dastmozd</span> نیز در همین
+            بخش قابل بازگردانی است.
           </span>
         </CardContent>
       </Card>

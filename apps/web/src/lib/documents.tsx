@@ -1,7 +1,7 @@
 'use client';
 
 import { Document, Font, Image, Page, StyleSheet, Text, View, pdf } from '@react-pdf/renderer';
-import { formatNumber, formatPersianNumber, rialInWords, toPersianDigits } from '@dastmozd/core';
+import { formatNumber, rialInWords, toPersianDigits } from '@dastmozd/core';
 import type { CompanyProfile, Employee, Payslip } from '@dastmozd/types';
 import type { LegalProfile } from '@dastmozd/legal';
 import QRCode from 'qrcode';
@@ -37,7 +37,12 @@ const styles = StyleSheet.create({
     color: '#10212b',
     backgroundColor: '#ffffff',
   },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 12,
+  },
   companyBlock: { maxWidth: '58%' },
   companyName: { fontSize: 13, fontWeight: 'bold', marginBottom: 3 },
   muted: { color: '#5b6b73' },
@@ -46,8 +51,19 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 3 },
   rowBox: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   cell: { width: '48%', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 3 },
-  tableHeader: { flexDirection: 'row', backgroundColor: '#e6f4f3', paddingVertical: 4, paddingHorizontal: 4 },
-  tableRow: { flexDirection: 'row', borderBottomWidth: 0.4, borderBottomColor: '#dde7ea', paddingVertical: 3, paddingHorizontal: 4 },
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#e6f4f3',
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+  },
+  tableRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 0.4,
+    borderBottomColor: '#dde7ea',
+    paddingVertical: 3,
+    paddingHorizontal: 4,
+  },
   colTitle: { width: '46%' },
   colQty: { width: '20%', textAlign: 'center' },
   colAmount: { width: '34%', textAlign: 'left' },
@@ -55,14 +71,35 @@ const styles = StyleSheet.create({
   summaryRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 2.5 },
   summaryLabel: { color: '#3c4c54' },
   summaryValue: { fontWeight: 'bold' },
-  netBox: { marginTop: 8, borderWidth: 0.8, borderColor: '#0d9488', borderRadius: 4, padding: 8, backgroundColor: '#f1faf9' },
+  netBox: {
+    marginTop: 8,
+    borderWidth: 0.8,
+    borderColor: '#0d9488',
+    borderRadius: 4,
+    padding: 8,
+    backgroundColor: '#f1faf9',
+  },
   netLabel: { fontSize: 10, fontWeight: 'bold', color: '#0f766e' },
   netValue: { fontSize: 12, fontWeight: 'bold', color: '#0f766e' },
   words: { marginTop: 3, fontSize: 8, color: '#3c4c54' },
   qr: { width: 74, height: 74 },
-  footer: { position: 'absolute', bottom: 18, left: 28, right: 28, fontSize: 7.5, color: '#5b6b73' },
+  footer: {
+    position: 'absolute',
+    bottom: 18,
+    left: 28,
+    right: 28,
+    fontSize: 7.5,
+    color: '#5b6b73',
+  },
   signatureRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 14 },
-  signature: { width: '30%', borderTopWidth: 0.5, borderTopColor: '#9fb2b9', paddingTop: 3, textAlign: 'center', fontSize: 7.5 },
+  signature: {
+    width: '30%',
+    borderTopWidth: 0.5,
+    borderTopColor: '#9fb2b9',
+    paddingTop: 3,
+    textAlign: 'center',
+    fontSize: 7.5,
+  },
   badge: { fontSize: 8, color: '#0f766e' },
 });
 
@@ -87,15 +124,13 @@ function PayslipPage({
   profile,
   qrDataUrl,
 }: PayslipDocumentInput & { qrDataUrl: string }) {
-  const periodLabel = `${jalaliText({ jy: payslip.period.jy, jm: payslip.period.jm, jd: 1 })} تا ${jalaliText({
-    jy: payslip.period.jy,
-    jm: payslip.period.jm,
-    jd: payslip.period.jm <= 6
-      ? 31
-      : payslip.period.jm <= 11
-        ? 30
-        : 29,
-  })}`;
+  const periodLabel = `${jalaliText({ jy: payslip.period.jy, jm: payslip.period.jm, jd: 1 })} تا ${jalaliText(
+    {
+      jy: payslip.period.jy,
+      jm: payslip.period.jm,
+      jd: payslip.period.jm <= 6 ? 31 : payslip.period.jm <= 11 ? 30 : 29,
+    },
+  )}`;
 
   return (
     <Page size="A4" style={styles.page}>
@@ -103,7 +138,9 @@ function PayslipPage({
         <View style={styles.companyBlock}>
           <Text style={styles.companyName}>{company.name}</Text>
           {company.registrationNumber ? (
-            <Text style={styles.muted}>شماره ثبت: {toPersianDigits(company.registrationNumber)}</Text>
+            <Text style={styles.muted}>
+              شماره ثبت: {toPersianDigits(company.registrationNumber)}
+            </Text>
           ) : null}
           {company.economicCode ? (
             <Text style={styles.muted}>کد اقتصادی: {toPersianDigits(company.economicCode)}</Text>
@@ -113,13 +150,16 @@ function PayslipPage({
               {company.address.city} — {company.address.line}
             </Text>
           ) : null}
-          {company.phone ? <Text style={styles.muted}>تلفن: {toPersianDigits(company.phone)}</Text> : null}
+          {company.phone ? (
+            <Text style={styles.muted}>تلفن: {toPersianDigits(company.phone)}</Text>
+          ) : null}
         </View>
         <View style={{ alignItems: 'center' }}>
-          {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <Text style={styles.badge}>فیش حقوق و دستمزد</Text>
           <Text style={styles.muted}>دوره: {periodLabel}</Text>
-          <Text style={styles.muted}>نسخه: {toPersianDigits(payslip.period.jm)}/{toPersianDigits(payslip.period.jy)}</Text>
+          <Text style={styles.muted}>
+            نسخه: {toPersianDigits(payslip.period.jm)}/{toPersianDigits(payslip.period.jy)}
+          </Text>
         </View>
         <View style={{ alignItems: 'center' }}>
           <Image src={qrDataUrl} style={styles.qr} />
@@ -145,7 +185,9 @@ function PayslipPage({
           </View>
           <View style={styles.cell}>
             <Text style={styles.muted}>شماره بیمه</Text>
-            <Text>{employee.insuranceNumber ? toPersianDigits(employee.insuranceNumber) : '—'}</Text>
+            <Text>
+              {employee.insuranceNumber ? toPersianDigits(employee.insuranceNumber) : '—'}
+            </Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.muted}>سمت</Text>
@@ -170,7 +212,9 @@ function PayslipPage({
             <View key={`${line.key}-${index}`} style={styles.tableRow} wrap={false}>
               <Text style={styles.colTitle}>{line.title}</Text>
               <Text style={styles.colQty}>
-                {line.quantity !== undefined ? formatNumber(Math.round(line.quantity * 100) / 100) : '—'}
+                {line.quantity !== undefined
+                  ? formatNumber(Math.round(line.quantity * 100) / 100)
+                  : '—'}
               </Text>
               <Text style={styles.colAmount}>{formatNumber(line.amount)}</Text>
             </View>
@@ -231,15 +275,21 @@ function PayslipPage({
           </View>
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>سهم کارمند (۷٪)</Text>
-            <Text style={styles.summaryValue}>{formatNumber(payslip.insurance.employeeShare)} ریال</Text>
+            <Text style={styles.summaryValue}>
+              {formatNumber(payslip.insurance.employeeShare)} ریال
+            </Text>
           </View>
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>سهم کارفرما (۲۳٪)</Text>
-            <Text style={styles.summaryValue}>{formatNumber(payslip.insurance.employerShare)} ریال</Text>
+            <Text style={styles.summaryValue}>
+              {formatNumber(payslip.insurance.employerShare)} ریال
+            </Text>
           </View>
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>جمع پرداختی به سازمان</Text>
-            <Text style={styles.summaryValue}>{formatNumber(payslip.insurance.totalShare)} ریال</Text>
+            <Text style={styles.summaryValue}>
+              {formatNumber(payslip.insurance.totalShare)} ریال
+            </Text>
           </View>
           <Text style={[styles.muted, { fontSize: 7.5, marginTop: 3 }]}>
             سقف بیمه این دوره: {formatNumber(payslip.insurance.ceiling)} ریال
@@ -265,8 +315,8 @@ function PayslipPage({
             <Text style={styles.summaryValue}>{formatNumber(payslip.tax.total)} ریال</Text>
           </View>
           <Text style={[styles.muted, { fontSize: 7.5, marginTop: 3 }]}>
-            نرخ مؤثر: {toPersianDigits(Math.round(payslip.tax.effectiveRate * 1000) / 10)}٪ — پروفایل حقوقی{' '}
-            {profile.label}
+            نرخ مؤثر: {toPersianDigits(Math.round(payslip.tax.effectiveRate * 1000) / 10)}٪ —
+            پروفایل حقوقی {profile.label}
           </Text>
         </View>
       </View>
@@ -278,8 +328,9 @@ function PayslipPage({
       </View>
 
       <Text style={styles.footer} fixed>
-        این فیش بر پایه پروفایل حقوقی {profile.label} ({profile.description}) صادر شده است. کد رهگیری:{' '}
-        {payslip.verificationCode} — بازبینی گام‌به‌گام اقلام از طریق گزارش محاسبه در سامانه ممکن است.
+        این فیش بر پایه پروفایل حقوقی {profile.label} ({profile.description}) صادر شده است. کد
+        رهگیری: {payslip.verificationCode} — بازبینی گام‌به‌گام اقلام از طریق گزارش محاسبه در سامانه
+        ممکن است.
       </Text>
     </Page>
   );
@@ -316,7 +367,10 @@ export async function buildPayslipsPdf(inputs: PayslipDocumentInput[]): Promise<
 }
 
 /** بارگیری PDF فیش‌های انتخابی. */
-export async function downloadPayslipsPdf(inputs: PayslipDocumentInput[], fileName: string): Promise<void> {
+export async function downloadPayslipsPdf(
+  inputs: PayslipDocumentInput[],
+  fileName: string,
+): Promise<void> {
   const blob = await buildPayslipsPdf(inputs);
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
@@ -365,8 +419,10 @@ export interface InsuranceFileResult {
  */
 export function buildInsuranceDiskette(input: InsuranceFileInput): InsuranceFileResult {
   const { payslips, employees, company, jy, jm } = input;
-  const pad = (value: string | number, length: number): string => String(value).padStart(length, ' ').slice(-length);
-  const zero = (value: number, length: number): string => String(Math.round(value)).padStart(length, '0').slice(-length);
+  const pad = (value: string | number, length: number): string =>
+    String(value).padStart(length, ' ').slice(-length);
+  const zero = (value: number, length: number): string =>
+    String(Math.round(value)).padStart(length, '0').slice(-length);
   const period = `${jy}${String(jm).padStart(2, '0')}`;
   const lines: string[] = [];
   const insured = payslips.filter((slip) => slip.insurance.base > 0);
@@ -379,9 +435,15 @@ export function buildInsuranceDiskette(input: InsuranceFileInput): InsuranceFile
       pad(company.name, 30),
       period,
       zero(insured.length, 5),
-      zero(insured.reduce((total, slip) => total + slip.insurance.base, 0), 12),
       zero(
-        insured.reduce((total, slip) => total + slip.insurance.employeeShare + slip.insurance.employerShare, 0),
+        insured.reduce((total, slip) => total + slip.insurance.base, 0),
+        12,
+      ),
+      zero(
+        insured.reduce(
+          (total, slip) => total + slip.insurance.employeeShare + slip.insurance.employerShare,
+          0,
+        ),
         12,
       ),
     ].join(''),
@@ -405,7 +467,10 @@ export function buildInsuranceDiskette(input: InsuranceFileInput): InsuranceFile
       [
         'D',
         zero(index + 1, 4),
-        zero(employee.insuranceNumber ? Number(employee.insuranceNumber.replace(/\D/g, '')) : 0, 12),
+        zero(
+          employee.insuranceNumber ? Number(employee.insuranceNumber.replace(/\D/g, '')) : 0,
+          12,
+        ),
         zero(Number(employee.nationalId.replace(/\D/g, '') || 0), 10),
         pad(employee.lastName, 25),
         pad(employee.firstName, 20),
@@ -471,14 +536,26 @@ export function downloadTaxExcel(input: TaxFileInput): void {
   const columns: Array<ExportColumn<{ slip: Payslip; employee?: Employee; index: number }>> = [
     { header: 'ردیف', value: (row) => row.index, width: 6 },
     { header: 'شماره پرسنلی', value: (row) => row.employee?.personnelCode ?? '', width: 14 },
-    { header: 'نام و نام خانوادگی', value: (row) => `${row.employee?.firstName ?? ''} ${row.employee?.lastName ?? ''}`, width: 26 },
+    {
+      header: 'نام و نام خانوادگی',
+      value: (row) => `${row.employee?.firstName ?? ''} ${row.employee?.lastName ?? ''}`,
+      width: 26,
+    },
     { header: 'کد ملی', value: (row) => `="${row.employee?.nationalId ?? ''}"`, width: 16 },
     { header: 'شماره بیمه', value: (row) => row.employee?.insuranceNumber ?? '', width: 16 },
     { header: 'جمع حقوق و مزایا (ریال)', value: (row) => row.slip.totals.grossEarnings, width: 20 },
-    { header: 'مزایای معاف (ریال)', value: (row) => Math.max(0, row.slip.totals.grossEarnings - row.slip.tax.taxableIncome), width: 20 },
+    {
+      header: 'مزایای معاف (ریال)',
+      value: (row) => Math.max(0, row.slip.totals.grossEarnings - row.slip.tax.taxableIncome),
+      width: 20,
+    },
     { header: 'مشمول مالیات (ریال)', value: (row) => row.slip.tax.taxableIncome, width: 20 },
     { header: 'معافیت ماهانه (ریال)', value: (row) => row.slip.tax.exemption, width: 20 },
-    { header: 'درآمد مشمول پس از معافیت (ریال)', value: (row) => row.slip.tax.afterExemption, width: 24 },
+    {
+      header: 'درآمد مشمول پس از معافیت (ریال)',
+      value: (row) => row.slip.tax.afterExemption,
+      width: 24,
+    },
     { header: 'مالیات (ریال)', value: (row) => row.slip.tax.total, width: 18 },
     { header: 'پایه بیمه (ریال)', value: (row) => row.slip.insurance.base, width: 18 },
   ];
@@ -536,12 +613,27 @@ export function downloadMonthlySummaryExcel(input: SummaryFileInput): void {
   const rows: Row[] = [
     { section: 'جمع‌ها', title: 'کارکنان مشمول', value: input.payslips.length, note: 'نفر' },
     { section: 'جمع‌ها', title: 'جمع حقوق و مزایا', value: totals.gross, note: 'ریال' },
-    { section: 'جمع‌ها', title: 'بیمه سهم کارکنان (۷٪)', value: totals.employeeInsurance, note: 'ریال' },
-    { section: 'جمع‌ها', title: 'بیمه سهم کارفرما (۲۳٪)', value: totals.employerInsurance, note: 'ریال' },
+    {
+      section: 'جمع‌ها',
+      title: 'بیمه سهم کارکنان (۷٪)',
+      value: totals.employeeInsurance,
+      note: 'ریال',
+    },
+    {
+      section: 'جمع‌ها',
+      title: 'بیمه سهم کارفرما (۲۳٪)',
+      value: totals.employerInsurance,
+      note: 'ریال',
+    },
     { section: 'جمع‌ها', title: 'مالیات بر درآمد', value: totals.tax, note: 'ریال' },
     { section: 'جمع‌ها', title: 'سایر کسورات', value: totals.otherDeductions, note: 'ریال' },
     { section: 'جمع‌ها', title: 'خالص پرداختی', value: totals.net, note: 'ریال' },
-    { section: 'جمع‌ها', title: 'هزینه تمام‌شده کارفرما', value: totals.employerCost, note: 'ریال' },
+    {
+      section: 'جمع‌ها',
+      title: 'هزینه تمام‌شده کارفرما',
+      value: totals.employerCost,
+      note: 'ریال',
+    },
   ];
 
   exportToExcel({

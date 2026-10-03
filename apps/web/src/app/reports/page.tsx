@@ -59,9 +59,23 @@ import {
 import { Suspense, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { PayrollTrendChart, type TrendPoint } from '@/components/charts';
-import { printPayslips, buildInsuranceDiskette, downloadInsuranceDiskette, downloadMonthlySummaryExcel, downloadPayslipsPdf, downloadTaxExcel } from '@/lib/documents';
+import {
+  printPayslips,
+  buildInsuranceDiskette,
+  downloadInsuranceDiskette,
+  downloadMonthlySummaryExcel,
+  downloadPayslipsPdf,
+  downloadTaxExcel,
+} from '@/lib/documents';
 import { downloadJson, exportToCsv, exportToExcel, type ExportColumn } from '@/lib/excel';
-import { JALALI_MONTH_LABELS, useActiveEmployees, useAttendanceGrid, usePeriodNavigator, usePayrollRuns, usePayslips } from '@/lib/hooks';
+import {
+  JALALI_MONTH_LABELS,
+  useActiveEmployees,
+  useAttendanceGrid,
+  usePeriodNavigator,
+  usePayrollRuns,
+  usePayslips,
+} from '@/lib/hooks';
 import { useAppStore } from '@/lib/store';
 
 interface BuilderColumn<T> {
@@ -174,7 +188,10 @@ function ReportsPageInner() {
   const insuranceFile = useMemo(() => {
     if (!company || slips.length === 0) return null;
     try {
-      return { result: buildInsuranceDiskette({ payslips: slips, employees, company, jy, jm }), error: null as string | null };
+      return {
+        result: buildInsuranceDiskette({ payslips: slips, employees, company, jy, jm }),
+        error: null as string | null,
+      };
     } catch (error) {
       return {
         result: null,
@@ -201,7 +218,12 @@ function ReportsPageInner() {
   const builderDatasets = useMemo(() => {
     const employeeColumns: Array<BuilderColumn<BuilderRow>> = [
       { id: 'personnel', header: 'شماره پرسنلی', value: (row) => String(row.personnel ?? '') },
-      { id: 'name', header: 'نام و نام خانوادگی', value: (row) => `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim(), width: 26 },
+      {
+        id: 'name',
+        header: 'نام و نام خانوادگی',
+        value: (row) => `${row.firstName ?? ''} ${row.lastName ?? ''}`.trim(),
+        width: 26,
+      },
       { id: 'nationalId', header: 'کد ملی', value: (row) => String(row.nationalId ?? '') },
       { id: 'position', header: 'سمت', value: (row) => String(row.position ?? '') },
       { id: 'hireYear', header: 'سال استخدام', value: (row) => String(row.hireYear ?? '') },
@@ -223,7 +245,12 @@ function ReportsPageInner() {
 
     const attendanceColumns: Array<BuilderColumn<BuilderRow>> = [
       { id: 'personnel', header: 'شماره پرسنلی', value: (row) => String(row.personnel ?? '') },
-      { id: 'name', header: 'نام و نام خانوادگی', value: (row) => String(row.name ?? ''), width: 26 },
+      {
+        id: 'name',
+        header: 'نام و نام خانوادگی',
+        value: (row) => String(row.name ?? ''),
+        width: 26,
+      },
       { id: 'day', header: 'روز ماه', value: (row) => String(row.day ?? '') },
       { id: 'kind', header: 'نوع کارکرد', value: (row) => String(row.kind ?? '') },
       { id: 'checkIn', header: 'ورود', value: (row) => String(row.checkIn ?? '') },
@@ -241,20 +268,37 @@ function ReportsPageInner() {
         checkOut: record.checkOut ?? '',
         hours:
           record.checkIn && record.checkOut
-            ? Math.round(((minutesBetween(record.checkIn, record.checkOut) - (record.breakMinutes ?? 0)) / 60) * 100) / 100
+            ? Math.round(
+                ((minutesBetween(record.checkIn, record.checkOut) - (record.breakMinutes ?? 0)) /
+                  60) *
+                  100,
+              ) / 100
             : 0,
       };
     });
 
     const payslipColumns: Array<BuilderColumn<BuilderRow>> = [
       { id: 'personnel', header: 'شماره پرسنلی', value: (row) => String(row.personnel ?? '') },
-      { id: 'name', header: 'نام و نام خانوادگی', value: (row) => String(row.name ?? ''), width: 26 },
+      {
+        id: 'name',
+        header: 'نام و نام خانوادگی',
+        value: (row) => String(row.name ?? ''),
+        width: 26,
+      },
       { id: 'gross', header: 'جمع مزایا (ریال)', value: (row) => Number(row.gross ?? 0) },
-      { id: 'insurance', header: 'بیمه سهم کارمند (ریال)', value: (row) => Number(row.insurance ?? 0) },
+      {
+        id: 'insurance',
+        header: 'بیمه سهم کارمند (ریال)',
+        value: (row) => Number(row.insurance ?? 0),
+      },
       { id: 'tax', header: 'مالیات (ریال)', value: (row) => Number(row.tax ?? 0) },
       { id: 'other', header: 'سایر کسورات (ریال)', value: (row) => Number(row.other ?? 0) },
       { id: 'net', header: 'خالص پرداختی (ریال)', value: (row) => Number(row.net ?? 0) },
-      { id: 'employerCost', header: 'هزینه کارفرما (ریال)', value: (row) => Number(row.employerCost ?? 0) },
+      {
+        id: 'employerCost',
+        header: 'هزینه کارفرما (ریال)',
+        value: (row) => Number(row.employerCost ?? 0),
+      },
       { id: 'code', header: 'کد رهگیری', value: (row) => String(row.code ?? '') },
     ];
     const payslipRows: BuilderRow[] = slips.map((slip) => {
@@ -274,7 +318,11 @@ function ReportsPageInner() {
 
     return {
       employees: { label: 'پرونده کارکنان', columns: employeeColumns, rows: employeeRows },
-      attendance: { label: `کارکرد ${monthLabel}`, columns: attendanceColumns, rows: attendanceRows },
+      attendance: {
+        label: `کارکرد ${monthLabel}`,
+        columns: attendanceColumns,
+        rows: attendanceRows,
+      },
       payslips: { label: `فیش‌های دوره ${monthLabel}`, columns: payslipColumns, rows: payslipRows },
     };
   }, [employees, records, slips, employeeById, monthLabel]);
@@ -310,7 +358,11 @@ function ReportsPageInner() {
               onClick={() =>
                 void guard('print-all', async () => {
                   await printPayslips(allDocuments);
-                  toast({ tone: 'success', title: 'فایل فیش‌ها در پنجره تازه باز شد', description: 'برای چاپ یا ذخیره PDF از آنجا استفاده کنید.' });
+                  toast({
+                    tone: 'success',
+                    title: 'فایل فیش‌ها در پنجره تازه باز شد',
+                    description: 'برای چاپ یا ذخیره PDF از آنجا استفاده کنید.',
+                  });
                 })
               }
             >
@@ -349,8 +401,8 @@ function ReportsPageInner() {
                 <CardTitle>فهرست فیش‌های دوره</CardTitle>
                 <CardDescription>
                   {toPersianDigits(slips.length)} فیش ·{' '}
-                  {activeRun ? `نسخه ${toPersianDigits(activeRun.version)}` : 'دوره نامشخص'} — برای انتخاب چند فیش،
-                  کادر ابتدای هر سطر را علامت بزنید.
+                  {activeRun ? `نسخه ${toPersianDigits(activeRun.version)}` : 'دوره نامشخص'} — برای
+                  انتخاب چند فیش، کادر ابتدای هر سطر را علامت بزنید.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -388,7 +440,9 @@ function ReportsPageInner() {
                               className="text-right font-semibold hover:text-[rgb(var(--dm-primary))]"
                               onClick={() => setSelectedSlipId(slip.id)}
                             >
-                              {employee ? `${employee.firstName} ${employee.lastName}` : slip.employeeId}
+                              {employee
+                                ? `${employee.firstName} ${employee.lastName}`
+                                : slip.employeeId}
                               <span className="dm-numeric block text-xs font-normal opacity-70">
                                 {employee ? toPersianDigits(employee.personnelCode) : ''}
                               </span>
@@ -430,7 +484,10 @@ function ReportsPageInner() {
                     disabled={allDocuments.length === 0 || busy !== null}
                     onClick={() =>
                       void guard('pdf-all', async () => {
-                        await downloadPayslipsPdf(allDocuments, `dastmozd-payslips-${jy}-${String(jm).padStart(2, '0')}.pdf`);
+                        await downloadPayslipsPdf(
+                          allDocuments,
+                          `dastmozd-payslips-${jy}-${String(jm).padStart(2, '0')}.pdf`,
+                        );
                         toast({ tone: 'success', title: 'PDF همه فیش‌های دوره آماده شد' });
                       })
                     }
@@ -438,7 +495,10 @@ function ReportsPageInner() {
                     <HardDriveDownload className="size-4" />
                     PDF همه فیش‌ها
                   </Button>
-                  <Button variant="ghost" onClick={() => setChecked(new Set(slips.map((slip) => slip.id)))}>
+                  <Button
+                    variant="ghost"
+                    onClick={() => setChecked(new Set(slips.map((slip) => slip.id)))}
+                  >
                     انتخاب همه
                   </Button>
                   <Button variant="ghost" onClick={() => setChecked(new Set())}>
@@ -494,7 +554,10 @@ function ReportsPageInner() {
                 ) : insuranceFile?.result ? (
                   <>
                     <div className="grid gap-2 sm:grid-cols-3">
-                      <MetricTile label="تعداد بیمه‌شده" value={toPersianDigits(insuranceFile.result.recordCount)} />
+                      <MetricTile
+                        label="تعداد بیمه‌شده"
+                        value={toPersianDigits(insuranceFile.result.recordCount)}
+                      />
                       <MetricTile
                         label="جمع حق بیمه"
                         value={`${formatPersianNumber(insuranceFile.result.totalInsurance)} ریال`}
@@ -526,7 +589,9 @@ function ReportsPageInner() {
                         onClick={() => {
                           navigator.clipboard
                             .writeText(insuranceFile.result?.content ?? '')
-                            .then(() => toast({ tone: 'success', title: 'محتوای فایل در حافظه موقت کپی شد' }))
+                            .then(() =>
+                              toast({ tone: 'success', title: 'محتوای فایل در حافظه موقت کپی شد' }),
+                            )
                             .catch(() => toast({ tone: 'error', title: 'کپی محتوا ممکن نشد' }));
                         }}
                       >
@@ -534,12 +599,14 @@ function ReportsPageInner() {
                       </Button>
                     </div>
                     <p className="text-xs text-[rgb(var(--dm-text-subtle))]">
-                      ساختار فایل بر پایه قالب رایج دیسکت بیمه است؛ پیش از ارسال، آن را با نسخه روز سامانه تأمین
-                      اجتماعی تطبیق دهید (شرح در docs/LEGAL.md).
+                      ساختار فایل بر پایه قالب رایج دیسکت بیمه است؛ پیش از ارسال، آن را با نسخه روز
+                      سامانه تأمین اجتماعی تطبیق دهید (شرح در docs/LEGAL.md).
                     </p>
                   </>
                 ) : (
-                  <p className="text-sm text-[rgb(var(--dm-text-subtle))]">برای ساخت فایل، ابتدا دوره را محاسبه کنید.</p>
+                  <p className="text-sm text-[rgb(var(--dm-text-subtle))]">
+                    برای ساخت فایل، ابتدا دوره را محاسبه کنید.
+                  </p>
                 )}
               </CardContent>
             </Card>
@@ -547,7 +614,9 @@ function ReportsPageInner() {
             <Card>
               <CardHeader>
                 <CardTitle>خروجی‌های مالی و مالیاتی</CardTitle>
-                <CardDescription>فایل‌های آماده برای سامانه‌های رسمی و بایگانی داخلی.</CardDescription>
+                <CardDescription>
+                  فایل‌های آماده برای سامانه‌های رسمی و بایگانی داخلی.
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
                 <Button
@@ -603,12 +672,36 @@ function ReportsPageInner() {
                           value: (row) => `${row.employee.firstName} ${row.employee.lastName}`,
                           width: 26,
                         },
-                        { header: 'پایه حقوق (ریال)', value: (row) => row.employee.salary.baseMonthly, width: 20 },
-                        { header: 'عیدی پیشنهادی (ریال)', value: (row) => row.result.recommended, width: 22 },
-                        { header: 'حداقل قانونی عیدی (ریال)', value: (row) => row.result.min, width: 22 },
-                        { header: 'حداکثر قانونی عیدی (ریال)', value: (row) => row.result.max, width: 22 },
-                        { header: 'بخش معاف از مالیات (ریال)', value: (row) => row.result.taxExempt, width: 22 },
-                        { header: 'بخش مشمول مالیات (ریال)', value: (row) => row.result.taxable, width: 22 },
+                        {
+                          header: 'پایه حقوق (ریال)',
+                          value: (row) => row.employee.salary.baseMonthly,
+                          width: 20,
+                        },
+                        {
+                          header: 'عیدی پیشنهادی (ریال)',
+                          value: (row) => row.result.recommended,
+                          width: 22,
+                        },
+                        {
+                          header: 'حداقل قانونی عیدی (ریال)',
+                          value: (row) => row.result.min,
+                          width: 22,
+                        },
+                        {
+                          header: 'حداکثر قانونی عیدی (ریال)',
+                          value: (row) => row.result.max,
+                          width: 22,
+                        },
+                        {
+                          header: 'بخش معاف از مالیات (ریال)',
+                          value: (row) => row.result.taxExempt,
+                          width: 22,
+                        },
+                        {
+                          header: 'بخش مشمول مالیات (ریال)',
+                          value: (row) => row.result.taxable,
+                          width: 22,
+                        },
                       ];
                       exportToExcel({
                         fileName: `dastmozd-eidi-${jy}.xlsx`,
@@ -635,11 +728,29 @@ function ReportsPageInner() {
                       exportToCsv({
                         fileName: `dastmozd-attendance-${jy}-${String(jm).padStart(2, '0')}.csv`,
                         columns: [
-                          { header: 'شماره پرسنلی', value: (row: (typeof records)[number]) => employeeById.get(row.employeeId)?.personnelCode ?? '' },
-                          { header: 'تاریخ', value: (row: (typeof records)[number]) => `${row.jalali.jy}/${row.jalali.jm}/${row.jalali.jd}` },
-                          { header: 'نوع', value: (row: (typeof records)[number]) => ATTENDANCE_KIND_LABELS[row.kind] },
-                          { header: 'ورود', value: (row: (typeof records)[number]) => row.checkIn ?? '' },
-                          { header: 'خروج', value: (row: (typeof records)[number]) => row.checkOut ?? '' },
+                          {
+                            header: 'شماره پرسنلی',
+                            value: (row: (typeof records)[number]) =>
+                              employeeById.get(row.employeeId)?.personnelCode ?? '',
+                          },
+                          {
+                            header: 'تاریخ',
+                            value: (row: (typeof records)[number]) =>
+                              `${row.jalali.jy}/${row.jalali.jm}/${row.jalali.jd}`,
+                          },
+                          {
+                            header: 'نوع',
+                            value: (row: (typeof records)[number]) =>
+                              ATTENDANCE_KIND_LABELS[row.kind],
+                          },
+                          {
+                            header: 'ورود',
+                            value: (row: (typeof records)[number]) => row.checkIn ?? '',
+                          },
+                          {
+                            header: 'خروج',
+                            value: (row: (typeof records)[number]) => row.checkOut ?? '',
+                          },
                         ],
                         rows: records,
                       });
@@ -658,19 +769,18 @@ function ReportsPageInner() {
             <CardHeader>
               <CardTitle>روند سالانه {toPersianDigits(jy)}</CardTitle>
               <CardDescription>
-                خالص پرداختی و هزینه کارفرما در دوازده ماه سال؛ حقوق پایه برای اعتبارسنجی سریع نمایش داده می‌شود.
+                خالص پرداختی و هزینه کارفرما در دوازده ماه سال؛ حقوق پایه برای اعتبارسنجی سریع نمایش
+                داده می‌شود.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <PayrollTrendChart
-                data={
-                  (trend ?? []).map<TrendPoint>((point) => ({
-                    month: JALALI_MONTH_LABELS[point.month - 1] ?? String(point.month),
-                    gross: point.gross,
-                    net: point.net,
-                    employerCost: point.employerCost,
-                  }))
-                }
+                data={(trend ?? []).map<TrendPoint>((point) => ({
+                  month: JALALI_MONTH_LABELS[point.month - 1] ?? String(point.month),
+                  gross: point.gross,
+                  net: point.net,
+                  employerCost: point.employerCost,
+                }))}
               />
             </CardContent>
           </Card>
@@ -679,7 +789,8 @@ function ReportsPageInner() {
             <CardHeader>
               <CardTitle>برآورد عیدی و پاداش پایان سال</CardTitle>
               <CardDescription>
-                حداقل قانونی عیدی معادل دو برابر حداقل مزد ماهانه و حداکثر سه برابر آن است (ماده ۷۵ قانون کار).
+                حداقل قانونی عیدی معادل دو برابر حداقل مزد ماهانه و حداکثر سه برابر آن است (ماده ۷۵
+                قانون کار).
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -735,12 +846,22 @@ function ReportsPageInner() {
   );
 }
 
-function SummaryCard({ label, value, tone = 'default' }: { label: string; value: number; tone?: 'default' | 'positive' }) {
+function SummaryCard({
+  label,
+  value,
+  tone = 'default',
+}: {
+  label: string;
+  value: number;
+  tone?: 'default' | 'positive';
+}) {
   return (
     <Card>
       <CardContent className="pt-5">
         <p className="text-xs text-[rgb(var(--dm-text-muted))]">{label}</p>
-        <div className={`mt-1 text-lg font-black ${tone === 'positive' ? 'text-[rgb(var(--dm-success))]' : ''}`}>
+        <div
+          className={`mt-1 text-lg font-black ${tone === 'positive' ? 'text-[rgb(var(--dm-success))]' : ''}`}
+        >
           <MoneyShort value={value} />
         </div>
       </CardContent>
@@ -764,7 +885,10 @@ function PayslipDetails({ slip }: { slip: Payslip }) {
         <p className="mb-1 text-xs font-bold text-[rgb(var(--dm-text-muted))]">مزایا</p>
         <div className="space-y-1">
           {slip.earnings.map((line, index) => (
-            <div key={`${line.key}-${index}`} className="flex items-center justify-between gap-2 text-xs">
+            <div
+              key={`${line.key}-${index}`}
+              className="flex items-center justify-between gap-2 text-xs"
+            >
               <span>{line.title}</span>
               <Money value={line.amount} size="sm" />
             </div>
@@ -776,7 +900,10 @@ function PayslipDetails({ slip }: { slip: Payslip }) {
         <p className="mb-1 text-xs font-bold text-[rgb(var(--dm-text-muted))]">کسورات</p>
         <div className="space-y-1">
           {slip.deductions.map((line, index) => (
-            <div key={`${line.key}-${index}`} className="flex items-center justify-between gap-2 text-xs">
+            <div
+              key={`${line.key}-${index}`}
+              className="flex items-center justify-between gap-2 text-xs"
+            >
               <span>{line.title}</span>
               <Money value={line.amount} size="sm" tone="negative" />
             </div>
@@ -823,7 +950,9 @@ function PayslipDetails({ slip }: { slip: Payslip }) {
           {slip.trace.map((step) => (
             <li key={`${step.code}-${step.step}`} className="text-[0.7rem] leading-relaxed">
               <span className="font-semibold">{step.title}</span> — {step.detail}
-              {step.formula ? <span className="dm-numeric opacity-70"> ({step.formula})</span> : null}
+              {step.formula ? (
+                <span className="dm-numeric opacity-70"> ({step.formula})</span>
+              ) : null}
             </li>
           ))}
         </ol>
@@ -836,13 +965,18 @@ function ReportBuilder({
   datasets,
   periodLabel,
 }: {
-  datasets: Record<string, { label: string; columns: Array<BuilderColumn<BuilderRow>>; rows: BuilderRow[] }>;
+  datasets: Record<
+    string,
+    { label: string; columns: Array<BuilderColumn<BuilderRow>>; rows: BuilderRow[] }
+  >;
   periodLabel: string;
 }) {
   const ids = Object.keys(datasets);
   const [datasetId, setDatasetId] = useState(ids[0] ?? 'employees');
   const dataset = datasets[datasetId] ?? Object.values(datasets)[0];
-  const [orderedIds, setOrderedIds] = useState<string[]>(dataset?.columns.map((column) => column.id) ?? []);
+  const [orderedIds, setOrderedIds] = useState<string[]>(
+    dataset?.columns.map((column) => column.id) ?? [],
+  );
   const [dragId, setDragId] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -869,7 +1003,8 @@ function ReportBuilder({
         <CardHeader>
           <CardTitle>سازنده گزارش</CardTitle>
           <CardDescription>
-            مجموعه داده و ستون‌ها را انتخاب کنید؛ برای تغییر ترتیب ستون‌ها، هر ستون را بکشید و در جای تازه رها کنید.
+            مجموعه داده و ستون‌ها را انتخاب کنید؛ برای تغییر ترتیب ستون‌ها، هر ستون را بکشید و در
+            جای تازه رها کنید.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -881,7 +1016,10 @@ function ReportBuilder({
               <Select
                 id="builder-dataset"
                 value={datasetId}
-                options={Object.entries(datasets).map(([id, item]) => ({ value: id, label: item.label }))}
+                options={Object.entries(datasets).map(([id, item]) => ({
+                  value: id,
+                  label: item.label,
+                }))}
                 onChange={(event) => {
                   const nextId = event.target.value;
                   setDatasetId(nextId);
@@ -893,7 +1031,9 @@ function ReportBuilder({
           </div>
 
           <div>
-            <p className="mb-2 text-xs font-bold text-[rgb(var(--dm-text-muted))]">ستون‌های گزارش</p>
+            <p className="mb-2 text-xs font-bold text-[rgb(var(--dm-text-muted))]">
+              ستون‌های گزارش
+            </p>
             <ul className="flex flex-wrap gap-2">
               {dataset.columns.map((column) => {
                 const active = orderedIds.includes(column.id);
@@ -912,7 +1052,9 @@ function ReportBuilder({
                       onDragEnd={() => setDragId(null)}
                       onClick={() =>
                         setOrderedIds((current) =>
-                          active ? current.filter((id) => id !== column.id) : [...current, column.id],
+                          active
+                            ? current.filter((id) => id !== column.id)
+                            : [...current, column.id],
                         )
                       }
                       className={`flex items-center gap-1.5 rounded-[var(--dm-radius-full,999px)] border px-3 py-1.5 text-xs font-semibold transition-colors ${
@@ -921,7 +1063,11 @@ function ReportBuilder({
                           : 'border-[rgb(var(--dm-border))] text-[rgb(var(--dm-text-muted))]'
                       }`}
                     >
-                      {active ? <GripVertical className="size-3.5" aria-hidden /> : <Table2 className="size-3.5" aria-hidden />}
+                      {active ? (
+                        <GripVertical className="size-3.5" aria-hidden />
+                      ) : (
+                        <Table2 className="size-3.5" aria-hidden />
+                      )}
                       {column.header}
                     </button>
                   </li>
@@ -1000,12 +1146,15 @@ function ReportBuilder({
         <CardHeader>
           <CardTitle>پیش‌نمایش گزارش</CardTitle>
           <CardDescription>
-            حداکثر ۵۰ سطر نخست نمایش داده می‌شود؛ خروجی کامل شامل همه {toPersianDigits(dataset.rows.length)} سطر است.
+            حداکثر ۵۰ سطر نخست نمایش داده می‌شود؛ خروجی کامل شامل همه{' '}
+            {toPersianDigits(dataset.rows.length)} سطر است.
           </CardDescription>
         </CardHeader>
         <CardContent>
           {columns.length === 0 ? (
-            <p className="text-sm text-[rgb(var(--dm-text-subtle))]">برای مشاهده پیش‌نمایش، حداقل یک ستون انتخاب کنید.</p>
+            <p className="text-sm text-[rgb(var(--dm-text-subtle))]">
+              برای مشاهده پیش‌نمایش، حداقل یک ستون انتخاب کنید.
+            </p>
           ) : (
             <div className="dm-scroll max-h-[28rem] overflow-auto rounded-[var(--dm-radius-lg)] border border-[rgb(var(--dm-border))]">
               <Table>
@@ -1040,7 +1189,11 @@ function ReportBuilder({
 
 function AuditPanel() {
   const [limit, setLimit] = useState(100);
-  const [integrity, setIntegrity] = useState<{ valid: boolean; checked: number; brokenAt?: string } | null>(null);
+  const [integrity, setIntegrity] = useState<{
+    valid: boolean;
+    checked: number;
+    brokenAt?: string;
+  } | null>(null);
   const { toast } = useToast();
 
   const entries = useLiveQuery(() => latestAuditEntries(limit), [limit], undefined);
@@ -1053,8 +1206,8 @@ function AuditPanel() {
           <div>
             <CardTitle>گزارش رهگیری تغییرات</CardTitle>
             <CardDescription>
-              همه تغییرات حساس با زنجیره هش ثبت می‌شود؛ دست‌کاری هر رکورد، زنجیره را می‌شکند. مجموع رکوردها:{' '}
-              {toPersianDigits(counts ?? 0)}
+              همه تغییرات حساس با زنجیره هش ثبت می‌شود؛ دست‌کاری هر رکورد، زنجیره را می‌شکند. مجموع
+              رکوردها: {toPersianDigits(counts ?? 0)}
             </CardDescription>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -1062,7 +1215,10 @@ function AuditPanel() {
               aria-label="تعداد رکوردها"
               className="w-32"
               value={String(limit)}
-              options={[50, 100, 200, 500].map((size) => ({ value: String(size), label: `${toPersianDigits(size)} رکورد` }))}
+              options={[50, 100, 200, 500].map((size) => ({
+                value: String(size),
+                label: `${toPersianDigits(size)} رکورد`,
+              }))}
               onChange={(event) => setLimit(Number(event.target.value))}
             />
             <Button
@@ -1084,7 +1240,10 @@ function AuditPanel() {
               variant="secondary"
               onClick={() => {
                 void exportAuditJson().then((json) => {
-                  downloadJson(`dastmozd-audit-${new Date().toISOString().slice(0, 10)}.json`, JSON.parse(json));
+                  downloadJson(
+                    `dastmozd-audit-${new Date().toISOString().slice(0, 10)}.json`,
+                    JSON.parse(json),
+                  );
                   toast({ tone: 'success', title: 'خروجی JSON گزارش رهگیری آماده شد' });
                 });
               }}
@@ -1096,7 +1255,10 @@ function AuditPanel() {
         </CardHeader>
         <CardContent className="space-y-3">
           {integrity ? (
-            <Alert tone={integrity.valid ? 'success' : 'danger'} title={integrity.valid ? 'صحت زنجیره تأیید شد' : 'ناسازگاری در زنجیره'}>
+            <Alert
+              tone={integrity.valid ? 'success' : 'danger'}
+              title={integrity.valid ? 'صحت زنجیره تأیید شد' : 'ناسازگاری در زنجیره'}
+            >
               {integrity.valid
                 ? `${toPersianDigits(integrity.checked)} رکورد بدون تغییر بررسی شد.`
                 : `نخستین رکورد ناسازگار: ${integrity.brokenAt ?? 'نامشخص'}`}
@@ -1120,13 +1282,17 @@ function AuditPanel() {
                 <TableBody>
                   {entries.map((entry) => (
                     <TableRow key={entry.id}>
-                      <TableCell className="dm-numeric text-xs">{toPersianDigits(entry.createdAt.slice(0, 19).replace('T', ' '))}</TableCell>
+                      <TableCell className="dm-numeric text-xs">
+                        {toPersianDigits(entry.createdAt.slice(0, 19).replace('T', ' '))}
+                      </TableCell>
                       <TableCell>
                         <Badge tone="neutral">{entry.action}</Badge>
                       </TableCell>
                       <TableCell className="text-xs">{entry.entityType}</TableCell>
                       <TableCell className="text-xs">{entry.summary}</TableCell>
-                      <TableCell className="dm-numeric text-[0.65rem] opacity-70">{entry.hash.slice(0, 12)}</TableCell>
+                      <TableCell className="dm-numeric text-[0.65rem] opacity-70">
+                        {entry.hash.slice(0, 12)}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -1152,7 +1318,7 @@ function AuditPanel() {
 function AttendanceCoverageBars() {
   const { records } = useAttendanceGrid();
   const employees = useActiveEmployees();
-  const { jy, jm } = usePeriodNavigator();
+  const { jm } = usePeriodNavigator();
 
   const coverage = useMemo(() => {
     const map = new Map<string, number>();
@@ -1167,7 +1333,10 @@ function AttendanceCoverageBars() {
       {employees.map((employee) => {
         const filled = coverage.get(employee.id) ?? 0;
         return (
-          <div key={employee.id} className="rounded-[var(--dm-radius-lg)] border border-[rgb(var(--dm-border))] p-3">
+          <div
+            key={employee.id}
+            className="rounded-[var(--dm-radius-lg)] border border-[rgb(var(--dm-border))] p-3"
+          >
             <div className="mb-2 flex items-center justify-between text-xs">
               <span className="font-semibold">
                 {employee.firstName} {employee.lastName}

@@ -25,7 +25,13 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_APP_VERSION: process.env.npm_package_version ?? '1.0.0',
     NEXT_PUBLIC_GITHUB_PAGES: isGitHubPages ? 'true' : 'false',
   },
-  transpilePackages: ['@dastmozd/ui', '@dastmozd/core', '@dastmozd/db', '@dastmozd/legal', '@dastmozd/brand'],
+  transpilePackages: [
+    '@dastmozd/ui',
+    '@dastmozd/core',
+    '@dastmozd/db',
+    '@dastmozd/legal',
+    '@dastmozd/brand',
+  ],
   eslint: { ignoreDuringBuilds: false },
   typescript: { ignoreBuildErrors: false },
   webpack: (config) => {

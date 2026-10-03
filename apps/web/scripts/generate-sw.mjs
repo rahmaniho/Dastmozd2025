@@ -14,7 +14,10 @@ import { dirname, join, resolve } from 'node:path';
 const here = dirname(fileURLToPath(import.meta.url));
 const appRoot = resolve(here, '..');
 const outDir = join(appRoot, 'out');
-const basePath = process.env.GITHUB_PAGES === 'true' ? `/${process.env.GITHUB_REPOSITORY?.split('/')[1] ?? ''}` : '';
+const basePath =
+  process.env.GITHUB_PAGES === 'true'
+    ? `/${process.env.GITHUB_REPOSITORY?.split('/')[1] ?? ''}`
+    : '';
 
 if (!existsSync(outDir)) {
   console.error('پوشه out پیدا نشد؛ ابتدا «next build» را اجرا کنید.');
@@ -71,7 +74,8 @@ const { count, size, warnings } = await generateSW({
     },
     {
       // تصاویر برند و نشان‌ها.
-      urlPattern: ({ request, url }) => request.destination === 'image' || /\/icons\/.*\.png$/.test(url.pathname),
+      urlPattern: ({ request, url }) =>
+        request.destination === 'image' || /\/icons\/.*\.png$/.test(url.pathname),
       handler: 'StaleWhileRevalidate',
       options: {
         cacheName: 'dastmozd-images-v1',

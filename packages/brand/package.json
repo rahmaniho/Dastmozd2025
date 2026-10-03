@@ -14,7 +14,8 @@
     "build": "echo \"brand assets are static\"",
     "icons": "node scripts/generate-icons.mjs",
     "clean": "rm -rf logo/png logo/ico logo/icns .turbo",
-    "tauri:icons": "node scripts/generate-tauri-icons.mjs"
+    "tauri:icons": "node scripts/generate-tauri-icons.mjs",
+    "lint": "eslint src scripts"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",

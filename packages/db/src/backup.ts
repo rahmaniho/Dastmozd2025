@@ -1,4 +1,12 @@
-import type { AttendanceRecord, CompanyProfile, Department, Employee, LoanContract, PayrollRun, Payslip } from '@dastmozd/types';
+import type {
+  AttendanceRecord,
+  CompanyProfile,
+  Department,
+  Employee,
+  LoanContract,
+  PayrollRun,
+  Payslip,
+} from '@dastmozd/types';
 import { db, TABLE_NAMES } from './schema';
 import { buildBackupFile, parseBackupFile } from './crypto';
 import { makeId, nowIso } from './helpers';
@@ -28,18 +36,27 @@ export async function collectBackupData(companyId?: string): Promise<BackupData>
     : await db.companies.toArray();
   const companyIds = new Set(companies.map((company) => company.id));
 
-  const [departments, employees, attendance, payrollRuns, payslips, loans, settings, legalOverrides, calendarEvents] =
-    await Promise.all([
-      db.departments.toArray().then((rows) => rows.filter((row) => companyIds.has(row.companyId))),
-      db.employees.toArray().then((rows) => rows.filter((row) => companyIds.has(row.companyId))),
-      db.attendance.toArray(),
-      db.payrollRuns.toArray().then((rows) => rows.filter((row) => companyIds.has(row.companyId))),
-      db.payslips.toArray(),
-      db.loans.toArray().then((rows) => rows.filter((row) => companyIds.has(row.companyId))),
-      db.settings.toArray(),
-      db.legalOverrides.toArray(),
-      db.calendarEvents.toArray().then((rows) => rows.filter((row) => companyIds.has(row.companyId))),
-    ]);
+  const [
+    departments,
+    employees,
+    attendance,
+    payrollRuns,
+    payslips,
+    loans,
+    settings,
+    legalOverrides,
+    calendarEvents,
+  ] = await Promise.all([
+    db.departments.toArray().then((rows) => rows.filter((row) => companyIds.has(row.companyId))),
+    db.employees.toArray().then((rows) => rows.filter((row) => companyIds.has(row.companyId))),
+    db.attendance.toArray(),
+    db.payrollRuns.toArray().then((rows) => rows.filter((row) => companyIds.has(row.companyId))),
+    db.payslips.toArray(),
+    db.loans.toArray().then((rows) => rows.filter((row) => companyIds.has(row.companyId))),
+    db.settings.toArray(),
+    db.legalOverrides.toArray(),
+    db.calendarEvents.toArray().then((rows) => rows.filter((row) => companyIds.has(row.companyId))),
+  ]);
 
   const employeeIds = new Set(employees.map((employee) => employee.id));
   const runIds = new Set(payrollRuns.map((run) => run.id));
@@ -53,7 +70,9 @@ export async function collectBackupData(companyId?: string): Promise<BackupData>
     employees,
     attendance: attendance.filter((record) => employeeIds.has(record.employeeId)),
     payrollRuns,
-    payslips: payslips.filter((slip) => runIds.has(slip.payrollRunId) && employeeIds.has(slip.employeeId)),
+    payslips: payslips.filter(
+      (slip) => runIds.has(slip.payrollRunId) && employeeIds.has(slip.employeeId),
+    ),
     loans,
     settings,
     legalOverrides,
@@ -72,7 +91,9 @@ export interface CreateBackupOptions {
 }
 
 /** ساخت فایل پشتیبان رمزنگاری‌شده `.dastmozd`. */
-export async function createBackup(options: CreateBackupOptions): Promise<{ content: string; fileName: string }> {
+export async function createBackup(
+  options: CreateBackupOptions,
+): Promise<{ content: string; fileName: string }> {
   const data = await collectBackupData(options.companyId);
   const { content, manifest } = await buildBackupFile(data, {
     companyId: options.companyId,
@@ -218,12 +239,16 @@ export async function listBackups() {
 
 /** حذف کامل داده‌های سامانه (با ثبت در گزارش حسابرسی). */
 export async function wipeDatabase(): Promise<void> {
-  await db.transaction('rw', TABLE_NAMES.map((name) => db.table(name)), async () => {
-    for (const name of TABLE_NAMES) {
-      if (name === 'auditLog') continue;
-      await db.table(name).clear();
-    }
-  });
+  await db.transaction(
+    'rw',
+    TABLE_NAMES.map((name) => db.table(name)),
+    async () => {
+      for (const name of TABLE_NAMES) {
+        if (name === 'auditLog') continue;
+        await db.table(name).clear();
+      }
+    },
+  );
   await recordAudit({
     action: 'delete',
     entityType: 'settings',

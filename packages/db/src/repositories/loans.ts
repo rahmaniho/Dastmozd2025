@@ -23,9 +23,12 @@ export interface LoanInput {
 
 /** ایجاد قرارداد وام با زمان‌بندی خودکار اقساط. */
 export async function createLoan(input: LoanInput, actorId?: string): Promise<LoanContract> {
-  if (input.principal <= 0) throw new DataError('مبلغ وام باید بزرگ‌تر از صفر باشد.', 'LOAN_AMOUNT');
-  if (input.installmentCount <= 0) throw new DataError('تعداد اقساط باید حداقل یک باشد.', 'LOAN_INSTALLMENTS');
-  const installmentAmount = input.installmentAmount ?? Math.round(input.principal / input.installmentCount);
+  if (input.principal <= 0)
+    throw new DataError('مبلغ وام باید بزرگ‌تر از صفر باشد.', 'LOAN_AMOUNT');
+  if (input.installmentCount <= 0)
+    throw new DataError('تعداد اقساط باید حداقل یک باشد.', 'LOAN_INSTALLMENTS');
+  const installmentAmount =
+    input.installmentAmount ?? Math.round(input.principal / input.installmentCount);
   const loan: LoanContract = {
     id: makeId('loan'),
     employeeId: input.employeeId,
@@ -57,7 +60,9 @@ export async function listLoans(companyId?: string, employeeId?: string): Promis
   let rows = await db.loans.toArray();
   if (companyId) rows = rows.filter((loan) => loan.companyId === companyId);
   if (employeeId) rows = rows.filter((loan) => loan.employeeId === employeeId);
-  return rows.sort((a, b) => a.startPeriod.jy - b.startPeriod.jy || a.startPeriod.jm - b.startPeriod.jm);
+  return rows.sort(
+    (a, b) => a.startPeriod.jy - b.startPeriod.jy || a.startPeriod.jm - b.startPeriod.jm,
+  );
 }
 
 /**
@@ -73,7 +78,11 @@ export function installmentForPeriod(loan: LoanContract, period: JalaliPeriod): 
 }
 
 /** ثبت پرداخت قسط و به‌روزرسانی مانده وام. */
-export async function registerInstallment(loanId: string, amount: number, actorId?: string): Promise<LoanContract> {
+export async function registerInstallment(
+  loanId: string,
+  amount: number,
+  actorId?: string,
+): Promise<LoanContract> {
   const loan = await db.loans.get(loanId);
   if (!loan) throw new DataError('وام یافت نشد.', 'LOAN_NOT_FOUND');
   const paidInstallments = loan.paidInstallments + 1;
@@ -99,7 +108,9 @@ export async function registerInstallment(loanId: string, amount: number, actorI
 }
 
 /** جدول زمان‌بندی اقساط برای نمایش در پرونده کارمند. */
-export function installmentSchedule(loan: LoanContract): Array<{ period: JalaliPeriod; amount: number; paid: boolean }> {
+export function installmentSchedule(
+  loan: LoanContract,
+): Array<{ period: JalaliPeriod; amount: number; paid: boolean }> {
   const schedule: Array<{ period: JalaliPeriod; amount: number; paid: boolean }> = [];
   const startIndex = periodIndex(loan.startPeriod);
   for (let index = 0; index < loan.installmentCount; index += 1) {

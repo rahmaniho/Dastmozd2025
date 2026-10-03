@@ -40,7 +40,7 @@ export type DeductionComponentKey =
   | 'penalty' // جریمه
   | 'union-fee' // کسورات اتحادیه
   | 'membership' // حق عضویت
-  | 'other-deduction' // سایر کسورات
+  | 'other-deduction'; // سایر کسورات
 
 export type ComponentKey = EarningComponentKey | DeductionComponentKey;
 
@@ -106,7 +106,12 @@ export interface TaxComputation {
   brackets: TaxBracketResult[];
   /** Sum of flat-rate segments (used by 1403/1404 profiles). */
   flatTax: number;
-  flatSegments: Array<{ key: ComponentKey | 'refah-engizehi'; amount: number; rate: number; tax: number }>;
+  flatSegments: Array<{
+    key: ComponentKey | 'refah-engizehi';
+    amount: number;
+    rate: number;
+    tax: number;
+  }>;
   /** Final tax to be withheld. */
   total: number;
   /** Effective rate as a fraction (0..1). */

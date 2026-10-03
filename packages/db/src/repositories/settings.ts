@@ -34,7 +34,12 @@ export async function getSettings(): Promise<AppSettings> {
 
 export async function saveSettings(patch: Partial<AppSettings>): Promise<AppSettings> {
   const current = await getSettings();
-  const updated: AppSettings = { ...current, ...patch, id: 'app', updatedAt: new Date().toISOString() };
+  const updated: AppSettings = {
+    ...current,
+    ...patch,
+    id: 'app',
+    updatedAt: new Date().toISOString(),
+  };
   await db.settings.put(updated);
   return updated;
 }
@@ -46,9 +51,11 @@ export async function hashPassword(
   password: string,
   saltHex?: string,
 ): Promise<{ hash: string; salt: string }> {
-  const salt = saltHex ?? Array.from(globalThis.crypto.getRandomValues(new Uint8Array(16)))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
+  const salt =
+    saltHex ??
+    Array.from(globalThis.crypto.getRandomValues(new Uint8Array(16)))
+      .map((byte) => byte.toString(16).padStart(2, '0'))
+      .join('');
   const encoder = new TextEncoder();
   const keyMaterial = await globalThis.crypto.subtle.importKey(
     'raw',
@@ -108,7 +115,10 @@ export async function createUser(input: {
   return user;
 }
 
-export async function verifyUserPassword(username: string, password: string): Promise<AppUser | null> {
+export async function verifyUserPassword(
+  username: string,
+  password: string,
+): Promise<AppUser | null> {
   const user = await db.users.where('username').equals(username).first();
   if (!user?.passwordHash || !user.passwordSalt) return null;
   const { hash } = await hashPassword(password, user.passwordSalt);
@@ -129,7 +139,9 @@ export async function deleteUser(id: string): Promise<void> {
   const user = await db.users.get(id);
   if (!user) return;
   if (user.role === 'admin') {
-    const admins = (await db.users.toArray()).filter((item) => item.role === 'admin' && item.isActive);
+    const admins = (await db.users.toArray()).filter(
+      (item) => item.role === 'admin' && item.isActive,
+    );
     if (admins.length <= 1) throw new Error('حذف آخرین مدیر سامانه مجاز نیست.');
   }
   await db.users.delete(id);

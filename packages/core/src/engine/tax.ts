@@ -90,10 +90,7 @@ export function bucketTaxableEarnings(
  * first, then by benefits, then by performance pay — mirroring how Iranian
  * payroll software reduces the taxable base.
  */
-export function absorbReduction(
-  buckets: CategoryBuckets,
-  reduction: number,
-): CategoryBuckets {
+export function absorbReduction(buckets: CategoryBuckets, reduction: number): CategoryBuckets {
   let remaining = Math.max(0, reduction);
   const order: TaxCategory[] = ['wage', 'benefit', 'performance', 'reimbursement', 'exempt'];
   const result: CategoryBuckets = { ...buckets };
@@ -137,7 +134,9 @@ export function computeTax({ profile, earnings, reductions, options }: TaxInput)
   const applyCaps = options?.applyFlatTaxSegments !== false;
   const withCaps = bucketTaxableEarnings(earnings, profile, { applyExemptCaps: applyCaps });
   const buckets = absorbReduction(withCaps.buckets, reductions);
-  const taxableIncome = roundRial(sum(Object.values(buckets).filter((v): v is number => typeof v === 'number')));
+  const taxableIncome = roundRial(
+    sum(Object.values(buckets).filter((v): v is number => typeof v === 'number')),
+  );
   const exemption = profile.tax.monthlyExemption;
 
   trace.push({
@@ -179,7 +178,11 @@ export function computeTax({ profile, earnings, reductions, options }: TaxInput)
       legalRef: 'بند (ز) تبصره ۱ قانون بودجه — توزیع متناسب معافیت',
     });
 
-    const progressive = applyProgressiveBrackets(regularTaxable, profile.tax.brackets, profile.tax.monthlyExemption);
+    const progressive = applyProgressiveBrackets(
+      regularTaxable,
+      profile.tax.brackets,
+      profile.tax.monthlyExemption,
+    );
     brackets.push(...progressive.brackets);
     totalTax += progressive.total;
 
@@ -187,7 +190,12 @@ export function computeTax({ profile, earnings, reductions, options }: TaxInput)
       const taxableInSegment = flatTaxable;
       if (taxableInSegment <= 0) continue;
       const segmentTax = roundRial(taxableInSegment * rule.rate);
-      flatSegments.push({ key: 'refah-engizehi', amount: taxableInSegment, rate: rule.rate, tax: segmentTax });
+      flatSegments.push({
+        key: 'refah-engizehi',
+        amount: taxableInSegment,
+        rate: rule.rate,
+        tax: segmentTax,
+      });
       totalTax += segmentTax;
       trace.push({
         step: step++,

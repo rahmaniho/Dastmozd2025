@@ -9,12 +9,7 @@ export type { BackupRecord, CalendarEventRecord, LegalOverrideRecord, TableName 
 
 export { DataError, auditStamp, makeId, nowIso } from './helpers';
 
-export {
-  exportAuditJson,
-  latestAuditEntries,
-  recordAudit,
-  verifyAuditChain,
-} from './audit';
+export { exportAuditJson, latestAuditEntries, recordAudit, verifyAuditChain } from './audit';
 export type { AuditInput, AuditIntegrityResult } from './audit';
 
 export {

@@ -166,7 +166,10 @@ export async function nativeReadTextFile(path: string): Promise<string> {
 }
 
 /** گوش‌دادن به فرمان‌های منوی بومی و رویدادهای عمر برنامه. */
-export async function onNativeEvent(event: string, handler: (payload: unknown) => void): Promise<() => void> {
+export async function onNativeEvent(
+  event: string,
+  handler: (payload: unknown) => void,
+): Promise<() => void> {
   if (!isDesktop()) return () => undefined;
   const { listen } = await import('@tauri-apps/api/event');
   return listen(event, (message) => handler(message.payload));

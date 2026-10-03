@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cn } from '../lib/cn';
-import { formatPersianNumber, formatRial, rialInWords, toPersianDigits } from '@dastmozd/core';
+import { formatPersianNumber, rialInWords, toPersianDigits } from '@dastmozd/core';
 
 /* ------------------------------------------------------------------ Money */
 
@@ -49,7 +49,9 @@ export function Money({
         {showUnit ? <span className="mr-1 text-xs font-normal opacity-70">ریال</span> : null}
       </span>
       {withWords ? (
-        <span className="mt-0.5 text-[0.7rem] text-[rgb(var(--dm-text-subtle))]">{rialInWords(value)}</span>
+        <span className="mt-0.5 text-[0.7rem] text-[rgb(var(--dm-text-subtle))]">
+          {rialInWords(value)}
+        </span>
       ) : null}
     </span>
   );
@@ -78,7 +80,17 @@ export function MoneyShort({ value, className }: { value: number; className?: st
 /* ------------------------------------------------------------------- Date */
 
 /** تاریخ شمسی با ارقام فارسی، مثلاً «۱۴۰۵/۰۷/۰۳». */
-export function JalaliDateText({ jy, jm, jd, className }: { jy: number; jm: number; jd: number; className?: string }) {
+export function JalaliDateText({
+  jy,
+  jm,
+  jd,
+  className,
+}: {
+  jy: number;
+  jm: number;
+  jd: number;
+  className?: string;
+}) {
   return (
     <span className={cn('dm-numeric', className)} dir="rtl">
       {toPersianDigits(`${jy}/${String(jm).padStart(2, '0')}/${String(jd).padStart(2, '0')}`)}
@@ -100,7 +112,15 @@ export interface StatCardProps {
 }
 
 /** کارت شاخص کلیدی داشبورد. */
-export function StatCard({ label, value, hint, delta, icon, tone = 'primary', className }: StatCardProps) {
+export function StatCard({
+  label,
+  value,
+  hint,
+  delta,
+  icon,
+  tone = 'primary',
+  className,
+}: StatCardProps) {
   const toneClass = {
     primary: 'text-[rgb(var(--dm-primary))] bg-[rgb(var(--dm-primary-subtle))]',
     accent: 'text-[rgb(var(--dm-accent))] bg-[rgb(var(--dm-accent-soft))]',
@@ -119,12 +139,20 @@ export function StatCard({ label, value, hint, delta, icon, tone = 'primary', cl
       <div className="flex items-start justify-between gap-3">
         <p className="text-sm font-medium text-[rgb(var(--dm-text-muted))]">{label}</p>
         {icon ? (
-          <span className={cn('grid size-9 place-items-center rounded-[var(--dm-radius-md)]', toneClass)} aria-hidden>
+          <span
+            className={cn(
+              'grid size-9 place-items-center rounded-[var(--dm-radius-md)]',
+              toneClass,
+            )}
+            aria-hidden
+          >
             {icon}
           </span>
         ) : null}
       </div>
-      <div className="mt-3 text-2xl font-black tracking-tight text-[rgb(var(--dm-text))]">{value}</div>
+      <div className="mt-3 text-2xl font-black tracking-tight text-[rgb(var(--dm-text))]">
+        {value}
+      </div>
       <div className="mt-1 flex items-center gap-2 text-xs">
         {delta !== undefined ? (
           <span
@@ -154,7 +182,13 @@ export interface PageHeaderProps {
   className?: string;
 }
 
-export function PageHeader({ title, description, actions, breadcrumb, className }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  description,
+  actions,
+  breadcrumb,
+  className,
+}: PageHeaderProps) {
   return (
     <header className={cn('flex flex-wrap items-end justify-between gap-4', className)}>
       <div className="space-y-1">
@@ -162,7 +196,9 @@ export function PageHeader({ title, description, actions, breadcrumb, className 
           <p className="text-xs font-medium text-[rgb(var(--dm-text-subtle))]">{breadcrumb}</p>
         ) : null}
         <h1 className="text-2xl font-black tracking-tight text-[rgb(var(--dm-text))]">{title}</h1>
-        {description ? <p className="text-sm text-[rgb(var(--dm-text-muted))]">{description}</p> : null}
+        {description ? (
+          <p className="text-sm text-[rgb(var(--dm-text-muted))]">{description}</p>
+        ) : null}
       </div>
       {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
     </header>

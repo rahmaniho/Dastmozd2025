@@ -46,27 +46,34 @@ export interface RunPayrollOptions {
 }
 
 /** تبدیل پرونده کارمند به ورودی موتور محاسباتی. */
-export function toPayrollEmployee(employee: {
-  id: string;
-  firstName: string;
-  lastName: string;
-  personnelCode: string;
-  nationalId: string;
-  insuranceNumber?: string;
-  hireDate: { jy: number; jm: number; jd: number };
-  maritalStatus: 'single' | 'married';
-  children: Array<{ birthDate: { jy: number; jm: number; jd: number }; isDisabled?: boolean; isStudent?: boolean }>;
-  contractType: PayrollEmployee['contractType'];
-  status: PayrollEmployee['status'];
-  salary: {
-    baseMonthly: number;
-    seniorityMonthly: number;
-    housingMonthly?: number;
-    groceryMonthly?: number;
-    marriageMonthly?: number;
-    extraFixedAllowances?: Array<{ title: string; amount: number; componentKey?: string }>;
-  };
-}, period: { jy: number; jm: number }): PayrollEmployee {
+export function toPayrollEmployee(
+  employee: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    personnelCode: string;
+    nationalId: string;
+    insuranceNumber?: string;
+    hireDate: { jy: number; jm: number; jd: number };
+    maritalStatus: 'single' | 'married';
+    children: Array<{
+      birthDate: { jy: number; jm: number; jd: number };
+      isDisabled?: boolean;
+      isStudent?: boolean;
+    }>;
+    contractType: PayrollEmployee['contractType'];
+    status: PayrollEmployee['status'];
+    salary: {
+      baseMonthly: number;
+      seniorityMonthly: number;
+      housingMonthly?: number;
+      groceryMonthly?: number;
+      marriageMonthly?: number;
+      extraFixedAllowances?: Array<{ title: string; amount: number; componentKey?: string }>;
+    };
+  },
+  period: { jy: number; jm: number },
+): PayrollEmployee {
   // فقط فرزندان واجد شرایط (زیر ۱۸ سال یا دارای معلولیت/اشتغال به تحصیل) شمرده می‌شوند.
   const eligibleChildren = employee.children.filter((child) => {
     const age = period.jy - child.birthDate.jy;
@@ -87,9 +94,15 @@ export function toPayrollEmployee(employee: {
     wage: {
       baseMonthly: employee.salary.baseMonthly,
       seniorityMonthly: employee.salary.seniorityMonthly,
-      ...(employee.salary.housingMonthly !== undefined ? { housingMonthly: employee.salary.housingMonthly } : {}),
-      ...(employee.salary.groceryMonthly !== undefined ? { groceryMonthly: employee.salary.groceryMonthly } : {}),
-      ...(employee.salary.marriageMonthly !== undefined ? { marriageMonthly: employee.salary.marriageMonthly } : {}),
+      ...(employee.salary.housingMonthly !== undefined
+        ? { housingMonthly: employee.salary.housingMonthly }
+        : {}),
+      ...(employee.salary.groceryMonthly !== undefined
+        ? { groceryMonthly: employee.salary.groceryMonthly }
+        : {}),
+      ...(employee.salary.marriageMonthly !== undefined
+        ? { marriageMonthly: employee.salary.marriageMonthly }
+        : {}),
       extraFixed: (employee.salary.extraFixedAllowances ?? []).map((item) => ({
         key: (item.componentKey ?? 'other-benefit') as EarningComponentKey,
         title: item.title,
@@ -130,9 +143,9 @@ export async function runPayroll(options: RunPayrollOptions): Promise<{
 
   const fromIso = jalaliToGregorianIso({ jy, jm, jd: 1 });
   const toIso = jalaliToGregorianIso({ jy, jm, jd: periodDays });
-  const records = (await db.attendance.where('date').between(fromIso, toIso, true, true).toArray()).filter(
-    (record) => !record.deletedAt,
-  );
+  const records = (
+    await db.attendance.where('date').between(fromIso, toIso, true, true).toArray()
+  ).filter((record) => !record.deletedAt);
 
   const results: PayrollResult[] = [];
   const total = employees.length;
@@ -151,7 +164,9 @@ export async function runPayroll(options: RunPayrollOptions): Promise<{
           })();
 
     const extraEarnings = options.earningsByEmployee?.[employee.id] ?? [];
-    const extraDeductions: ExtraDeduction[] = [...(options.deductionsByEmployee?.[employee.id] ?? [])];
+    const extraDeductions: ExtraDeduction[] = [
+      ...(options.deductionsByEmployee?.[employee.id] ?? []),
+    ];
     if (options.includeLoanInstallments) {
       const loans = await db.loans.where('employeeId').equals(employee.id).toArray();
       for (const loan of loans) {
@@ -200,7 +215,10 @@ export async function runPayroll(options: RunPayrollOptions): Promise<{
     .equals([companyId, jy, jm])
     .toArray();
   const previousRun = existingVersions.sort((a, b) => b.version - a.version)[0];
-  const version = options.createNewVersion === false && previousRun ? previousRun.version : (previousRun?.version ?? 0) + 1;
+  const version =
+    options.createNewVersion === false && previousRun
+      ? previousRun.version
+      : (previousRun?.version ?? 0) + 1;
 
   const totals = results.reduce(
     (acc, result) => ({
@@ -244,7 +262,9 @@ export async function runPayroll(options: RunPayrollOptions): Promise<{
     changeLog: [
       `کد یکتای دوره: ${makeRunCode(jy, jm, version, `${companyId}|${totals.netPay}`)}`,
       `محاسبه حقوق ${profile.label} برای ${totals.employeeCount} کارمند اجرا شد (نسخه ${version}).`,
-      ...(previousRun ? [`نسخه پیشین (${previousRun.version}) بدون تغییر در تاریخچه باقی ماند.`] : []),
+      ...(previousRun
+        ? [`نسخه پیشین (${previousRun.version}) بدون تغییر در تاریخچه باقی ماند.`]
+        : []),
       ...(resolved.warning ? [resolved.warning] : []),
     ],
     ...stamp,
@@ -290,8 +310,8 @@ export async function runPayroll(options: RunPayrollOptions): Promise<{
 
 export async function listPayrollRuns(companyId: string): Promise<PayrollRun[]> {
   const runs = await db.payrollRuns.where('companyId').equals(companyId).toArray();
-  return runs.sort((a, b) =>
-    b.period.jy - a.period.jy || b.period.jm - a.period.jm || b.version - a.version,
+  return runs.sort(
+    (a, b) => b.period.jy - a.period.jy || b.period.jm - a.period.jm || b.version - a.version,
   );
 }
 

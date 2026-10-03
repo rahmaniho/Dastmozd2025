@@ -12,11 +12,14 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit false --emitDeclarationOnly --declarationMap false --outDir .tscheck",
-    "clean": "rm -rf dist .tscheck .turbo"
+    "clean": "rm -rf dist .tscheck .turbo",
+    "lint": "eslint src"
   },
   "devDependencies": {
     "typescript": "^5.7.2"

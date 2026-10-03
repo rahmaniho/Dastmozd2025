@@ -20,10 +20,24 @@ export interface AuditInput {
  * هر رکورد با هش زنجیره‌ای (هش رکورد قبلی + محتوای این رکورد) ذخیره می‌شود؛ در
  * نتیجه هرگونه دست‌کاری در سابقه، زنجیره را می‌شکند و در بازبینی شناسایی می‌شود.
  */
+/**
+ * زمان‌نگار یکنوا برای گزارش حسابرسی.
+ *
+ * زنجیره هش تنها زمانی معنا دارد که ترتیب رکوردها قطعی باشد؛ چون دقت زمان
+ * ذخیره‌سازی یک میلی‌ثانیه است، دو رویداد هم‌زمان می‌توانند ترتیب را مبهم کنند.
+ * این تابع تضمین می‌کند هر رکورد زمان‌نگار بزرگ‌تری از رکورد پیشین بگیرد.
+ */
+let lastAuditStamp = 0;
+function nextAuditStamp(): string {
+  const now = Date.now();
+  lastAuditStamp = now > lastAuditStamp ? now : lastAuditStamp + 1;
+  return new Date(lastAuditStamp).toISOString();
+}
+
 export async function recordAudit(input: AuditInput): Promise<AuditLogEntry> {
   const previous = await db.auditLog.orderBy('createdAt').last();
   const previousHash = previous?.hash ?? null;
-  const createdAt = nowIso();
+  const createdAt = nextAuditStamp();
   const payload = JSON.stringify({
     action: input.action,
     entityType: input.entityType,

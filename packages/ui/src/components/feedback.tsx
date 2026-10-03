@@ -22,8 +22,7 @@ const badgeVariants = cva(
 );
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof badgeVariants> {}
+  extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {}
 
 export function Badge({ className, tone, ...props }: BadgeProps) {
   return <span className={cn(badgeVariants({ tone }), className)} {...props} />;
@@ -35,17 +34,19 @@ const alertVariants = cva('flex gap-3 rounded-[var(--dm-radius-lg)] border p-4 t
   variants: {
     tone: {
       info: 'border-[rgb(var(--dm-info))]/30 bg-[rgb(var(--dm-info-soft))] text-[rgb(var(--dm-info))]',
-      success: 'border-[rgb(var(--dm-success))]/30 bg-[rgb(var(--dm-success-soft))] text-[rgb(var(--dm-success))]',
-      warning: 'border-[rgb(var(--dm-warning))]/30 bg-[rgb(var(--dm-warning-soft))] text-[rgb(var(--dm-warning))]',
-      danger: 'border-[rgb(var(--dm-danger))]/30 bg-[rgb(var(--dm-danger-soft))] text-[rgb(var(--dm-danger))]',
+      success:
+        'border-[rgb(var(--dm-success))]/30 bg-[rgb(var(--dm-success-soft))] text-[rgb(var(--dm-success))]',
+      warning:
+        'border-[rgb(var(--dm-warning))]/30 bg-[rgb(var(--dm-warning-soft))] text-[rgb(var(--dm-warning))]',
+      danger:
+        'border-[rgb(var(--dm-danger))]/30 bg-[rgb(var(--dm-danger-soft))] text-[rgb(var(--dm-danger))]',
     },
   },
   defaultVariants: { tone: 'info' },
 });
 
 export interface AlertProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof alertVariants> {
+  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof alertVariants> {
   title?: string;
 }
 
@@ -72,7 +73,13 @@ export interface EmptyStateProps {
   className?: string;
 }
 
-export function EmptyState({ title, description, action, illustration, className }: EmptyStateProps) {
+export function EmptyState({
+  title,
+  description,
+  action,
+  illustration,
+  className,
+}: EmptyStateProps) {
   return (
     <div
       className={cn(
@@ -158,5 +165,11 @@ export function Progress({ value, max = 100, label, className }: ProgressProps) 
 /* ------------------------------------------------------------- Separator */
 
 export function Separator({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div role="separator" className={cn('h-px w-full bg-[rgb(var(--dm-border))]', className)} {...props} />;
+  return (
+    <div
+      role="separator"
+      className={cn('h-px w-full bg-[rgb(var(--dm-border))]', className)}
+      {...props}
+    />
+  );
 }

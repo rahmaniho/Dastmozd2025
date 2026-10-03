@@ -124,7 +124,9 @@ describe('گزینه‌های محاسبه', () => {
 
   it('بدون شماره بیمه برای کارمند فعال هشدار صادر می‌شود', () => {
     const result = calculatePayroll(input({ employee: employee({ insuranceNumber: undefined }) }));
-    expect(result.warnings.some((warning) => warning.code === 'MISSING_INSURANCE_NUMBER')).toBe(true);
+    expect(result.warnings.some((warning) => warning.code === 'MISSING_INSURANCE_NUMBER')).toBe(
+      true,
+    );
   });
 
   it('خالص پرداختی منفی هشدار خطا می‌دهد', () => {

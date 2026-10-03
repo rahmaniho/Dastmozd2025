@@ -66,7 +66,9 @@ export function PayrollPreview({
       const employee = await db.employees.get(employeeId);
       if (!employee) return null;
       const summary = await summarizeEmployeeMonth(employeeId, jy, jm);
-      const loans = includeLoans ? await db.loans.where('employeeId').equals(employeeId).toArray() : [];
+      const loans = includeLoans
+        ? await db.loans.where('employeeId').equals(employeeId).toArray()
+        : [];
       return { employee, summary, loans };
     },
     [employeeId, jy, jm, includeLoans],
@@ -109,7 +111,7 @@ export function PayrollPreview({
           }
         : {}),
     });
-  }, [data, jy, jm, earnings, deductions, options, includeLoans, company]);
+  }, [data, jy, jm, earnings, deductions, options, company]);
 
   if (!data || !result) {
     return <Skeleton className="h-64 w-full" />;
@@ -132,7 +134,13 @@ export function PayrollPreview({
             {result.warnings.map((warning) => (
               <Alert
                 key={warning.code}
-                tone={warning.severity === 'error' ? 'danger' : warning.severity === 'warning' ? 'warning' : 'info'}
+                tone={
+                  warning.severity === 'error'
+                    ? 'danger'
+                    : warning.severity === 'warning'
+                      ? 'warning'
+                      : 'info'
+                }
                 title={
                   warning.severity === 'error'
                     ? 'خطای محاسبه'
@@ -142,7 +150,9 @@ export function PayrollPreview({
                 }
               >
                 {warning.message}
-                {warning.hint ? <span className="mt-1 block opacity-80">{warning.hint}</span> : null}
+                {warning.hint ? (
+                  <span className="mt-1 block opacity-80">{warning.hint}</span>
+                ) : null}
               </Alert>
             ))}
           </div>
@@ -157,7 +167,9 @@ export function PayrollPreview({
 
         <div className="grid gap-4 lg:grid-cols-2">
           <div>
-            <p className="mb-2 text-xs font-bold text-[rgb(var(--dm-text-muted))]">مزایا و دریافتی‌ها</p>
+            <p className="mb-2 text-xs font-bold text-[rgb(var(--dm-text-muted))]">
+              مزایا و دریافتی‌ها
+            </p>
             <Table>
               <TableHeader>
                 <TableRow>
@@ -171,7 +183,9 @@ export function PayrollPreview({
                   <TableRow key={`${line.key}-${index}`}>
                     <TableCell className="text-xs">{line.title}</TableCell>
                     <TableCell className="dm-numeric text-xs">
-                      {line.quantity !== undefined ? toPersianDigits(Math.round(line.quantity * 100) / 100) : '—'}
+                      {line.quantity !== undefined
+                        ? toPersianDigits(Math.round(line.quantity * 100) / 100)
+                        : '—'}
                     </TableCell>
                     <TableCell>
                       <Money value={line.amount} size="sm" />
@@ -216,8 +230,16 @@ export function PayrollPreview({
           <PreviewTile label="بیمه سهم کارمند (۷٪)" value={result.insurance.employeeShare} />
           <PreviewTile label="مالیات بر درآمد" value={result.tax.total} />
           <PreviewTile label="خالص پرداختی" value={result.totals.netPay} tone="positive" />
-          <PreviewTile label="مبلغ قابل پرداخت (رند شده)" value={result.totals.payableAmount} tone="positive" />
-          <PreviewTile label="هزینه تمام‌شده کارفرما" value={result.employerCost.total} tone="accent" />
+          <PreviewTile
+            label="مبلغ قابل پرداخت (رند شده)"
+            value={result.totals.payableAmount}
+            tone="positive"
+          />
+          <PreviewTile
+            label="هزینه تمام‌شده کارفرما"
+            value={result.employerCost.total}
+            tone="accent"
+          />
         </div>
 
         <div className="rounded-[var(--dm-radius-lg)] border border-[rgb(var(--dm-border))] bg-[rgb(var(--dm-surface-sunken))] p-3 text-xs">
@@ -249,7 +271,9 @@ export function PayrollPreview({
                 <span className="font-semibold">{step.title}: </span>
                 <span>{step.detail}</span>
                 {step.formula ? (
-                  <span className="dm-numeric mr-1 text-[rgb(var(--dm-text-muted))]">({step.formula})</span>
+                  <span className="dm-numeric mr-1 text-[rgb(var(--dm-text-muted))]">
+                    ({step.formula})
+                  </span>
                 ) : null}
                 {step.value ? (
                   <span className="dm-numeric mr-1 text-[rgb(var(--dm-text-subtle))]">

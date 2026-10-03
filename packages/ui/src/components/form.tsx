@@ -30,20 +30,21 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
 
 /* ------------------------------------------------------------------ Textarea */
 
-export const Textarea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
-  function Textarea({ className, ...props }, ref) {
-    return (
-      <textarea
-        ref={ref}
-        className={cn(
-          'min-h-24 w-full rounded-[var(--dm-radius-md)] border border-[rgb(var(--dm-border))] bg-[rgb(var(--dm-surface))] p-3 text-sm text-[rgb(var(--dm-text))] shadow-[var(--dm-shadow-xs)] transition-colors placeholder:text-[rgb(var(--dm-text-subtle))] focus-visible:border-[rgb(var(--dm-primary))] focus-visible:outline-none',
-          className,
-        )}
-        {...props}
-      />
-    );
-  },
-);
+export const Textarea = React.forwardRef<
+  HTMLTextAreaElement,
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>
+>(function Textarea({ className, ...props }, ref) {
+  return (
+    <textarea
+      ref={ref}
+      className={cn(
+        'min-h-24 w-full rounded-[var(--dm-radius-md)] border border-[rgb(var(--dm-border))] bg-[rgb(var(--dm-surface))] p-3 text-sm text-[rgb(var(--dm-text))] shadow-[var(--dm-shadow-xs)] transition-colors placeholder:text-[rgb(var(--dm-text-subtle))] focus-visible:border-[rgb(var(--dm-primary))] focus-visible:outline-none',
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 
 /* ------------------------------------------------------------------- Select */
 
@@ -78,17 +79,34 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(function 
 
 /* -------------------------------------------------------------------- Label */
 
-export const Label = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttributes<HTMLLabelElement>>(
-  function Label({ className, ...props }, ref) {
+export const Label = React.forwardRef<
+  HTMLLabelElement | HTMLSpanElement,
+  React.LabelHTMLAttributes<HTMLLabelElement>
+>(function Label({ className, htmlFor, children, ...props }, ref) {
+  const classes = cn(
+    'mb-1.5 block text-xs font-semibold text-[rgb(var(--dm-text-muted))]',
+    className,
+  );
+  // برچسب بدون کنترل متناظر (مثلاً عنوان گروه) به‌صورت span رندر می‌شود تا
+  // پیوند برچسب و کنترل در صفحه‌خوان‌ها مخدوش نشود.
+  if (!htmlFor) {
     return (
-      <label
-        ref={ref}
-        className={cn('mb-1.5 block text-xs font-semibold text-[rgb(var(--dm-text-muted))]', className)}
-        {...props}
-      />
+      <span ref={ref as React.Ref<HTMLSpanElement>} className={classes} {...props}>
+        {children}
+      </span>
     );
-  },
-);
+  }
+  return (
+    <label
+      ref={ref as React.Ref<HTMLLabelElement>}
+      htmlFor={htmlFor}
+      className={classes}
+      {...props}
+    >
+      {children}
+    </label>
+  );
+});
 
 /* --------------------------------------------------------------- Form field */
 
@@ -104,7 +122,15 @@ export interface FormFieldProps {
 }
 
 /** ترکیب برچسب، ورودی، راهنما و پیام خطا با ویژگی‌های دسترس‌پذیری کامل. */
-export function FormField({ label, htmlFor, error, hint, required, className, children }: FormFieldProps) {
+export function FormField({
+  label,
+  htmlFor,
+  error,
+  hint,
+  required,
+  className,
+  children,
+}: FormFieldProps) {
   return (
     <div className={cn('w-full', className)}>
       <Label htmlFor={htmlFor}>
@@ -112,7 +138,9 @@ export function FormField({ label, htmlFor, error, hint, required, className, ch
         {required ? <span className="mr-1 text-[rgb(var(--dm-danger))]">*</span> : null}
       </Label>
       {children}
-      {hint && !error ? <p className="mt-1 text-xs text-[rgb(var(--dm-text-subtle))]">{hint}</p> : null}
+      {hint && !error ? (
+        <p className="mt-1 text-xs text-[rgb(var(--dm-text-subtle))]">{hint}</p>
+      ) : null}
       {error ? (
         <p role="alert" className="mt-1 text-xs font-medium text-[rgb(var(--dm-danger))]">
           {error}
@@ -132,7 +160,8 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(functi
   { className, label, id, ...props },
   ref,
 ) {
-  const inputId = id ?? React.useId();
+  const generatedId = React.useId();
+  const inputId = id ?? generatedId;
   return (
     <div className={cn('flex items-center gap-2', className)}>
       <input
@@ -163,7 +192,14 @@ export interface SwitchProps {
 }
 
 /** کلید دوحالته دسترس‌پذیر با نقش switch. */
-export function Switch({ checked, onCheckedChange, label, description, disabled, id }: SwitchProps) {
+export function Switch({
+  checked,
+  onCheckedChange,
+  label,
+  description,
+  disabled,
+  id,
+}: SwitchProps) {
   const autoId = React.useId();
   const switchId = id ?? autoId;
   return (

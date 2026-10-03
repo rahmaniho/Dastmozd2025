@@ -4,9 +4,13 @@ import { db } from '../schema';
 import { makeId, nowIso } from '../helpers';
 
 /** رویدادهای خودکار تقویم: پایان قرارداد، سررسید وام، مهلت بیمه و مالیات. */
-export async function syncCalendarEvents(companyId: string, period: { jy: number; jm: number }): Promise<number> {
+export async function syncCalendarEvents(
+  companyId: string,
+  period: { jy: number; jm: number },
+): Promise<number> {
   // مهلت ارسال لیست بیمه: پایان ماه بعد؛ مهلت مالیات: آخرین روز ماه بعد.
-  const dueYearMonth = period.jm === 12 ? { jy: period.jy + 1, jm: 1 } : { jy: period.jy, jm: period.jm + 1 };
+  const dueYearMonth =
+    period.jm === 12 ? { jy: period.jy + 1, jm: 1 } : { jy: period.jy, jm: period.jm + 1 };
   const dueDate = jalaliToGregorianIso(addJalaliDays({ ...dueYearMonth, jd: 1 }, 29));
 
   const [employees, loans] = await Promise.all([
@@ -67,13 +71,20 @@ export async function syncCalendarEvents(companyId: string, period: { jy: number
   });
 
   const existing = await db.calendarEvents.where('companyId').equals(companyId).toArray();
-  const existingKeys = new Set(existing.map((event) => `${event.kind}|${event.date}|${event.title}`));
-  const fresh = events.filter((event) => !existingKeys.has(`${event.kind}|${event.date}|${event.title}`));
+  const existingKeys = new Set(
+    existing.map((event) => `${event.kind}|${event.date}|${event.title}`),
+  );
+  const fresh = events.filter(
+    (event) => !existingKeys.has(`${event.kind}|${event.date}|${event.title}`),
+  );
   if (fresh.length > 0) await db.calendarEvents.bulkAdd(fresh);
   return fresh.length;
 }
 
-export async function listCalendarEvents(companyId: string, limit = 50): Promise<CalendarEventRecord[]> {
+export async function listCalendarEvents(
+  companyId: string,
+  limit = 50,
+): Promise<CalendarEventRecord[]> {
   const rows = await db.calendarEvents.where('companyId').equals(companyId).toArray();
   return rows
     .filter((event) => !event.done)

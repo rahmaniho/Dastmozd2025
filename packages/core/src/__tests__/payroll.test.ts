@@ -216,7 +216,9 @@ describe('کسورات کارکرد و محدودیت‌ها', () => {
     expect(result.insurance.base).toBe(PROFILE_1405.insurance.ceiling);
     expect(result.insurance.employeeShare).toBe(81_465_195);
     expect(result.insurance.employerShare).toBe(267_671_355);
-    expect(result.warnings.some((warning) => warning.code === 'INSURANCE_CEILING_EXCEEDED')).toBe(true);
+    expect(result.warnings.some((warning) => warning.code === 'INSURANCE_CEILING_EXCEEDED')).toBe(
+      true,
+    );
   });
 
   it('بیمه و مالیات با تنظیمات قابل غیرفعال شدن است', () => {
@@ -293,7 +295,9 @@ describe('پایه سنوات و سابقه کار', () => {
   });
 
   it('تعداد فرزندان به سقف قانونی چهار فرزند محدود می‌شود', () => {
-    const result = calculatePayroll(input({ employee: employee({ maritalStatus: 'married', childCount: 6 }) }));
+    const result = calculatePayroll(
+      input({ employee: employee({ maritalStatus: 'married', childCount: 6 }) }),
+    );
     const childLine = result.earnings.find((line) => line.key === 'child-allowance');
     expect(childLine?.quantity).toBe(4);
     expect(result.warnings.some((warning) => warning.code === 'CHILD_COUNT_CAPPED')).toBe(true);
@@ -342,7 +346,9 @@ describe('محاسبه گروهی حقوق', () => {
   it('جمع کل کارکنان و پیشرفت محاسبه گزارش می‌شود', () => {
     const employees = [
       input({ employee: employee({ id: 'emp-1', fullName: 'الف' }) }),
-      input({ employee: employee({ id: 'emp-2', fullName: 'ب', maritalStatus: 'married', childCount: 1 }) }),
+      input({
+        employee: employee({ id: 'emp-2', fullName: 'ب', maritalStatus: 'married', childCount: 1 }),
+      }),
       input({
         employee: employee({
           id: 'emp-3',
@@ -362,13 +368,18 @@ describe('محاسبه گروهی حقوق', () => {
     expect(batch.totals.grossEarnings).toBe(
       batch.results.reduce((total, result) => total + result.totals.grossEarnings, 0),
     );
-    expect(batch.totals.netPay).toBe(batch.results.reduce((total, result) => total + result.totals.netPay, 0));
+    expect(batch.totals.netPay).toBe(
+      batch.results.reduce((total, result) => total + result.totals.netPay, 0),
+    );
     expect(batch.totals.employerCost).toBeGreaterThan(batch.totals.netPay);
   });
 
   it('محاسبه برای ماه ۳۱ روزه یک روز مزد بیشتر پرداخت می‌کند', () => {
     const result = calculatePayroll(
-      input({ period: { jy: 1405, jm: 1, days: 31 }, employee: employee({ wage: { baseMonthly: 166_255_500, seniorityMonthly: 0 } }) }),
+      input({
+        period: { jy: 1405, jm: 1, days: 31 },
+        employee: employee({ wage: { baseMonthly: 166_255_500, seniorityMonthly: 0 } }),
+      }),
     );
     expect(result.earnings[0]?.quantity).toBe(31);
     expect(result.earnings[0]?.amount).toBe(171_797_350);

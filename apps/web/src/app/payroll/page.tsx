@@ -1,6 +1,11 @@
 'use client';
 
-import type { AttendanceSummary, ExtraDeduction, ExtraEarning, PayrollRunOptions } from '@dastmozd/core';
+import type {
+  AttendanceSummary,
+  ExtraDeduction,
+  ExtraEarning,
+  PayrollRunOptions,
+} from '@dastmozd/core';
 import type { DeductionComponentKey, EarningComponentKey } from '@dastmozd/types';
 import { formatPersianNumber, toPersianDigits } from '@dastmozd/core';
 import {
@@ -63,7 +68,7 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { MoneyInput } from '@/components/money-input';
 import { PayrollPreview } from '@/components/payroll-preview';
-import { JALALI_MONTH_LABELS, useActiveEmployees, usePeriodNavigator } from '@/lib/hooks';
+import { useActiveEmployees, usePeriodNavigator } from '@/lib/hooks';
 import { useAppStore } from '@/lib/store';
 
 const STEPS = [
@@ -221,7 +226,11 @@ export default function PayrollPage() {
     return list;
   }, [summaries, selected, profile.maxOvertimeHoursPerMonth]);
 
-  const updateExtras = (kind: 'earnings' | 'deductions', employeeId: string, list: ExtraItem[]): void => {
+  const updateExtras = (
+    kind: 'earnings' | 'deductions',
+    employeeId: string,
+    list: ExtraItem[],
+  ): void => {
     setState((current) => ({ ...current, [kind]: { ...current[kind], [employeeId]: list } }));
   };
 
@@ -286,8 +295,8 @@ export default function PayrollPage() {
   };
 
   const previewEmployee = previewEmployeeId
-    ? employees.find((employee) => employee.id === previewEmployeeId) ?? null
-    : selected[0] ?? null;
+    ? (employees.find((employee) => employee.id === previewEmployeeId) ?? null)
+    : (selected[0] ?? null);
 
   return (
     <div className="space-y-5">
@@ -299,7 +308,9 @@ export default function PayrollPage() {
           <>
             <Badge tone={profile.verified ? 'success' : 'warning'}>
               <BadgeCheck className="size-3.5" aria-hidden />
-              {profile.verified ? `پروفایل ${profile.label} تأییدشده` : `پروفایل ${profile.label} (در انتظار بخشنامه)`}
+              {profile.verified
+                ? `پروفایل ${profile.label} تأییدشده`
+                : `پروفایل ${profile.label} (در انتظار بخشنامه)`}
             </Badge>
             {currentRun ? (
               <Badge tone={currentRun.status === 'locked' ? 'info' : 'primary'}>
@@ -342,7 +353,9 @@ export default function PayrollPage() {
                     گام {toPersianDigits(index + 1)}
                   </span>
                   <span className="mt-0.5 block text-sm font-bold">{item.label}</span>
-                  <span className="mt-0.5 block text-[0.68rem] text-[rgb(var(--dm-text-muted))]">{item.hint}</span>
+                  <span className="mt-0.5 block text-[0.68rem] text-[rgb(var(--dm-text-muted))]">
+                    {item.hint}
+                  </span>
                 </button>
               ))}
             </div>
@@ -360,10 +373,17 @@ export default function PayrollPage() {
                     <LegalTile label="حق مسکن" value={profile.housingAllowanceMonthly} />
                     <LegalTile label="بن کارگری" value={profile.groceryAllowanceMonthly} />
                     <LegalTile label="حق تأهل" value={profile.marriageAllowanceMonthly} />
-                    <LegalTile label="حق اولاد (هر فرزند)" value={profile.childAllowanceDaily * 30} />
+                    <LegalTile
+                      label="حق اولاد (هر فرزند)"
+                      value={profile.childAllowanceDaily * 30}
+                    />
                     <LegalTile label="سقف بیمه" value={profile.insurance.ceiling} />
                     <LegalTile label="معافیت مالیاتی ماهانه" value={profile.tax.monthlyExemption} />
-                    <LegalTile label="مزد ساعتی مبنای اضافه‌کار" value={profile.minDailyWage} hint="÷ ۷٫۳۳" />
+                    <LegalTile
+                      label="مزد ساعتی مبنای اضافه‌کار"
+                      value={profile.minDailyWage}
+                      hint="÷ ۷٫۳۳"
+                    />
                   </CardContent>
                 </Card>
 
@@ -372,19 +392,25 @@ export default function PayrollPage() {
                     <div>
                       <CardTitle>انتخاب کارکنان</CardTitle>
                       <CardDescription>
-                        {toPersianDigits(selected.length)} از {toPersianDigits(employees.length)} کارمند فعال انتخاب
-                        شده است.
+                        {toPersianDigits(selected.length)} از {toPersianDigits(employees.length)}{' '}
+                        کارمند فعال انتخاب شده است.
                       </CardDescription>
                     </div>
                     <div className="flex gap-2">
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => setState((c) => ({ ...c, selectedIds: employees.map((e) => e.id) }))}
+                        onClick={() =>
+                          setState((c) => ({ ...c, selectedIds: employees.map((e) => e.id) }))
+                        }
                       >
                         انتخاب همه
                       </Button>
-                      <Button size="sm" variant="ghost" onClick={() => setState((c) => ({ ...c, selectedIds: [] }))}>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setState((c) => ({ ...c, selectedIds: [] }))}
+                      >
                         پاک‌کردن
                       </Button>
                     </div>
@@ -399,7 +425,11 @@ export default function PayrollPage() {
                           checked={checked}
                           onChange={(event) =>
                             setState((current) => {
-                              const ids = new Set(current.selectedIds.length > 0 ? current.selectedIds : employees.map((e) => e.id));
+                              const ids = new Set(
+                                current.selectedIds.length > 0
+                                  ? current.selectedIds
+                                  : employees.map((e) => e.id),
+                              );
                               if (event.target.checked) ids.add(employee.id);
                               else ids.delete(employee.id);
                               return { ...current, selectedIds: [...ids] };
@@ -415,29 +445,47 @@ export default function PayrollPage() {
                   <CardHeader>
                     <CardTitle>گزینه‌های محاسبه</CardTitle>
                     <CardDescription>
-                      این تنظیمات روی همه کارکنان این اجرا اثر می‌گذارد و در متادیتای نسخه ذخیره می‌شود.
+                      این تنظیمات روی همه کارکنان این اجرا اثر می‌گذارد و در متادیتای نسخه ذخیره
+                      می‌شود.
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="grid gap-3 sm:grid-cols-2">
                     <Checkbox
                       label="محاسبه و کسر بیمه تأمین اجتماعی"
                       checked={options.insuranceEnabled !== false}
-                      onChange={(event) => setOptions((current) => ({ ...current, insuranceEnabled: event.target.checked }))}
+                      onChange={(event) =>
+                        setOptions((current) => ({
+                          ...current,
+                          insuranceEnabled: event.target.checked,
+                        }))
+                      }
                     />
                     <Checkbox
                       label="محاسبه و کسر مالیات بر درآمد"
                       checked={options.taxEnabled !== false}
-                      onChange={(event) => setOptions((current) => ({ ...current, taxEnabled: event.target.checked }))}
+                      onChange={(event) =>
+                        setOptions((current) => ({ ...current, taxEnabled: event.target.checked }))
+                      }
                     />
                     <Checkbox
                       label="پرداخت پایه سنوات (در صورت احراز شرط یک سال سابقه)"
                       checked={options.includeSeniority !== false}
-                      onChange={(event) => setOptions((current) => ({ ...current, includeSeniority: event.target.checked }))}
+                      onChange={(event) =>
+                        setOptions((current) => ({
+                          ...current,
+                          includeSeniority: event.target.checked,
+                        }))
+                      }
                     />
                     <Checkbox
                       label="تقسیم مزایای ثابت بر روزهای کارکرد"
                       checked={options.prorateBenefits ?? false}
-                      onChange={(event) => setOptions((current) => ({ ...current, prorateBenefits: event.target.checked }))}
+                      onChange={(event) =>
+                        setOptions((current) => ({
+                          ...current,
+                          prorateBenefits: event.target.checked,
+                        }))
+                      }
                     />
                     <Checkbox
                       label="افزودن خودکار اقساط وام به کسورات"
@@ -487,7 +535,10 @@ export default function PayrollPage() {
                           { value: '100000', label: 'نزدیک‌ترین ۱۰۰٫۰۰۰ ریال' },
                         ]}
                         onChange={(event) =>
-                          setOptions((current) => ({ ...current, roundingStep: Number(event.target.value) }))
+                          setOptions((current) => ({
+                            ...current,
+                            roundingStep: Number(event.target.value),
+                          }))
                         }
                       />
                     </FormField>
@@ -495,11 +546,16 @@ export default function PayrollPage() {
                 </Card>
 
                 {activeLoansForPeriod.length > 0 ? (
-                  <Alert tone="info" title={`${toPersianDigits(activeLoansForPeriod.length)} قسط وام در این دوره`}>
-                    جمع اقساط این دوره {formatPersianNumber(
+                  <Alert
+                    tone="info"
+                    title={`${toPersianDigits(activeLoansForPeriod.length)} قسط وام در این دوره`}
+                  >
+                    جمع اقساط این دوره{' '}
+                    {formatPersianNumber(
                       activeLoansForPeriod.reduce((total, item) => total + item.amount, 0),
                     )}{' '}
-                    ریال است و {includeLoans ? 'به‌صورت خودکار از خالص پرداختی کسر می‌شود' : 'کسر نخواهد شد'}.
+                    ریال است و{' '}
+                    {includeLoans ? 'به‌صورت خودکار از خالص پرداختی کسر می‌شود' : 'کسر نخواهد شد'}.
                   </Alert>
                 ) : null}
               </div>
@@ -510,7 +566,8 @@ export default function PayrollPage() {
                 <CardHeader>
                   <CardTitle>بازبینی کارکرد {monthLabel}</CardTitle>
                   <CardDescription>
-                    خلاصه ساعات و روزها از رکوردهای حضور و غیاب؛ برای اصلاح، به صفحه حضور و غیاب بروید.
+                    خلاصه ساعات و روزها از رکوردهای حضور و غیاب؛ برای اصلاح، به صفحه حضور و غیاب
+                    بروید.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -556,22 +613,34 @@ export default function PayrollPage() {
                                   {summary ? toPersianDigits(summary.presentDays) : '—'}
                                 </TableCell>
                                 <TableCell className="dm-numeric">
-                                  {summary ? toPersianDigits(Math.round(summary.overtimeHours * 10) / 10) : '—'}
-                                </TableCell>
-                                <TableCell className="dm-numeric">
-                                  {summary ? toPersianDigits(Math.round(summary.nightHours * 10) / 10) : '—'}
-                                </TableCell>
-                                <TableCell className="dm-numeric">
-                                  {summary ? toPersianDigits(Math.round(summary.holidayHours * 10) / 10) : '—'}
+                                  {summary
+                                    ? toPersianDigits(Math.round(summary.overtimeHours * 10) / 10)
+                                    : '—'}
                                 </TableCell>
                                 <TableCell className="dm-numeric">
                                   {summary
-                                    ? toPersianDigits(summary.paidLeaveDays + summary.unpaidLeaveDays + summary.sickLeaveDays)
+                                    ? toPersianDigits(Math.round(summary.nightHours * 10) / 10)
+                                    : '—'}
+                                </TableCell>
+                                <TableCell className="dm-numeric">
+                                  {summary
+                                    ? toPersianDigits(Math.round(summary.holidayHours * 10) / 10)
+                                    : '—'}
+                                </TableCell>
+                                <TableCell className="dm-numeric">
+                                  {summary
+                                    ? toPersianDigits(
+                                        summary.paidLeaveDays +
+                                          summary.unpaidLeaveDays +
+                                          summary.sickLeaveDays,
+                                      )
                                     : '—'}
                                 </TableCell>
                                 <TableCell
                                   className={`dm-numeric ${
-                                    summary && summary.absenceDays > 0 ? 'text-[rgb(var(--dm-danger))] font-bold' : ''
+                                    summary && summary.absenceDays > 0
+                                      ? 'text-[rgb(var(--dm-danger))] font-bold'
+                                      : ''
                                   }`}
                                 >
                                   {summary ? toPersianDigits(summary.absenceDays) : '—'}
@@ -580,7 +649,11 @@ export default function PayrollPage() {
                                   {summary ? toPersianDigits(summary.lateMinutes) : '—'}
                                 </TableCell>
                                 <TableCell>
-                                  <Button size="sm" variant="ghost" onClick={() => setPreviewEmployeeId(employee.id)}>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => setPreviewEmployeeId(employee.id)}
+                                  >
                                     مشاهده
                                   </Button>
                                 </TableCell>
@@ -599,7 +672,8 @@ export default function PayrollPage() {
                     {company?.payroll.latePenaltyEnabled ? (
                       <Badge tone="warning">
                         <TriangleAlert className="size-3.5" aria-hidden />
-                        کسر تأخیر فعال است: {toPersianDigits(company.payroll.latePenaltyPerMinute ?? 0)} ریال به ازای هر
+                        کسر تأخیر فعال است:{' '}
+                        {toPersianDigits(company.payroll.latePenaltyPerMinute ?? 0)} ریال به ازای هر
                         دقیقه
                       </Badge>
                     ) : (
@@ -646,7 +720,9 @@ export default function PayrollPage() {
                 گام پیشین
               </Button>
               {step < STEPS.length - 1 ? (
-                <Button onClick={() => setStep((current) => Math.min(STEPS.length - 1, current + 1))}>
+                <Button
+                  onClick={() => setStep((current) => Math.min(STEPS.length - 1, current + 1))}
+                >
                   گام بعدی
                   <ChevronLeft className="size-4" />
                 </Button>
@@ -662,7 +738,9 @@ export default function PayrollPage() {
               <Card>
                 <CardHeader>
                   <CardTitle>تاریخچه نسخه‌های دوره {monthLabel}</CardTitle>
-                  <CardDescription>هر اجرا یک نسخه تازه می‌سازد؛ نسخه‌های پیشین برای بازبینی باقی می‌مانند.</CardDescription>
+                  <CardDescription>
+                    هر اجرا یک نسخه تازه می‌سازد؛ نسخه‌های پیشین برای بازبینی باقی می‌مانند.
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Table>
@@ -679,13 +757,17 @@ export default function PayrollPage() {
                     <TableBody>
                       {periodRuns.map((run) => (
                         <TableRow key={run.id}>
-                          <TableCell className="dm-numeric">{toPersianDigits(run.version)}</TableCell>
+                          <TableCell className="dm-numeric">
+                            {toPersianDigits(run.version)}
+                          </TableCell>
                           <TableCell>
                             <Badge tone={run.status === 'locked' ? 'info' : 'primary'}>
                               {run.status === 'locked' ? 'قفل‌شده' : 'محاسبه‌شده'}
                             </Badge>
                           </TableCell>
-                          <TableCell className="dm-numeric">{toPersianDigits(run.totals.employeeCount)}</TableCell>
+                          <TableCell className="dm-numeric">
+                            {toPersianDigits(run.totals.employeeCount)}
+                          </TableCell>
                           <TableCell>
                             <Money value={run.totals.netPay} />
                           </TableCell>
@@ -706,14 +788,21 @@ export default function PayrollPage() {
                                   variant="ghost"
                                   onClick={async () => {
                                     await unlockPayrollRun(run.id, displayName);
-                                    toast({ tone: 'info', title: `قفل نسخه ${toPersianDigits(run.version)} باز شد` });
+                                    toast({
+                                      tone: 'info',
+                                      title: `قفل نسخه ${toPersianDigits(run.version)} باز شد`,
+                                    });
                                   }}
                                 >
                                   <LockOpen className="size-3.5" />
                                   باز کردن قفل
                                 </Button>
                               ) : (
-                                <Button size="sm" variant="ghost" onClick={() => setPendingLock(run)}>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => setPendingLock(run)}
+                                >
                                   <Lock className="size-3.5" />
                                   قفل دوره
                                 </Button>
@@ -748,9 +837,14 @@ export default function PayrollPage() {
                   />
                   <SummaryRow
                     label="بیمه سهم کارمند"
-                    value={currentRun ? formatPersianNumber(currentRun.totals.employeeInsurance) : '—'}
+                    value={
+                      currentRun ? formatPersianNumber(currentRun.totals.employeeInsurance) : '—'
+                    }
                   />
-                  <SummaryRow label="مالیات" value={currentRun ? formatPersianNumber(currentRun.totals.tax) : '—'} />
+                  <SummaryRow
+                    label="مالیات"
+                    value={currentRun ? formatPersianNumber(currentRun.totals.tax) : '—'}
+                  />
                   <SummaryRow
                     label="خالص پرداختی"
                     value={currentRun ? formatPersianNumber(currentRun.totals.netPay) : '—'}
@@ -764,7 +858,11 @@ export default function PayrollPage() {
 
                 {progress ? (
                   <div className="space-y-1">
-                    <Progress value={progress.done} max={Math.max(progress.total, 1)} label="پیشرفت محاسبه" />
+                    <Progress
+                      value={progress.done}
+                      max={Math.max(progress.total, 1)}
+                      label="پیشرفت محاسبه"
+                    />
                     <p className="dm-numeric text-xs text-[rgb(var(--dm-text-muted))]">
                       {toPersianDigits(progress.done)} از {toPersianDigits(progress.total)} کارمند
                     </p>
@@ -774,7 +872,11 @@ export default function PayrollPage() {
                 <Separator />
 
                 <div className="space-y-2">
-                  <Button className="w-full" onClick={execute} disabled={running || currentRun?.status === 'locked'}>
+                  <Button
+                    className="w-full"
+                    onClick={execute}
+                    disabled={running || currentRun?.status === 'locked'}
+                  >
                     <Wallet className="size-4" />
                     {running ? 'در حال محاسبه…' : 'اجرای محاسبه حقوق'}
                   </Button>
@@ -863,7 +965,11 @@ export default function PayrollPage() {
           if (!pendingLock) return;
           try {
             await lockPayrollRun(pendingLock.id, displayName);
-            toast({ tone: 'success', title: 'دوره قفل شد', description: 'ویرایش‌های بعدی تا باز کردن قفل ممکن نیست.' });
+            toast({
+              tone: 'success',
+              title: 'دوره قفل شد',
+              description: 'ویرایش‌های بعدی تا باز کردن قفل ممکن نیست.',
+            });
           } catch (error) {
             toast({
               tone: 'error',
@@ -884,7 +990,8 @@ function LegalTile({ label, value, hint }: { label: string; value: number; hint?
     <div className="rounded-[var(--dm-radius-lg)] border border-[rgb(var(--dm-border))] bg-[rgb(var(--dm-surface-sunken))] p-3">
       <p className="text-xs text-[rgb(var(--dm-text-muted))]">{label}</p>
       <p className="dm-numeric mt-1 text-sm font-bold">
-        {formatPersianNumber(value)} <span className="text-xs font-normal opacity-70">ریال{hint ? ` ${hint}` : ''}</span>
+        {formatPersianNumber(value)}{' '}
+        <span className="text-xs font-normal opacity-70">ریال{hint ? ` ${hint}` : ''}</span>
       </p>
     </div>
   );
@@ -894,7 +1001,9 @@ function SummaryRow({ label, value, strong }: { label: string; value: string; st
   return (
     <div className="flex items-center justify-between gap-2 text-sm">
       <span className="text-[rgb(var(--dm-text-muted))]">{label}</span>
-      <span className={`dm-numeric ${strong ? 'font-black text-[rgb(var(--dm-success))]' : 'font-semibold'}`}>
+      <span
+        className={`dm-numeric ${strong ? 'font-black text-[rgb(var(--dm-success))]' : 'font-semibold'}`}
+      >
         {value}
         {value !== '—' ? <span className="mr-1 text-xs font-normal opacity-70">ریال</span> : null}
       </span>
@@ -1001,7 +1110,9 @@ function ExtrasEditor({
                 <TableRow key={`${item.key}-${index}`}>
                   <TableCell>
                     {options.find((option) => option.value === item.key)?.label ?? item.key}
-                    {item.note ? <span className="block text-xs opacity-70">{item.note}</span> : null}
+                    {item.note ? (
+                      <span className="block text-xs opacity-70">{item.note}</span>
+                    ) : null}
                   </TableCell>
                   <TableCell>
                     <Money value={item.amount} />
@@ -1011,7 +1122,12 @@ function ExtrasEditor({
                       variant="ghost"
                       size="icon-sm"
                       aria-label="حذف مورد"
-                      onClick={() => onChange(employeeId, current.filter((_, itemIndex) => itemIndex !== index))}
+                      onClick={() =>
+                        onChange(
+                          employeeId,
+                          current.filter((_, itemIndex) => itemIndex !== index),
+                        )
+                      }
                     >
                       <Trash2 className="size-4 text-[rgb(var(--dm-danger))]" />
                     </Button>

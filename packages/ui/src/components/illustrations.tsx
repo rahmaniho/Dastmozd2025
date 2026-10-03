@@ -27,7 +27,13 @@ export function IllustrationEmployees(props: SVGProps<SVGSVGElement>) {
       <rect x="24" y="18" width="152" height="104" rx="14" fill={primarySoft} />
       <rect x="48" y="34" width="104" height="72" rx="10" fill={surface} stroke={muted} />
       <circle cx="100" cy="60" r="14" fill={primary} opacity="0.85" />
-      <path d="M78 96c4-12 12-18 22-18s18 6 22 18" fill="none" stroke={primary} strokeWidth="5" strokeLinecap="round" />
+      <path
+        d="M78 96c4-12 12-18 22-18s18 6 22 18"
+        fill="none"
+        stroke={primary}
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
       <rect x="34" y="100" width="18" height="10" rx="5" fill={accent} />
     </svg>
   );
@@ -64,10 +70,25 @@ export function IllustrationPayroll(props: SVGProps<SVGSVGElement>) {
       <rect x="46" y="18" width="108" height="112" rx="12" fill={surface} stroke={muted} />
       <rect x="60" y="34" width="80" height="8" rx="4" fill={primary} />
       {Array.from({ length: 6 }, (_, index) => (
-        <rect key={index} x="60" y={54 + index * 12} width={index % 2 === 0 ? 80 : 56} height="6" rx="3" fill={primarySoft} />
+        <rect
+          key={index}
+          x="60"
+          y={54 + index * 12}
+          width={index % 2 === 0 ? 80 : 56}
+          height="6"
+          rx="3"
+          fill={primarySoft}
+        />
       ))}
       <circle cx="148" cy="112" r="20" fill={accent} opacity="0.9" />
-      <path d="M140 112l6 6 12-13" fill="none" stroke={surface} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M140 112l6 6 12-13"
+        fill="none"
+        stroke={surface}
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -101,7 +122,13 @@ export function IllustrationNoResults(props: SVGProps<SVGSVGElement>) {
 export function IllustrationError(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...BASE_PROPS} {...props}>
-      <path d="M100 22l64 96H36z" fill={primarySoft} stroke={accent} strokeWidth="5" strokeLinejoin="round" />
+      <path
+        d="M100 22l64 96H36z"
+        fill={primarySoft}
+        stroke={accent}
+        strokeWidth="5"
+        strokeLinejoin="round"
+      />
       <path d="M100 58v28" stroke={accent} strokeWidth="7" strokeLinecap="round" />
       <circle cx="100" cy="98" r="5" fill={accent} />
     </svg>
@@ -113,7 +140,15 @@ export function IllustrationWelcome(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...BASE_PROPS} {...props}>
       <circle cx="88" cy="70" r="34" fill={primarySoft} />
-      <circle cx="88" cy="70" r="34" fill="none" stroke={primary} strokeWidth="4" strokeDasharray="9 11" />
+      <circle
+        cx="88"
+        cy="70"
+        r="34"
+        fill="none"
+        stroke={primary}
+        strokeWidth="4"
+        strokeDasharray="9 11"
+      />
       <circle cx="88" cy="70" r="22" fill={surface} stroke={muted} />
       <path d="M104 52c-12 3-18 9-18 22 10-2 15-9 18-22z" fill={primary} />
       <circle cx="150" cy="96" r="16" fill={accent} opacity="0.9" />

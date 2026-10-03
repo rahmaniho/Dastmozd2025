@@ -1,0 +1,103 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+  PNPM_VERSION: '10.18.0'
+
+jobs:
+  quality:
+    name: کیفیت کد، آزمون و ساخت
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: نصب وابستگی‌ها
+        run: pnpm install --frozen-lockfile
+
+      - name: قالب‌بندی (Prettier)
+        run: pnpm format:check
+
+      - name: لینت (ESLint)
+        run: pnpm lint
+
+      - name: بررسی نوع‌ها (TypeScript strict)
+        run: pnpm typecheck
+
+      - name: آزمون‌های واحد و پوشش
+        run: pnpm test:coverage
+
+      - name: ساخت بسته‌ها و خروجی ایستای وب
+        run: pnpm build
+        env:
+          GITHUB_PAGES: 'false'
+
+      - name: بارگذاری گزارش پوشش
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: |
+            packages/*/coverage/lcov.info
+            apps/web/coverage/lcov.info
+          if-no-files-found: ignore
+
+  accessibility:
+    name: آزمون سرتاسری و دسترس‌پذیری
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs: quality
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: ساخت خروجی ایستا برای آزمون PWA و آفلاین
+        run: pnpm --filter web build
+        env:
+          GITHUB_PAGES: 'false'
+
+      - name: نصب مرورگرهای Playwright
+        run: pnpm exec playwright install --with-deps chromium firefox webkit
+
+      - name: اجرای آزمون‌های سرتاسری (شامل axe)
+        run: pnpm --filter web test:e2e
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:3100
+          E2E_PORT: '3100'
+
+      - name: بارگذاری گزارش Playwright
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          if-no-files-found: ignore

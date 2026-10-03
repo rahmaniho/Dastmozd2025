@@ -1,5 +1,10 @@
 import type { LegalProfile } from '@dastmozd/legal';
-import type { CalculationTraceEntry, ComponentKey, InsuranceComputation, PayrollLineItem } from '@dastmozd/types';
+import type {
+  CalculationTraceEntry,
+  ComponentKey,
+  InsuranceComputation,
+  PayrollLineItem,
+} from '@dastmozd/types';
 import { amountOf, roundRial, sum } from '../utils/money';
 import type { PayrollRunOptions } from './types';
 
@@ -23,7 +28,12 @@ export interface InsuranceOutput {
  * بیمه بیکاری) از «مزد و مزایای مشمول» کسر می‌شود. سقف مبنای کسر حق بیمه معادل
  * ۷ برابر حداقل مزد ماهانه است.
  */
-export function computeInsurance({ profile, earnings, reductions, options }: InsuranceInput): InsuranceOutput {
+export function computeInsurance({
+  profile,
+  earnings,
+  reductions,
+  options,
+}: InsuranceInput): InsuranceOutput {
   const trace: CalculationTraceEntry[] = [];
   let step = 1;
 
@@ -43,12 +53,14 @@ export function computeInsurance({ profile, earnings, reductions, options }: Ins
   }
 
   const afterReductions = Math.max(0, roundRial(rawBase - Math.max(0, reductions)));
-  const ceiling = options?.insuranceCeiling === undefined ? profile.insurance.ceiling : options.insuranceCeiling;
-  const base = options?.manualInsuranceBase != null
-    ? roundRial(options.manualInsuranceBase)
-    : ceiling === null
-      ? afterReductions
-      : Math.min(afterReductions, ceiling);
+  const ceiling =
+    options?.insuranceCeiling === undefined ? profile.insurance.ceiling : options.insuranceCeiling;
+  const base =
+    options?.manualInsuranceBase != null
+      ? roundRial(options.manualInsuranceBase)
+      : ceiling === null
+        ? afterReductions
+        : Math.min(afterReductions, ceiling);
 
   trace.push({
     step: step++,

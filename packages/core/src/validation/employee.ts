@@ -42,7 +42,10 @@ function isBlank(value: unknown): boolean {
  */
 export function validateEmployee(
   employee: Partial<Employee>,
-  context: { existingPersonnelCodes?: readonly string[]; existingNationalIds?: readonly string[] } = {},
+  context: {
+    existingPersonnelCodes?: readonly string[];
+    existingNationalIds?: readonly string[];
+  } = {},
 ): EmployeeIssue[] {
   const issues: EmployeeIssue[] = [];
 
@@ -59,7 +62,9 @@ export function validateEmployee(
   const normalizedPersonnel = toLatinDigits(employee.personnelCode ?? '').trim();
   if (
     normalizedPersonnel &&
-    (context.existingPersonnelCodes ?? []).some((code) => toLatinDigits(code).trim() === normalizedPersonnel)
+    (context.existingPersonnelCodes ?? []).some(
+      (code) => toLatinDigits(code).trim() === normalizedPersonnel,
+    )
   ) {
     push('personnelCode', 'این شماره پرسنلی قبلاً ثبت شده است.');
   }
@@ -69,7 +74,9 @@ export function validateEmployee(
   const normalizedNational = toLatinDigits(employee.nationalId ?? '').trim();
   if (
     normalizedNational &&
-    (context.existingNationalIds ?? []).some((code) => toLatinDigits(code).trim() === normalizedNational)
+    (context.existingNationalIds ?? []).some(
+      (code) => toLatinDigits(code).trim() === normalizedNational,
+    )
   ) {
     push('nationalId', 'این کد ملی قبلاً در سامانه ثبت شده است.');
   }
@@ -77,7 +84,12 @@ export function validateEmployee(
   const idCard = validateIdCardNumber(employee.idCardNumber ?? '');
   if (!idCard.valid) push('idCardNumber', idCard.reason ?? 'شماره شناسنامه نامعتبر است.');
 
-  if (!employee.birthDate || !employee.birthDate.jy || !employee.birthDate.jm || !employee.birthDate.jd) {
+  if (
+    !employee.birthDate ||
+    !employee.birthDate.jy ||
+    !employee.birthDate.jm ||
+    !employee.birthDate.jd
+  ) {
     push('birthDate', 'تاریخ تولد (شمسی) را وارد کنید.');
   } else if (employee.birthDate.jy > 1405) {
     push('birthDate', 'سال تولد نمی‌تواند بزرگ‌تر از سال جاری باشد.');

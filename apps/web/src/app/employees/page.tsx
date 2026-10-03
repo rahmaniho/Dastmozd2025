@@ -24,7 +24,7 @@ import {
   TableSkeleton,
   useToast,
 } from '@dastmozd/ui';
-import { Download, FileSpreadsheet, Pencil, Plus, Search, Trash2, Undo2, UserCircle2 } from 'lucide-react';
+import { Download, FileSpreadsheet, Pencil, Plus, Search, Trash2, UserCircle2 } from 'lucide-react';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { EmployeeForm } from '@/components/employee-form';
@@ -42,7 +42,10 @@ const STATUS_OPTIONS = [
   { value: 'terminated', label: 'تسویه‌شده' },
 ];
 
-const STATUS_LABELS: Record<Employee['status'], { label: string; tone: 'success' | 'warning' | 'neutral' | 'danger' }> = {
+const STATUS_LABELS: Record<
+  Employee['status'],
+  { label: string; tone: 'success' | 'warning' | 'neutral' | 'danger' }
+> = {
   active: { label: 'شاغل', tone: 'success' },
   inactive: { label: 'غیرفعال', tone: 'neutral' },
   'unpaid-leave': { label: 'مرخصی بدون حقوق', tone: 'warning' },
@@ -117,7 +120,11 @@ function EmployeesPageInner() {
         undoLabel: 'بازگردانی',
         onUndo: async () => {
           await restoreEmployee(target.id, { status: target.status });
-          toast({ tone: 'success', title: 'پرونده بازگردانی شد', description: 'وضعیت کارمند به حالت پیشین بازگشت.' });
+          toast({
+            tone: 'success',
+            title: 'پرونده بازگردانی شد',
+            description: 'وضعیت کارمند به حالت پیشین بازگشت.',
+          });
         },
       });
     } catch (error) {
@@ -203,7 +210,10 @@ function EmployeesPageInner() {
                 id="employee-department"
                 value={departmentId}
                 placeholder="همه دپارتمان‌ها"
-                options={departments.map((department) => ({ value: department.id, label: department.title }))}
+                options={departments.map((department) => ({
+                  value: department.id,
+                  label: department.title,
+                }))}
                 onChange={(event) => {
                   setDepartmentId(event.target.value);
                   setPage(1);
@@ -225,14 +235,20 @@ function EmployeesPageInner() {
               />
             </div>
             <div className="flex items-center gap-2">
-              <label className="text-xs text-[rgb(var(--dm-text-muted))]" htmlFor="employee-page-size">
+              <label
+                className="text-xs text-[rgb(var(--dm-text-muted))]"
+                htmlFor="employee-page-size"
+              >
                 نمایش
               </label>
               <Select
                 id="employee-page-size"
                 className="w-24"
                 value={String(pageSize)}
-                options={[10, 20, 50, 100].map((size) => ({ value: String(size), label: `${toPersianDigits(size)} نفر` }))}
+                options={[10, 20, 50, 100].map((size) => ({
+                  value: String(size),
+                  label: `${toPersianDigits(size)} نفر`,
+                }))}
                 onChange={(event) => {
                   setPageSize(Number(event.target.value));
                   setPage(1);
@@ -313,19 +329,28 @@ function EmployeesPageInner() {
                           className="flex items-center gap-2 text-right font-semibold hover:text-[rgb(var(--dm-primary))]"
                           onClick={() => void openProfile(employee)}
                         >
-                          <UserCircle2 className="size-5 text-[rgb(var(--dm-text-subtle))]" aria-hidden />
+                          <UserCircle2
+                            className="size-5 text-[rgb(var(--dm-text-subtle))]"
+                            aria-hidden
+                          />
                           {employee.firstName} {employee.lastName}
                         </button>
                       </TableCell>
-                      <TableCell className="dm-numeric">{toPersianDigits(employee.personnelCode)}</TableCell>
-                      <TableCell className="dm-numeric">{toPersianDigits(employee.nationalId)}</TableCell>
+                      <TableCell className="dm-numeric">
+                        {toPersianDigits(employee.personnelCode)}
+                      </TableCell>
+                      <TableCell className="dm-numeric">
+                        {toPersianDigits(employee.nationalId)}
+                      </TableCell>
                       <TableCell>{departmentName(employee.departmentId)}</TableCell>
                       <TableCell>{employee.position}</TableCell>
                       <TableCell>
                         <Money value={employee.salary.baseMonthly} size="sm" />
                       </TableCell>
                       <TableCell>
-                        <Badge tone={STATUS_LABELS[employee.status].tone}>{STATUS_LABELS[employee.status].label}</Badge>
+                        <Badge tone={STATUS_LABELS[employee.status].tone}>
+                          {STATUS_LABELS[employee.status].label}
+                        </Badge>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1">
@@ -358,7 +383,8 @@ function EmployeesPageInner() {
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
                 <p className="text-[rgb(var(--dm-text-muted))]">
                   نمایش {toPersianDigits((page - 1) * pageSize + 1)} تا{' '}
-                  {toPersianDigits(Math.min(page * pageSize, result.total))} از {toPersianDigits(result.total)} نفر
+                  {toPersianDigits(Math.min(page * pageSize, result.total))} از{' '}
+                  {toPersianDigits(result.total)} نفر
                 </p>
                 <div className="flex items-center gap-1">
                   <Button
@@ -451,7 +477,9 @@ function SortableHead({
 }) {
   const active = sort.field === field;
   return (
-    <TableHead aria-sort={active ? (sort.direction === 'asc' ? 'ascending' : 'descending') : 'none'}>
+    <TableHead
+      aria-sort={active ? (sort.direction === 'asc' ? 'ascending' : 'descending') : 'none'}
+    >
       <button
         type="button"
         className="inline-flex items-center gap-1 font-semibold hover:text-[rgb(var(--dm-primary))]"

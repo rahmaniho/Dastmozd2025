@@ -15,7 +15,9 @@ interface ComponentInput {
  * every profile defines the same vocabulary (and lets TypeScript check that no
  * component key is forgotten).
  */
-export function buildComponents(input: Record<EarningComponentKey, ComponentInput>): Record<EarningComponentKey, ComponentRule> {
+export function buildComponents(
+  input: Record<EarningComponentKey, ComponentInput>,
+): Record<EarningComponentKey, ComponentRule> {
   const keys = Object.keys(input) as EarningComponentKey[];
   const result = {} as Record<EarningComponentKey, ComponentRule>;
   for (const key of keys) {

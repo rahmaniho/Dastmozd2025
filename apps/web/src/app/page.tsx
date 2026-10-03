@@ -44,7 +44,10 @@ import { ListRow } from '@/components/list-row';
 import { useAppStore } from '@/lib/store';
 import { JALALI_MONTH_LABELS, useDashboardStats, usePeriodNavigator } from '@/lib/hooks';
 
-const EVENT_TONES: Record<string, 'primary' | 'accent' | 'success' | 'info' | 'warning' | 'danger' | 'neutral'> = {
+const EVENT_TONES: Record<
+  string,
+  'primary' | 'accent' | 'success' | 'info' | 'warning' | 'danger' | 'neutral'
+> = {
   'contract-end': 'warning',
   'loan-due': 'accent',
   'insurance-due': 'info',
@@ -86,7 +89,9 @@ export default function DashboardPage() {
   );
 
   const previous = useMemo(() => {
-    const run = data?.runs.find((item) => item.period.jm === currentMonth - 1 && item.period.jy === fiscalYear);
+    const run = data?.runs.find(
+      (item) => item.period.jm === currentMonth - 1 && item.period.jy === fiscalYear,
+    );
     return run?.totals.netPay ?? 0;
   }, [data?.runs, currentMonth, fiscalYear]);
 
@@ -172,7 +177,11 @@ export default function DashboardPage() {
           label={`خالص پرداختی ${monthLabel}`}
           value={<MoneyShort value={payable} />}
           {...(netDelta !== undefined ? { delta: netDelta } : {})}
-          hint={currentRun ? `${toPersianDigits(currentRun.totals.employeeCount)} فیش حقوقی` : 'دوره‌ای محاسبه نشده است'}
+          hint={
+            currentRun
+              ? `${toPersianDigits(currentRun.totals.employeeCount)} فیش حقوقی`
+              : 'دوره‌ای محاسبه نشده است'
+          }
           icon={<CircleDollarSign className="size-4" />}
           tone="success"
         />
@@ -182,7 +191,11 @@ export default function DashboardPage() {
           hint={
             currentRun
               ? `شامل بیمه کارفرما ${toPersianDigits(
-                  Math.round((currentRun.totals.employerInsurance / Math.max(currentRun.totals.employerCost, 1)) * 100),
+                  Math.round(
+                    (currentRun.totals.employerInsurance /
+                      Math.max(currentRun.totals.employerCost, 1)) *
+                      100,
+                  ),
                 )}٪`
               : 'بر پایه دوره‌های محاسبه‌شده'
           }
@@ -203,7 +216,8 @@ export default function DashboardPage() {
           <CardHeader>
             <CardTitle>روند دوازده‌ماهه حقوق</CardTitle>
             <CardDescription>
-              خالص پرداختی و هزینه کارفرما به تفکیک ماه؛ ماه‌های بدون دوره محاسبه‌شده صفر نمایش داده می‌شوند.
+              خالص پرداختی و هزینه کارفرما به تفکیک ماه؛ ماه‌های بدون دوره محاسبه‌شده صفر نمایش داده
+              می‌شوند.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -231,7 +245,11 @@ export default function DashboardPage() {
                   icon={<CalendarClock className="size-4" aria-hidden />}
                   meta={
                     <span className="flex items-center gap-2">
-                      <JalaliDateText jy={event.jalali.jy} jm={event.jalali.jm} jd={event.jalali.jd} />
+                      <JalaliDateText
+                        jy={event.jalali.jy}
+                        jm={event.jalali.jm}
+                        jd={event.jalali.jd}
+                      />
                       <Badge tone={EVENT_TONES[event.kind] ?? 'neutral'}>
                         {EVENT_LABELS[event.kind] ?? event.kind}
                       </Badge>
@@ -291,7 +309,9 @@ export default function DashboardPage() {
                         </Badge>
                       </TableCell>
                       <TableCell className="dm-numeric">{toPersianDigits(run.version)}</TableCell>
-                      <TableCell className="dm-numeric">{toPersianDigits(run.totals.employeeCount)}</TableCell>
+                      <TableCell className="dm-numeric">
+                        {toPersianDigits(run.totals.employeeCount)}
+                      </TableCell>
                       <TableCell>
                         <Money value={run.totals.netPay} />
                       </TableCell>
@@ -315,7 +335,8 @@ export default function DashboardPage() {
             <DepartmentChart data={departments} />
             <div className="mt-4 space-y-2">
               {departments.map((department) => {
-                const share = stats.active > 0 ? Math.round((department.count / stats.active) * 100) : 0;
+                const share =
+                  stats.active > 0 ? Math.round((department.count / stats.active) * 100) : 0;
                 return (
                   <div key={department.departmentId}>
                     <div className="mb-1 flex items-center justify-between text-xs">
@@ -336,10 +357,15 @@ export default function DashboardPage() {
       <Card>
         <CardHeader>
           <CardTitle>خلاصه کارکرد و مزایای دوره</CardTitle>
-          <CardDescription>مبالغ تجمعی دوره {monthLabel} برای بازبینی سریع مدیر مالی.</CardDescription>
+          <CardDescription>
+            مبالغ تجمعی دوره {monthLabel} برای بازبینی سریع مدیر مالی.
+          </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <SummaryItem label="جمع کل پرداختی (ناخالص)" value={currentRun?.totals.grossEarnings ?? 0} />
+          <SummaryItem
+            label="جمع کل پرداختی (ناخالص)"
+            value={currentRun?.totals.grossEarnings ?? 0}
+          />
           <SummaryItem label="بیمه سهم کارکنان" value={currentRun?.totals.employeeInsurance ?? 0} />
           <SummaryItem label="مالیات بر درآمد حقوق" value={currentRun?.totals.tax ?? 0} />
           <SummaryItem label="بیمه سهم کارفرما" value={currentRun?.totals.employerInsurance ?? 0} />

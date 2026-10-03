@@ -40,12 +40,15 @@ export function calculateEidi({ profile, monthsWorked, daysWorked }: EidiInput):
       ? Math.min(1, safeDivide(daysWorked, 365))
       : Math.min(1, safeDivide(Math.min(Math.max(monthsWorked, 0), 12), 12)) * 10000,
   );
-  const ratio = daysWorked !== undefined
-    ? Math.min(1, safeDivide(daysWorked, 365))
-    : Math.min(1, safeDivide(Math.min(Math.max(monthsWorked, 0), 12), 12));
+  const ratio =
+    daysWorked !== undefined
+      ? Math.min(1, safeDivide(daysWorked, 365))
+      : Math.min(1, safeDivide(Math.min(Math.max(monthsWorked, 0), 12), 12));
 
   const baseForRecommended = Math.max(profile.minMonthlyWage, minWage);
-  const recommended = roundRial(Math.min(max, Math.max(min * ratio, baseForRecommended * profile.eidi.minMultiplier * ratio)));
+  const recommended = roundRial(
+    Math.min(max, Math.max(min * ratio, baseForRecommended * profile.eidi.minMultiplier * ratio)),
+  );
   const taxExempt = Math.min(recommended, profile.tax.eidiExemptionCap);
 
   return {
@@ -84,9 +87,10 @@ export function calculateEidi({ profile, monthsWorked, daysWorked }: EidiInput):
         step: 4,
         code: 'eidi.ratio',
         title: 'نسبت کارکرد',
-        detail: daysWorked !== undefined
-          ? `نسبت بر پایه ${daysWorked} روز کارکرد محاسبه شد.`
-          : `نسبت بر پایه ${Math.min(monthsWorked, 12)} ماه کارکرد محاسبه شد.`,
+        detail:
+          daysWorked !== undefined
+            ? `نسبت بر پایه ${daysWorked} روز کارکرد محاسبه شد.`
+            : `نسبت بر پایه ${Math.min(monthsWorked, 12)} ماه کارکرد محاسبه شد.`,
         value: ratio,
       },
     ],
@@ -126,7 +130,7 @@ export function calculateSeverance({
 }: SeveranceInput): SeveranceResult {
   const daysPerYear = profile.severance.daysPerYear;
   const dailyWage = safeDivide(monthlyWage, profile.monthlyDayDivisor);
-  const owedDays = years * daysPerYear + (safeDivide(extraDays, 365) * daysPerYear);
+  const owedDays = years * daysPerYear + safeDivide(extraDays, 365) * daysPerYear;
   const amount = roundRial(dailyWage * owedDays);
   return {
     owedDays: Math.round(owedDays * 100) / 100,
@@ -152,13 +156,14 @@ export function calculateSeverance({
         step: 3,
         code: 'severance.reason',
         title: 'علت تسویه',
-        detail: reason === 'resignation'
-          ? 'استعفا — سنوات خدمت به کارگر تعلق می‌گیرد.'
-          : reason === 'termination'
-            ? 'خاتمه رابطه کارگری — سنوات و مزایای پایان کار به کارگر تعلق می‌گیرد.'
-            : reason === 'retirement'
-              ? 'بازنشستگی — سنوات و مزایای پایان کار پرداخت می‌شود.'
-              : 'پایان قرارداد کار — سنوات به کارگر تعلق می‌گیرد.',
+        detail:
+          reason === 'resignation'
+            ? 'استعفا — سنوات خدمت به کارگر تعلق می‌گیرد.'
+            : reason === 'termination'
+              ? 'خاتمه رابطه کارگری — سنوات و مزایای پایان کار به کارگر تعلق می‌گیرد.'
+              : reason === 'retirement'
+                ? 'بازنشستگی — سنوات و مزایای پایان کار پرداخت می‌شود.'
+                : 'پایان قرارداد کار — سنوات به کارگر تعلق می‌گیرد.',
         value: 0,
       },
     ],
@@ -186,7 +191,12 @@ export interface UnusedLeaveResult {
  * ماده ۶۴ قانون کار: ۲۶ روز مرخصی استحقاقی در سال و ماده ۶۶: مرخصی استفاده‌نشده
  * قابل ذخیره و بازخرید است.
  */
-export function calculateUnusedLeave({ profile, accruedDays, usedDays, monthlyWage }: UnusedLeaveInput): UnusedLeaveResult {
+export function calculateUnusedLeave({
+  profile,
+  accruedDays,
+  usedDays,
+  monthlyWage,
+}: UnusedLeaveInput): UnusedLeaveResult {
   const balanceDays = Math.max(0, accruedDays - usedDays);
   const dailyWage = safeDivide(monthlyWage, profile.monthlyDayDivisor);
   const amount = roundRial(balanceDays * dailyWage);
@@ -229,7 +239,11 @@ export interface AccrualResult {
 }
 
 /** Monthly accrual of the two year-end obligations (هزینه ماهانه کارفرما). */
-export function calculateAccruals({ profile, monthlyWage, monthsElapsed }: AccrualInput): AccrualResult {
+export function calculateAccruals({
+  profile,
+  monthlyWage,
+  monthsElapsed,
+}: AccrualInput): AccrualResult {
   const eidi = calculateEidi({ profile, monthsWorked: monthsElapsed });
   const severance = roundRial(safeDivide(monthlyWage, 12));
   return {

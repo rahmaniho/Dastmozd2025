@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { PROFILE_1404, PROFILE_1405 } from '@dastmozd/legal';
-import { calculateAccruals, calculateEidi, calculateSeverance, calculateUnusedLeave } from '../engine/bonuses';
+import {
+  calculateAccruals,
+  calculateEidi,
+  calculateSeverance,
+  calculateUnusedLeave,
+} from '../engine/bonuses';
 
 describe('عیدی و پاداش پایان سال (ماده ۷۵ قانون کار)', () => {
   it('حداقل و حداکثر عیدی برای یک سال کارکرد کامل ۱۴۰۵', () => {
@@ -38,7 +43,11 @@ describe('عیدی و پاداش پایان سال (ماده ۷۵ قانون ک�
 
 describe('سنوات خدمت (ماده ۲۴ قانون کار)', () => {
   it('برای سه سال سابقه، سه ماه مزد پرداخت می‌شود', () => {
-    const result = calculateSeverance({ profile: PROFILE_1405, monthlyWage: 166_255_500, years: 3 });
+    const result = calculateSeverance({
+      profile: PROFILE_1405,
+      monthlyWage: 166_255_500,
+      years: 3,
+    });
     expect(result.owedDays).toBe(90);
     expect(result.amount).toBe(498_766_500);
   });
@@ -84,7 +93,11 @@ describe('مانده مرخصی و بازخرید آن', () => {
 
 describe('ذخیره ماهانه عیدی و سنوات (هزینه کارفرما)', () => {
   it('ذخیره ماهانه درست محاسبه می‌شود', () => {
-    const result = calculateAccruals({ profile: PROFILE_1405, monthlyWage: 166_255_500, monthsElapsed: 12 });
+    const result = calculateAccruals({
+      profile: PROFILE_1405,
+      monthlyWage: 166_255_500,
+      monthsElapsed: 12,
+    });
     expect(result.eidi).toBe(27_709_250);
     expect(result.severance).toBe(13_854_625);
     expect(result.total).toBe(41_563_875);
