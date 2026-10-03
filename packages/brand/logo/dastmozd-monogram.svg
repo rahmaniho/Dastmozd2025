@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="مونوگرام حرف آ">
+  <title>مونوگرام «آ» — دستمزد آرمانی</title>
+  <defs>
+    <linearGradient id="dmMono" x1="6" y1="4" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#14b3a4"/>
+      <stop offset="1" stop-color="#0d4f66"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#dmMono)"/>
+  <!-- الف ایستاده -->
+  <path d="M33.6 46.4V22.6" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+  <!-- مد «آ» که در ترکیب، شکل بال پر را می‌سازد -->
+  <path d="M21.6 19.2c4.6-5.4 15-5.4 19.6 0-4.6 3-15 3-19.6 0z" fill="#ffffff"/>
+  <!-- نشانه سکه: نقطه طلایی تعادل -->
+  <circle cx="43.4" cy="45.4" r="3.4" fill="#f2b544"/>
+</svg>
