@@ -82,7 +82,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: ساخت خروجی ایستا برای آزمون PWA و آفلاین
-        run: pnpm --filter web build
+        # ساخت باید از مسیر Turbo انجام شود تا بسته‌های کاری (core، db، ui و …)
+        # پیش از برنامه وب ساخته شوند؛ اجرای مستقیم next build در CI شکست می‌خورد.
+        run: pnpm exec turbo run build --filter=@dastmozd/web
         env:
           GITHUB_PAGES: 'false'
 
