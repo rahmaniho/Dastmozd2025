@@ -375,7 +375,7 @@ export function buildInsuranceDiskette(input: InsuranceFileInput): InsuranceFile
   lines.push(
     [
       'H',
-      zero(Number((company.workshopCode ?? '').replace(/\D/g, '') || 0), 8),
+      zero(Number((company.workshopCode ?? '').replace(/\D/g, '') || 0), 10),
       pad(company.name, 30),
       period,
       zero(insured.length, 5),

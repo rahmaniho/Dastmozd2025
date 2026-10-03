@@ -113,6 +113,15 @@ export function parseClockCell(input: unknown): string | undefined {
   if (input === null || input === undefined) return undefined;
   const text = toLatinDigits(String(input)).trim();
   if (!text) return undefined;
+
+  // شکل‌های «۸:۵»، «08:30» یا «8.5» پیش از هر پردازش دیگری جدا می‌شوند.
+  const separated = text.match(/^(\d{1,2})\s*[:.]\s*(\d{1,2})$/);
+  if (separated) {
+    const hour = Math.min(Number(separated[1]), 23);
+    const minute = Math.min(Number(separated[2]), 59);
+    return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+  }
+
   const digits = text.replace(/[^\d]/g, '');
   if (!digits) return undefined;
   if (digits.length === 3) {
