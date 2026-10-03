@@ -1,0 +1,32 @@
+{
+  "name": "@dastmozd/core",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "موتور محاسباتی حقوق و دستمزد (توابع خالص و بدون وابستگی به رابط کاربری)",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist coverage .turbo"
+  },
+  "dependencies": {
+    "@dastmozd/legal": "workspace:*",
+    "@dastmozd/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.8",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
